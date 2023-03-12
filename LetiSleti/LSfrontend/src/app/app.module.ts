@@ -12,6 +12,7 @@ import { RegisterComponent } from './components/home/register/register.component
 import { HomepageComponent } from './components/home/homepage/homepage.component';
 import { HomepageMenuComponent } from './components/home/homepage-menu/homepage-menu.component';
 import { CorouselComponent } from './components/home/corousel/corousel.component';
+import { AdminModuleModule } from './components/admin-module/admin-module.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CorouselComponent } from './components/home/corousel/corousel.component
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    NgbModule
+    NgbModule,
+    AdminModuleModule
   ],
   providers: [],
   bootstrap: [AppComponent],
