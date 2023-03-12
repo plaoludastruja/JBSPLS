@@ -31,6 +31,7 @@ import { CorouselComponent } from './components/home/corousel/corousel.component
     NgbModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [HomepageMenuComponent]
 })
 export class AppModule { }
