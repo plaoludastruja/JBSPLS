@@ -1,0 +1,40 @@
+.carousel {
+    height: 100vh;
+    width: 100%;
+    overflow-y: hidden;
+}
+
+.carousel .carousel-inner {
+    height:95%;    
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* Centered text */
+.centered {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 54px;
+    font-weight: bolder;
+    font-family: Pacifico;
+}
+
+p {
+    font-size: 36px;
+    font-weight: normal;
+    font-family: Pacifico;
+}
+
+img {
+    width: 100%;
+    max-height: min-content;
+}

@@ -10,7 +10,7 @@ To stop the containers and remove them run: `docker compose down`
 - `docker exec mongo bash -c "mongosh <db_name> --quiet --eval 'db.<collection_name>.find();'"`
 
 ### Queries for existing databases(expand this list as needed)
-- ` docker exec mongo bash -c "mongosh flights --quiet --eval 'db.users.find();'" `
+- ` docker exec mongo bash -c "mongosh LetiSleti --quiet --eval 'db.users.find();'" `
 
 # Automated scripts
 
