@@ -11,17 +11,17 @@
               <h5 class="mb-0 text-font text-uppercase">REGISTER NEW FLIGHT</h5>
             </div>
             <div class="card-body">
-              <form>
+              <form [formGroup]="form">
                 <div class="row mb-4">
                     <div class="col">
                         <mat-form-field appearance="fill" class="form-field">
                             <mat-label>Start date and time</mat-label>
-                            <input matInput type="datetime-local">
+                            <input formControlName="startDateTIme" matInput type="datetime-local">
                         </mat-form-field>
                     </div>
                     <div class="col">
                         <div class="form-outline mb-4">
-                        <input type="text" id="form11Example3" class="form-control" />
+                        <input formControlName="startPlace" type="text" id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Start place</label>
                         </div>
                     </div>
@@ -30,12 +30,12 @@
                     <div class="col">
                         <mat-form-field appearance="fill" class="form-field">
                             <mat-label>Start date and time</mat-label>
-                            <input matInput type="datetime-local">
+                            <input formControlName="endDateTime" matInput type="datetime-local">
                         </mat-form-field>
                     </div>
                     <div class="col">
                         <div class="form-outline mb-4">
-                        <input type="text" id="form11Example3" class="form-control" />
+                        <input type="text" formControlName="endPlace" id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Destination place</label>
                         </div>
                     </div>
@@ -43,13 +43,13 @@
                 <div class="row mb-4">
                     <div class="col">
                         <div class="form-outline mb-4">
-                        <input type="number" id="form11Example3" class="form-control" />
+                        <input type="number" formControlName="maxNumberOfPlaces" id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Max number of places</label>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline mb-4">
-                        <input type="number" id="form11Example3" class="form-control" />
+                        <input type="number" formControlName="pricePerPlace"  id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Price per place</label>
                         </div>
                     </div>
