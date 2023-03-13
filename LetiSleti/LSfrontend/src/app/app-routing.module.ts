@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'home', component: HomepageComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'create-flight', component: HomepageComponent},
+  { path: 'create-flight', component: CreateFlightComponent},
 
   // ova linija mora biti zadnja, biti zadnja
   { path: '', redirectTo: '/home', pathMatch: 'full' },
