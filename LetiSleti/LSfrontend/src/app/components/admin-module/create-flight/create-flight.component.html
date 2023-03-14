@@ -16,12 +16,12 @@
                     <div class="col">
                         <mat-form-field appearance="fill" class="form-field">
                             <mat-label>Start date and time</mat-label>
-                            <input formControlName="startDateTIme" matInput type="datetime-local">
+                            <input formControlName="startDateTime" matInput type="datetime-local" width="100%">
                         </mat-form-field>
                     </div>
                     <div class="col">
-                        <div class="form-outline mb-4">
-                        <input formControlName="startPlace" type="text" id="form11Example3" class="form-control" />
+                      <div class="form-outline mb-4">
+                        <input type="text" formControlName="startPlace" id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Start place</label>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                 <div class="row mb-4">
                     <div class="col">
                         <mat-form-field appearance="fill" class="form-field">
-                            <mat-label>Start date and time</mat-label>
+                            <mat-label>End date and time</mat-label>
                             <input formControlName="endDateTime" matInput type="datetime-local">
                         </mat-form-field>
                     </div>
@@ -52,15 +52,18 @@
                         <input type="number" formControlName="pricePerPlace"  id="form11Example3" class="form-control" />
                         <label class="form-label" for="form11Example3">Price per place</label>
                         </div>
+                        
                     </div>
                 </div>
+                <div class="text-center">
+                  <button (click)="register()" type="button" class="btn button-order col-md-10">Register</button>
+                </div>
+                <label style="color: red">{{errorMessage}}</label>
               </form>
             </div>
   
           </div>
-          <div class="text-center">
-            <button type="button" class="btn button-order col-md-10">Register</button>
-          </div>
+          
   
         </div>
   
