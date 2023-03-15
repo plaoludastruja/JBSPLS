@@ -11,3 +11,7 @@ func RegisterUser(user Models.User) bool {
 	}
 	return false
 }
+
+func GetAllUsers() []Models.User {
+	return Repository.GetAllUsers()
+}

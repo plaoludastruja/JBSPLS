@@ -10,7 +10,7 @@ import (
 )
 
 func RegisterUser(ctx *gin.Context) {
-	fmt.Println("guzica")
+	fmt.Println("RegisterUser")
 	httpGin := HTTP.Gin{Context: ctx}
 	user := Models.User{}
 
@@ -25,6 +25,17 @@ func RegisterUser(ctx *gin.Context) {
 	}
 
 	httpGin.Created(user)
+
+}
+
+func GetAllUsers(ctx *gin.Context) {
+	fmt.Println("GetAllUsers")
+	httpGin := HTTP.Gin{Context: ctx}
+	users := []Models.User{}
+
+	users = Services.GetAllUsers()
+
+	httpGin.OK(users)
 
 }
 

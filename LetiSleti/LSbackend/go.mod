@@ -34,10 +34,12 @@ require (
 
 require (
 	github.com/gin-gonic/gin v1.9.0
+	github.com/google/uuid v1.3.0
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	go.mongodb.org/mongo-driver v1.11.2
 	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
