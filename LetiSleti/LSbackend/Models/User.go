@@ -10,4 +10,5 @@ type User struct {
 	LastName  string        `json:"lastName" bson:"last_name" binding:"required"`
 	Email     string        `json:"email" bson:"email" binding:"required"`
 	Password  string        `json:"password" bson:"password" binding:"required"`
+	Role      string        `json:"role" bson:"role" binding:"required"`
 }
