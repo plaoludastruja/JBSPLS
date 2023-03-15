@@ -17,6 +17,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onRegister():void{
+    this.user.role = "USERROLE"
     this.userService.registerUser(this.user).subscribe(res => {
       console.log(res)
     });

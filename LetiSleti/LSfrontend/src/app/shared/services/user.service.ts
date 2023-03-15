@@ -20,4 +20,8 @@ export class UserService {
   registerUser(user: any): Observable<any> {
     return this.http.post<any>(this.apiHost + 'user/register', user);
   }
+
+  login(login:any): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'user/login', login);
+  }
 }

@@ -4,6 +4,7 @@ export class User {
     lastName: string = '';
     email: string = '';
     password: string = '';
+    role: string = '';
 
     public constructor(obj?: any) {
         if (obj) {
@@ -12,6 +13,7 @@ export class User {
             this.lastName = obj.lastName;
             this.email = obj.email;
             this.password = obj.password;
+            this.role = obj.role;
         }
     }
 }
