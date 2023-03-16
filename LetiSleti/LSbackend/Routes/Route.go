@@ -26,6 +26,8 @@ func InitRoutes() *gin.Engine {
 	public.POST("/user/register", Controllers.RegisterUser)
 	public.POST("/user/login", Controllers.LoginUser)
 
+	public.POST("/flight/register", Controllers.RegisterFlight)
+
 	public.GET("/user/getAll", Controllers.GetAllUsers)
 
 	r.Run()
