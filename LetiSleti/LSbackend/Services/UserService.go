@@ -5,9 +5,6 @@ import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Repository"
 )
 
-func RegisterUser(user Models.User) bool {
-	if Repository.CreateUser(user) {
-		return true
-	}
-	return false
+func GetAllUsers() []Models.User {
+	return Repository.GetAllUsers()
 }
