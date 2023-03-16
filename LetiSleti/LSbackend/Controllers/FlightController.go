@@ -23,3 +23,10 @@ func RegisterFlight(ctx *gin.Context) {
 	}
 	httpGin.Created(flight)
 }
+
+func GetAllFlights(ctx *gin.Context) {
+	fmt.Println("GetAllFlights")
+	httpGin := HTTP.Gin{Context: ctx}
+	flights := Services.GetAllFlights()
+	httpGin.OK(flights)
+}

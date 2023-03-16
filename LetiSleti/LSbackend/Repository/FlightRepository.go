@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func CreateFlight(flight Models.Flight) bool {
@@ -12,4 +13,11 @@ func CreateFlight(flight Models.Flight) bool {
 		log.Panic("Could not save document to database", err.Error())
 	}
 	return true
+}
+
+func GetAllFlights() []Models.Flight {
+	results := []Models.Flight{}
+	cursor, _ := flightsCollection.Find(context.TODO(), bson.D{})
+	cursor.All(context.TODO(), &results)
+	return results
 }

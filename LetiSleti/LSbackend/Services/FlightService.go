@@ -8,3 +8,7 @@ import (
 func AddFlight(flight Models.Flight) bool {
 	return Repository.CreateFlight(flight)
 }
+
+func GetAllFlights() []Models.Flight {
+	return Repository.GetAllFlights()
+}
