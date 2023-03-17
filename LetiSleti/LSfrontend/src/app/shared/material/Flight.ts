@@ -1,7 +1,8 @@
 export interface IFlight {
-    start: Date,
+    id: string,
+    start: string,
     startPlace: String,
-    end: Date,
+    end: string,
     endPlace: String,
     maxNumberOfPlaces: number,
     pricePerPlace: number

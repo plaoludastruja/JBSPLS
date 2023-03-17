@@ -14,6 +14,8 @@ func RegisterFlight(ctx *gin.Context) {
 	httpGin := HTTP.Gin{Context: ctx}
 	flight := Models.Flight{}
 	if err := ctx.ShouldBindJSON(&flight); err != nil {
+		fmt.Println("Tu je")
+		fmt.Println(&flight)
 		httpGin.BadRequest(err.Error())
 		return
 	}
