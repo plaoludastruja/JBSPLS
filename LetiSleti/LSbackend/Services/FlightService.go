@@ -5,6 +5,10 @@ import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Repository"
 )
 
-func GetAllUsers() []Models.User {
-	return Repository.GetAllUsers()
+func AddFlight(flight Models.Flight) bool {
+	return Repository.CreateFlight(flight)
+}
+
+func GetAllFlights() []Models.Flight {
+	return Repository.GetAllFlights()
 }

@@ -13,6 +13,9 @@ import { HomepageComponent } from './components/home/homepage/homepage.component
 import { HomepageMenuComponent } from './components/home/homepage-menu/homepage-menu.component';
 import { CorouselComponent } from './components/home/corousel/corousel.component';
 import { AdminModuleModule } from './components/admin-module/admin-module.module';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ShowFlightsComponent } from './components/home/show-flights/show-flights.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,8 @@ import { AdminModuleModule } from './components/admin-module/admin-module.module
     RegisterComponent,
     HomepageComponent,
     HomepageMenuComponent,
-    CorouselComponent
+    CorouselComponent,
+    ShowFlightsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,9 @@ import { AdminModuleModule } from './components/admin-module/admin-module.module
     BrowserAnimationsModule,
     MaterialModule,
     NgbModule,
-    AdminModuleModule
+    AdminModuleModule,
+    HttpClientModule,
+    FormsModule 
   ],
   providers: [],
   bootstrap: [AppComponent],

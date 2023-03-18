@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IFlight } from 'src/app/shared/material/Flight';
+import { FlightService } from 'src/app/shared/services/flight.service';
 
 @Component({
   selector: 'app-create-flight',
@@ -15,7 +16,8 @@ export class CreateFlightComponent implements OnInit {
   public errorMessage: String = ""
 
   constructor(
-    fb: FormBuilder) {
+    fb: FormBuilder,
+    public flightService: FlightService) {
       this.form = fb.group({
         startDateTime: ['', [Validators.required]],
         startPlace: ['', [Validators.required, Validators.pattern("^[A-Z].*$")]],
@@ -50,6 +52,7 @@ export class CreateFlightComponent implements OnInit {
 
   register(){
     let flight: IFlight = {
+      id: '',
       start: this.startDateTime?.value,
       startPlace: String(this.startPlace?.value),
       end: this.endDateTime?.value,
@@ -60,6 +63,7 @@ export class CreateFlightComponent implements OnInit {
     console.log(flight)
     if(this.form.valid && this.compareDates(this.startDateTime, this.endDateTime)){
       this.errorMessage=""
+      this.flightService.register(flight).subscribe();
     }else{
       if(this.errorMessage=="") this.errorMessage="All fields must be entered"
     }
