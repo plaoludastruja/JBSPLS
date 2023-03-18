@@ -1,7 +1,7 @@
 export interface IFlight {
     id: string,
     start: string,
-    startPlace: String,
+    startPlace: string,
     end: string,
     endPlace: String,
     maxNumberOfPlaces: number,

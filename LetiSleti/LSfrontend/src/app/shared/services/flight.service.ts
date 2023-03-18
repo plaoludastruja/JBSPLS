@@ -16,4 +16,8 @@ export class FlightService {
     return this.http.post<any>(this.apiHost + 'flight/register', flight);
   }
 
+  getAll(): Observable<any> {
+    return this.http.get<any>(this.apiHost + 'flight/getAll');
+  }
+
 }

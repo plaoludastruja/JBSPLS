@@ -15,6 +15,7 @@ import { CorouselComponent } from './components/home/corousel/corousel.component
 import { AdminModuleModule } from './components/admin-module/admin-module.module';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ShowFlightsComponent } from './components/home/show-flights/show-flights.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { FormsModule } from '@angular/forms';
     RegisterComponent,
     HomepageComponent,
     HomepageMenuComponent,
-    CorouselComponent
+    CorouselComponent,
+    ShowFlightsComponent
   ],
   imports: [
     BrowserModule,
