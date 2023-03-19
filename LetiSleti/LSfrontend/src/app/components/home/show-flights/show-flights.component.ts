@@ -1,3 +1,4 @@
+import { SearchDto } from './../../../shared/model/DTO/searchDTO';
 import { Component, OnInit } from '@angular/core';
 import { IFlight } from 'src/app/shared/material/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
@@ -17,6 +18,14 @@ export class ShowFlightsComponent implements OnInit{
 
   ngOnInit(): void {
     this.flightService.getAll().subscribe(data => this.flights=data);
+  }
+
+  search(startPlace: string){
+    const searchCriteria: SearchDto = {startPlace:startPlace}
+    this.flightService.search(searchCriteria).subscribe((data) => {
+      this.flights = data;
+      console.log('view:', this.flights);
+    });
   }
 
 }

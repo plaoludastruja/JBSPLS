@@ -2,6 +2,7 @@ package Repository
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
@@ -25,7 +26,7 @@ func GetAllFlights() []Models.Flight {
 
 func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	results := []Models.Flight{}
-	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"StartPlace": searchCriteria.StartPlace})
+	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"startPlace": searchCriteria.StartPlace})
 	if err != nil {
 		log.Panic("Could not find document in database", err.Error())
 		return nil
@@ -34,5 +35,9 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 		log.Panic("Could not find document in database", err.Error())
 		return nil
 	}
+	fmt.Println("search criteria:")
+	fmt.Println(searchCriteria.StartPlace)
+	fmt.Println("SearchResult:")
+	fmt.Println(&results)
 	return results
 }

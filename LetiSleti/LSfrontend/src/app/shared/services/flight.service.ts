@@ -1,3 +1,4 @@
+import { SearchDto } from './../model/DTO/searchDTO';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -18,6 +19,10 @@ export class FlightService {
 
   getAll(): Observable<any> {
     return this.http.get<any>(this.apiHost + 'flight/getAll');
+  }
+
+  search(searchCriteria: SearchDto): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'flight/search', searchCriteria);
   }
 
 }

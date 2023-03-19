@@ -1,4 +1,13 @@
 <p>show-flights works!</p>
+<div>
+  <mat-form-field class="search">
+    <mat-label>Start place</mat-label>
+    <input matInput #startPlace/>
+  </mat-form-field>
+  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value)" type="button">
+    Search
+  </button>
+</div>
 <table mat-table [dataSource]="flights" class="mat-elevation-z8">
 
     <!--- Note that these columns can be defined in any order.
