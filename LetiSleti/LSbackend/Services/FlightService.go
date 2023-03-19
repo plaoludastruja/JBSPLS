@@ -2,6 +2,7 @@ package Services
 
 import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
+	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models/DTO"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Repository"
 )
 
@@ -11,4 +12,8 @@ func AddFlight(flight Models.Flight) bool {
 
 func GetAllFlights() []Models.Flight {
 	return Repository.GetAllFlights()
+}
+
+func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
+	return Repository.SearchFlights(searchCriteria)
 }
