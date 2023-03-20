@@ -26,7 +26,7 @@ func GetAllFlights() []Models.Flight {
 
 func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	results := []Models.Flight{}
-	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"startPlace": searchCriteria.StartPlace})
+	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace})
 	if err != nil {
 		log.Panic("Could not find document in database", err.Error())
 		return nil

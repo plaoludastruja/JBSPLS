@@ -1,3 +1,4 @@
 export interface SearchDto {
-    startPlace: string
+    startPlace: string,
+    endPlace: string
 }

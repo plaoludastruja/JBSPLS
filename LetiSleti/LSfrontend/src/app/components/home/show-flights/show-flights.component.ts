@@ -20,8 +20,9 @@ export class ShowFlightsComponent implements OnInit{
     this.flightService.getAll().subscribe(data => this.flights=data);
   }
 
-  search(startPlace: string){
-    const searchCriteria: SearchDto = {startPlace:startPlace}
+  search(startPlace: string, endPlace: string){
+    const searchCriteria: SearchDto = {startPlace:startPlace,
+                                       endPlace:endPlace}
     this.flightService.search(searchCriteria).subscribe((data) => {
       this.flights = data;
       console.log('view:', this.flights);
