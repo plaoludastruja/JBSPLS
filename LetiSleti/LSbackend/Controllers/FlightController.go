@@ -2,6 +2,7 @@ package Controllers
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/gin-gonic/gin"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/HTTP"
@@ -36,6 +37,7 @@ func GetAllFlights(ctx *gin.Context) {
 
 func SearchFlights(ctx *gin.Context) {
 	fmt.Println("SearchFlights")
+	fmt.Println("Ne mora bild uvek")
 	httpGin := HTTP.Gin{Context: ctx}
 	searchCriteria := DTO.SearchDTO{}
 
@@ -48,4 +50,27 @@ func SearchFlights(ctx *gin.Context) {
 
 	flights := Services.SearchFlights(searchCriteria)
 	httpGin.OK(flights)
+}
+
+func DeleteFlight(ctx *gin.Context) {
+	fmt.Println("Delete flight")
+	httpGin := HTTP.Gin{Context: ctx}
+
+	bytes, err := io.ReadAll(ctx.Request.Body)
+	fmt.Println(string(bytes))
+
+	if err != nil {
+		fmt.Println("Spoljasnji if")
+		fmt.Println(err)
+		httpGin.BadRequest(string(bytes))
+
+	} else {
+		ret := Services.DeleteFlight(string(bytes))
+		if ret {
+			httpGin.OK(string(bytes))
+		} else {
+			fmt.Println("Unutrasnji if")
+			httpGin.BadRequest(string(bytes))
+		}
+	}
 }

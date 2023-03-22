@@ -8,6 +8,7 @@ import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models/DTO"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateFlight(flight Models.Flight) bool {
@@ -40,4 +41,22 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	fmt.Println("SearchResult:")
 	fmt.Println(&results)
 	return results
+}
+
+func DeleteFlight(id string) bool {
+	objID, er := primitive.ObjectIDFromHex(id)
+	if er != nil {
+		fmt.Println("Could not convert id")
+		fmt.Println(er)
+		log.Panic("Could not convert id", er.Error())
+		return false
+	}
+	_, err := flightsCollection.DeleteOne(context.TODO(), bson.M{"id": objID})
+	if err != nil {
+		fmt.Println("Could not delete flight")
+		fmt.Println(err)
+		log.Panic("Could not delete flight", err.Error())
+		return false
+	}
+	return true
 }

@@ -1,3 +1,4 @@
+import { DeleteDto } from './../../../shared/model/DTO/deleteDTO';
 import { SearchDto } from './../../../shared/model/DTO/searchDTO';
 import { Component, OnInit } from '@angular/core';
 import { IFlight } from 'src/app/shared/material/Flight';
@@ -11,7 +12,7 @@ import { FlightService } from 'src/app/shared/services/flight.service';
 export class ShowFlightsComponent implements OnInit{
 
   flights: IFlight[] = []
-  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'freePlaces'];
+  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'freePlaces', 'delete'];
 
   constructor(
     public flightService: FlightService) {}
@@ -26,6 +27,13 @@ export class ShowFlightsComponent implements OnInit{
     this.flightService.search(searchCriteria).subscribe((data) => {
       this.flights = data;
       console.log('view:', this.flights);
+    });
+  }
+
+  deleteFlight(id: string){
+    const deleteId: DeleteDto = {id:id}
+    this.flightService.delete(id).subscribe(() => {
+      console.log('super');
     });
   }
 
