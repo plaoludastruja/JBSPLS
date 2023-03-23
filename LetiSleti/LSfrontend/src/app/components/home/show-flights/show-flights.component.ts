@@ -21,9 +21,21 @@ export class ShowFlightsComponent implements OnInit{
     this.flightService.getAll().subscribe(data => this.flights=data);
   }
 
-  search(startPlace: string, endPlace: string){
-    const searchCriteria: SearchDto = {startPlace:startPlace,
-                                       endPlace:endPlace}
+  search(startPlace: string, endPlace: string, date: string){
+    var dateConverted: Date = new Date(); 
+    var searchCriteria: SearchDto;
+    if(date != ""){
+      var d = new Date(date);
+      dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, d.getMinutes(), d.getSeconds(), d.getMilliseconds())
+      searchCriteria = {startPlace:startPlace,
+        endPlace:endPlace,
+        date:dateConverted.toISOString()}
+    } else{
+      searchCriteria = {startPlace:startPlace,
+        endPlace:endPlace,
+        date:date}
+    }
+    
     this.flightService.search(searchCriteria).subscribe((data) => {
       this.flights = data;
       console.log('view:', this.flights);
@@ -32,7 +44,7 @@ export class ShowFlightsComponent implements OnInit{
 
   deleteFlight(flight: IFlight){
     //const deleteId: DeleteDto = {id:id}
-    this.flightService.delete(flight).subscribe(() => {
+    this.flightService.delete(flight.id).subscribe(() => {
       console.log('super');
     });
   }

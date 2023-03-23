@@ -10,7 +10,12 @@
     <input matInput #endPlace/>
   </mat-form-field>
 
-  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value)" type="button">
+  <mat-form-field appearance="fill" class="search">
+    <mat-label>Date and time</mat-label>
+    <input matInput #dateTime type="datetime-local">
+  </mat-form-field>
+
+  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, dateTime.value)" type="button">
     Search
   </button>
 </div>

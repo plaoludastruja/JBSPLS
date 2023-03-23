@@ -27,7 +27,7 @@ export class FlightService {
     return this.http.post<any>(this.apiHost + 'flight/search', searchCriteria);
   }
 
-  delete(flight: IFlight): any{
-    return this.http.post(this.apiHost + 'flight/delete', flight);
+  delete(flightId: string): any{
+    return this.http.delete(this.apiHost + `flight/${flightId}`);
   }
 }

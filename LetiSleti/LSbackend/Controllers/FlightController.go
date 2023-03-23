@@ -48,6 +48,7 @@ func SearchFlights(ctx *gin.Context) {
 	fmt.Println("search criteria controller:")
 	fmt.Println(searchCriteria.StartPlace)
 	fmt.Println(searchCriteria.EndPlace)
+	fmt.Println(searchCriteria.Date)
 	flights := Services.SearchFlights(searchCriteria)
 	httpGin.OK(flights)
 }
@@ -55,19 +56,9 @@ func SearchFlights(ctx *gin.Context) {
 func DeleteFlight(ctx *gin.Context) {
 	fmt.Println("Delete flight")
 	httpGin := HTTP.Gin{Context: ctx}
+	flightId := ctx.Param("flightId")
+	fmt.Println(flightId)
+	ret := Services.DeleteFlight(flightId)
 
-	flight := Models.Flight{}
-	if err := ctx.ShouldBindJSON(&flight); err != nil {
-		fmt.Println("Tu je")
-		fmt.Println(&flight)
-		httpGin.BadRequest(err.Error())
-		return
-	}
-	ret := Services.DeleteFlight(flight)
-
-	if !ret {
-		httpGin.BadRequest(flight)
-		return
-	}
-	httpGin.OK(flight)
+	httpGin.OK(ret)
 }

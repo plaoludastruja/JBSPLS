@@ -18,6 +18,6 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	return Repository.SearchFlights(searchCriteria)
 }
 
-func DeleteFlight(flight Models.Flight) bool {
-	return Repository.DeleteFlight(flight)
+func DeleteFlight(flightId string) int64 {
+	return Repository.DeleteFlight(flightId)
 }
