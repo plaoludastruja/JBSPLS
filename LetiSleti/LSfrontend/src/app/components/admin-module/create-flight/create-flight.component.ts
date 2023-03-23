@@ -13,7 +13,7 @@ export class CreateFlightComponent implements OnInit {
 
   public dateValue: Date = new Date("06/06/2022 15:30");
   public form: FormGroup;
-  public errorMessage: String = ""
+  public errorMessage: String = "";
 
   constructor(
     fb: FormBuilder,
@@ -51,11 +51,20 @@ export class CreateFlightComponent implements OnInit {
   }
 
   register(){
+    
+    var startConverted = new Date(this.startDateTime?.value);
+    var newStart = new Date(startConverted.getFullYear(), startConverted.getMonth(), startConverted.getDay(), startConverted.getHours() + 2,
+      startConverted.getMinutes(), startConverted.getSeconds(), startConverted.getMilliseconds()); 
+    //startConverted.setHours(startConverted.getHours() + 2);
+    var endConverted = new Date(this.endDateTime?.value);
+    var newEnd = new Date(endConverted.getFullYear(), endConverted.getMonth(), endConverted.getDay(), endConverted.getHours() + 2,
+      endConverted.getMinutes(), endConverted.getSeconds(), endConverted.getMilliseconds()); 
+
     let flight: IFlight = {
       id: '',
-      start: this.startDateTime?.value,
+      start: newStart.toISOString(), //new Date(this.startDateTime?.value).toISOString(),
       startPlace: String(this.startPlace?.value),
-      end: this.endDateTime?.value,
+      end: newEnd.toISOString(), //new Date(this.endDateTime?.value).toISOString(),
       endPlace: String(this.endPlace?.value),
       maxNumberOfPlaces: this.maxNumberOfPlaces?.value,
       pricePerPlace: this.pricePerPlace?.value
