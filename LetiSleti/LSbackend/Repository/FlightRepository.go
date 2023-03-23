@@ -8,7 +8,6 @@ import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models/DTO"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateFlight(flight Models.Flight) bool {
@@ -27,7 +26,19 @@ func GetAllFlights() []Models.Flight {
 
 func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	results := []Models.Flight{}
-	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace})
+	filter := bson.M{}
+	if searchCriteria.StartPlace != "" {
+		if searchCriteria.EndPlace != "" {
+			filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace}
+		} else {
+			filter = bson.M{"startPlace": searchCriteria.StartPlace}
+		}
+	} else {
+		if searchCriteria.EndPlace != "" {
+			filter = bson.M{"endPlace": searchCriteria.EndPlace}
+		}
+	}
+	cursor, err := flightsCollection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Panic("Could not find document in database", err.Error())
 		return nil
@@ -43,15 +54,9 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	return results
 }
 
-func DeleteFlight(id string) bool {
-	objID, er := primitive.ObjectIDFromHex(id)
-	if er != nil {
-		fmt.Println("Could not convert id")
-		fmt.Println(er)
-		log.Panic("Could not convert id", er.Error())
-		return false
-	}
-	_, err := flightsCollection.DeleteOne(context.TODO(), bson.M{"id": objID})
+func DeleteFlight(flight Models.Flight) bool {
+
+	_, err := flightsCollection.DeleteOne(context.TODO(), bson.M{"id": flight.Id})
 	if err != nil {
 		fmt.Println("Could not delete flight")
 		fmt.Println(err)

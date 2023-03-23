@@ -30,9 +30,9 @@ export class ShowFlightsComponent implements OnInit{
     });
   }
 
-  deleteFlight(id: string){
-    const deleteId: DeleteDto = {id:id}
-    this.flightService.delete(id).subscribe(() => {
+  deleteFlight(flight: IFlight){
+    //const deleteId: DeleteDto = {id:id}
+    this.flightService.delete(flight).subscribe(() => {
       console.log('super');
     });
   }

@@ -1,3 +1,4 @@
+import { IFlight } from 'src/app/shared/material/Flight';
 import { DeleteDto } from './../model/DTO/deleteDTO';
 import { SearchDto } from './../model/DTO/searchDTO';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -26,7 +27,7 @@ export class FlightService {
     return this.http.post<any>(this.apiHost + 'flight/search', searchCriteria);
   }
 
-  delete(id: string): any{
-    return this.http.post(this.apiHost + 'flight/delete', id);
+  delete(flight: IFlight): any{
+    return this.http.post(this.apiHost + 'flight/delete', flight);
   }
 }
