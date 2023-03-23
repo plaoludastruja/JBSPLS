@@ -8,3 +8,7 @@ import (
 func GetAllUsers() []Models.User {
 	return Repository.GetAllUsers()
 }
+
+func DeleteUser(userId string) int64 {
+	return Repository.DeleteUser(userId)
+}
