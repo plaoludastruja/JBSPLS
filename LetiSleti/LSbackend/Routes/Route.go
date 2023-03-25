@@ -34,6 +34,7 @@ func InitRoutes() *gin.Engine {
 	public.POST("/flight/search", Controllers.SearchFlights)
 	public.DELETE("/flight/:flightId", Controllers.DeleteFlight)
 
+	public.DELETE("/user/:userId", Controllers.DeleteUser)
 	r.Run()
 	return nil
 }

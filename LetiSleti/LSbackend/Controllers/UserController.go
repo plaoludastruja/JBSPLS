@@ -14,3 +14,11 @@ func GetAllUsers(ctx *gin.Context) {
 	users := Services.GetAllUsers()
 	httpGin.OK(users)
 }
+
+func DeleteUser(ctx *gin.Context) {
+	fmt.Println("DeleteUser")
+	userId := ctx.Param("userId")
+	httpGin := HTTP.Gin{Context: ctx}
+	users := Services.DeleteUser(userId)
+	httpGin.OK(users)
+}
