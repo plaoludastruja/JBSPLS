@@ -23,7 +23,7 @@ export class FlightService {
     return this.http.get<any>(this.apiHost + 'flight/getAll');
   }
 
-  search(searchCriteria: SearchDto): Observable<any> {
+  search(searchCriteria: any): Observable<any> {
     return this.http.post<any>(this.apiHost + 'flight/search', searchCriteria);
   }
 

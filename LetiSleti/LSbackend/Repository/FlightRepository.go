@@ -27,9 +27,25 @@ func GetAllFlights() []Models.Flight {
 
 func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	results := []Models.Flight{}
-	//filter := bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "startDate": bson.M{"$gt": searchCriteria.Date}}
 
-	cursor, err := flightsCollection.Find(context.TODO(), bson.M{"startDate": bson.M{"$gt": searchCriteria.Date}})
+	//date := time.Date(searchCriteria.Date.Year(), searchCriteria.Date.Month(), searchCriteria.Date.Year(), searchCriteria.Date.Day(), searchCriteria.Date.Hour(), searchCriteria.Date.Minute(), searchCriteria.Date.Second(), time.UTC)
+	filter := bson.M{}
+	if searchCriteria.StartPlace != "" && searchCriteria.EndPlace != "" && !searchCriteria.Date.IsZero() {
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+	} else if searchCriteria.StartPlace != "" && searchCriteria.EndPlace != "" {
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace}
+	} else if searchCriteria.StartPlace != "" && !searchCriteria.Date.IsZero() {
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+	} else if searchCriteria.EndPlace != "" && !searchCriteria.Date.IsZero() {
+		filter = bson.M{"endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+	} else if searchCriteria.StartPlace != "" {
+		filter = bson.M{"startPlace": searchCriteria.StartPlace}
+	} else if !searchCriteria.Date.IsZero() {
+		filter = bson.M{"start": bson.M{"$gte": searchCriteria.Date}}
+	} else if searchCriteria.EndPlace != "" {
+		filter = bson.M{"endPlace": searchCriteria.EndPlace}
+	}
+	cursor, err := flightsCollection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Panic("Could not find document in database", err.Error())
 		return nil
@@ -38,10 +54,10 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 		log.Panic("Could not find document in database", err.Error())
 		return nil
 	}
-	fmt.Println("search criteria:")
-	fmt.Println(searchCriteria.StartPlace)
+
 	fmt.Println("SearchResult:")
 	fmt.Println(&results)
+
 	return results
 }
 

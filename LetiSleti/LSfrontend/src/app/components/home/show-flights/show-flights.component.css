@@ -1,4 +1,11 @@
-table {
+.search-container {
+    display: flex;
+    justify-content:center;
+  }
+  table {
     width: 90%;
     margin: auto;
+}
+.search{
+    background-color: #f2f2f2; /* Set a light gray background color */
 }
