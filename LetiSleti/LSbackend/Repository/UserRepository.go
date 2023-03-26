@@ -2,11 +2,10 @@ package Repository
 
 import (
 	"context"
-	"log"
-
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 )
 
 func CreateUser(user Models.User) bool {

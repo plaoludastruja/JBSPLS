@@ -58,6 +58,7 @@ export class CreateFlightComponent implements OnInit {
       end: this.endDateTime?.value,
       endPlace: String(this.endPlace?.value),
       maxNumberOfPlaces: this.maxNumberOfPlaces?.value,
+      remaining: this.maxNumberOfPlaces?.value,
       pricePerPlace: this.pricePerPlace?.value
     }
     console.log(flight)

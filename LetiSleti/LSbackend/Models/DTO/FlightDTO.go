@@ -11,4 +11,5 @@ type FlightDTO struct {
 	EndPlace          string    `json:"endPlace" bson:"end_place" binding:"required"`
 	MaxNumberOfPlaces int       `json:"maxNumberOfPlaces" bson:"max_number_of_places" binding:"required"`
 	PricePerPlace     int       `json:"pricePErPlace" bson:"price_per_place" binding:"required"`
+	Remaining         int       `json:"remaining" bson:"remaining" binding:"required"`
 }
