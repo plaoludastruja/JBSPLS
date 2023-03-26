@@ -21,3 +21,6 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 func DeleteFlight(flightId string) int64 {
 	return Repository.DeleteFlight(flightId)
 }
+func ChangePlacesLeft(id string) {
+	Repository.ChangePlacesLeft(id)
+}

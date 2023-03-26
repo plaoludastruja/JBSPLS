@@ -62,3 +62,14 @@ func DeleteFlight(ctx *gin.Context) {
 
 	httpGin.OK(ret)
 }
+
+func ChangePlacesLeft(ctx *gin.Context) {
+	fmt.Println("ChangePlacesLeft")
+	httpGin := HTTP.Gin{Context: ctx}
+
+	flightId := ctx.Param("flightId")
+	fmt.Println(flightId)
+	Services.ChangePlacesLeft(flightId)
+
+	httpGin.OK(flightId)
+}

@@ -14,4 +14,5 @@ type Flight struct {
 	EndPlace          string             `json:"endPlace" bson:"endPlace" binding:"required"`
 	MaxNumberOfPlaces int                `json:"maxNumberOfPlaces" bson:"maxNumberOfPlaces" binding:"required"`
 	PricePerPlace     int                `json:"pricePerPlace" bson:"pricePerPlace" binding:"required"`
+	Remaining         int                `json:"remaining" bson:"remaining" binding:"required"`
 }

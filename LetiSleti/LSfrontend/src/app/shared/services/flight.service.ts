@@ -30,4 +30,8 @@ export class FlightService {
   delete(flightId: string): any{
     return this.http.delete(this.apiHost + `flight/${flightId}`);
   }
+  changePlacesLeft(flightId: any): Observable<any> {
+    return this.http.get<any>(this.apiHost + 'flight/change-places-left/' + flightId);
+  }
+
 }
