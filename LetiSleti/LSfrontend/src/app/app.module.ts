@@ -13,9 +13,12 @@ import { HomepageComponent } from './components/home/homepage/homepage.component
 import { HomepageMenuComponent } from './components/home/homepage-menu/homepage-menu.component';
 import { CorouselComponent } from './components/home/corousel/corousel.component';
 import { AdminModuleModule } from './components/admin-module/admin-module.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ShowFlightsComponent } from './components/home/show-flights/show-flights.component';
+import { MatTableModule } from '@angular/material/table';
+import { TicketsInfoComponent } from './components/customer/tickets-info/tickets-info.component';
+import { AuthInterceptor } from 'auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,8 @@ import { ShowFlightsComponent } from './components/home/show-flights/show-flight
     HomepageComponent,
     HomepageMenuComponent,
     CorouselComponent,
-    ShowFlightsComponent
+    ShowFlightsComponent,
+    TicketsInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -36,9 +40,16 @@ import { ShowFlightsComponent } from './components/home/show-flights/show-flight
     NgbModule,
     AdminModuleModule,
     HttpClientModule,
-    FormsModule 
+    FormsModule,
+    MatTableModule 
   ],
-  providers: [],
+  providers: [
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi   : true,
+    }
+  ],
   bootstrap: [AppComponent],
   exports: [HomepageMenuComponent]
 })

@@ -3,7 +3,8 @@ export interface IFlight {
     start: string,
     startPlace: string,
     end: string,
-    endPlace: String,
+    endPlace: string,
     maxNumberOfPlaces: number,
+    remaining: number,
     pricePerPlace: number
 }

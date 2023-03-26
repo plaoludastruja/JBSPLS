@@ -1,0 +1,9 @@
+.mat-elevation-z8 {
+    width: 100%;
+    table-layout: fixed;
+    margin: 2%;
+}
+
+th {
+    background-color: rgb(86, 25, 83);
+}
