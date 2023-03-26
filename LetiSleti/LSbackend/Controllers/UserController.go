@@ -24,4 +24,12 @@ func GetUserByEmail(ctx *gin.Context) {
 	fmt.Println(email)
 	user, _ = Services.GetUserByEmail(email)
 	httpGin.OK(user)
+ }
+
+func DeleteUser(ctx *gin.Context) {
+	fmt.Println("DeleteUser")
+	userId := ctx.Param("userId")
+	httpGin := HTTP.Gin{Context: ctx}
+	users := Services.DeleteUser(userId)
+	httpGin.OK(users)
 }

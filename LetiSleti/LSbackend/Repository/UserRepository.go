@@ -2,8 +2,12 @@ package Repository
 
 import (
 	"context"
+	"fmt"
+	"log"
+
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 )
@@ -32,4 +36,18 @@ func GetUserByEmail(email string) (Models.User, error) {
 		log.Fatal(err)
 	}
 	return result, err
+}
+
+func DeleteUser(userId string) int64 {
+	objectId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		log.Println("Invalid id")
+	}
+
+	res, err := usersCollection.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: objectId}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("deleted %v documents\n", res.DeletedCount)
+	return res.DeletedCount
 }
