@@ -15,7 +15,12 @@
     <input matInput #dateTime type="datetime-local">
   </mat-form-field>
 
-  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, dateTime.value)" type="button">
+  <mat-form-field appearance="fill" class="search">
+    <mat-label>Number of places</mat-label>
+    <input matInput #numberOfPlaces type="number">
+  </mat-form-field>
+
+  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, dateTime.value, numberOfPlaces.value)" type="button">
     <mat-icon matSuffix>search</mat-icon>
   </button>
 </div>

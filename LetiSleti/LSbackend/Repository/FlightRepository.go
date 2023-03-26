@@ -31,19 +31,19 @@ func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	//date := time.Date(searchCriteria.Date.Year(), searchCriteria.Date.Month(), searchCriteria.Date.Year(), searchCriteria.Date.Day(), searchCriteria.Date.Hour(), searchCriteria.Date.Minute(), searchCriteria.Date.Second(), time.UTC)
 	filter := bson.M{}
 	if searchCriteria.StartPlace != "" && searchCriteria.EndPlace != "" && !searchCriteria.Date.IsZero() {
-		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if searchCriteria.StartPlace != "" && searchCriteria.EndPlace != "" {
-		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace}
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if searchCriteria.StartPlace != "" && !searchCriteria.Date.IsZero() {
-		filter = bson.M{"startPlace": searchCriteria.StartPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "start": bson.M{"$gte": searchCriteria.Date}, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if searchCriteria.EndPlace != "" && !searchCriteria.Date.IsZero() {
-		filter = bson.M{"endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}}
+		filter = bson.M{"endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date}, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if searchCriteria.StartPlace != "" {
-		filter = bson.M{"startPlace": searchCriteria.StartPlace}
+		filter = bson.M{"startPlace": searchCriteria.StartPlace, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if !searchCriteria.Date.IsZero() {
-		filter = bson.M{"start": bson.M{"$gte": searchCriteria.Date}}
+		filter = bson.M{"start": bson.M{"$gte": searchCriteria.Date}, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	} else if searchCriteria.EndPlace != "" {
-		filter = bson.M{"endPlace": searchCriteria.EndPlace}
+		filter = bson.M{"endPlace": searchCriteria.EndPlace, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
 	}
 	cursor, err := flightsCollection.Find(context.TODO(), filter)
 	if err != nil {

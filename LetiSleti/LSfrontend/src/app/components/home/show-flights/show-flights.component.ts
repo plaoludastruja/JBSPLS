@@ -27,7 +27,8 @@ export class ShowFlightsComponent implements OnInit{
     
   }
 
-  search(startPlace: string, endPlace: string, date: string){
+  search(startPlace: string, endPlace: string, date: string, numberOfPlaces: string){
+    var numberOfPlacesConv = parseInt(numberOfPlaces);
     var dateConverted: Date = new Date(); 
     var searchCriteria;
     if(date != ""){
@@ -35,10 +36,12 @@ export class ShowFlightsComponent implements OnInit{
       dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, d.getMinutes(), d.getSeconds(), d.getMilliseconds())
       searchCriteria = {startPlace:startPlace,
         endPlace:endPlace,
+        numberOfPlaces: numberOfPlacesConv,
         date:dateConverted.toISOString()}
     } else{
       searchCriteria = {startPlace:startPlace,
-        endPlace:endPlace}
+        endPlace:endPlace,
+        numberOfPlaces: numberOfPlacesConv}
     }
     
     this.flightService.search(searchCriteria).subscribe((data) => {
