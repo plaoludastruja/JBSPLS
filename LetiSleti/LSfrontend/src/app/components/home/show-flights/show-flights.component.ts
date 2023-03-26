@@ -1,3 +1,5 @@
+import { DeleteDto } from './../../../shared/model/DTO/deleteDTO';
+import { SearchDto } from './../../../shared/model/DTO/searchDTO';
 import { Component, OnInit } from '@angular/core';
 import { IFlight } from 'src/app/shared/material/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
@@ -14,7 +16,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class ShowFlightsComponent implements OnInit{
 
   flights: IFlight[] = []
-  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'buy'];
+  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'buy', 'delete'];
   user: User  = new User 
 
   constructor(
@@ -23,6 +25,37 @@ export class ShowFlightsComponent implements OnInit{
   ngOnInit(): void {
     this.flightService.getAll().subscribe(data => this.flights=data);
     
+  }
+
+  search(startPlace: string, endPlace: string, date: string, numberOfPlaces: string){
+    var numberOfPlacesConv = parseInt(numberOfPlaces);
+    var dateConverted: Date = new Date(); 
+    var searchCriteria;
+    if(date != ""){
+      var d = new Date(date);
+      dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, d.getMinutes(), d.getSeconds(), d.getMilliseconds())
+      searchCriteria = {startPlace:startPlace,
+        endPlace:endPlace,
+        numberOfPlaces: numberOfPlacesConv,
+        date:dateConverted.toISOString()}
+    } else{
+      searchCriteria = {startPlace:startPlace,
+        endPlace:endPlace,
+        numberOfPlaces: numberOfPlacesConv}
+    }
+    
+    this.flightService.search(searchCriteria).subscribe((data) => {
+      this.flights = data;
+      console.log('view:', this.flights);
+    });
+  }
+
+  deleteFlight(flight: IFlight){
+    //const deleteId: DeleteDto = {id:id}
+    this.flightService.delete(flight.id).subscribe(() => {
+      console.log('super');
+      this.flightService.getAll().subscribe(data => this.flights=data);
+    });
   }
 
 createTicket(flight : IFlight){

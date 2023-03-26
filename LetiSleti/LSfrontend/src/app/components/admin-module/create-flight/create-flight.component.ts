@@ -53,11 +53,11 @@ export class CreateFlightComponent implements OnInit {
   register(){
     
     var startConverted = new Date(this.startDateTime?.value);
-    var newStart = new Date(startConverted.getFullYear(), startConverted.getMonth(), startConverted.getDay(), startConverted.getHours() + 2,
+    var newStart = new Date(startConverted.getFullYear(), startConverted.getMonth(), startConverted.getDate(), startConverted.getHours() + 2,
       startConverted.getMinutes(), startConverted.getSeconds(), startConverted.getMilliseconds()); 
     //startConverted.setHours(startConverted.getHours() + 2);
     var endConverted = new Date(this.endDateTime?.value);
-    var newEnd = new Date(endConverted.getFullYear(), endConverted.getMonth(), endConverted.getDay(), endConverted.getHours() + 2,
+    var newEnd = new Date(endConverted.getFullYear(), endConverted.getMonth(), endConverted.getDate(), endConverted.getHours() + 2,
       endConverted.getMinutes(), endConverted.getSeconds(), endConverted.getMilliseconds()); 
 
     let flight: IFlight = {

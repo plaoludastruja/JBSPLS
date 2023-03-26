@@ -1,3 +1,6 @@
+import { IFlight } from 'src/app/shared/material/Flight';
+import { DeleteDto } from './../model/DTO/deleteDTO';
+import { SearchDto } from './../model/DTO/searchDTO';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -20,6 +23,13 @@ export class FlightService {
     return this.http.get<any>(this.apiHost + 'flight/getAll');
   }
 
+  search(searchCriteria: any): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'flight/search', searchCriteria);
+  }
+
+  delete(flightId: string): any{
+    return this.http.delete(this.apiHost + `flight/${flightId}`);
+  }
   changePlacesLeft(flightId: any): Observable<any> {
     return this.http.get<any>(this.apiHost + 'flight/change-places-left/' + flightId);
   }
