@@ -12,3 +12,7 @@ func AddFlight(flight Models.Flight) bool {
 func GetAllFlights() []Models.Flight {
 	return Repository.GetAllFlights()
 }
+
+func ChangePlacesLeft(id string) {
+	Repository.ChangePlacesLeft(id)
+}

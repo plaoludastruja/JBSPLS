@@ -1,6 +1,8 @@
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import jwtDecode from 'jwt-decode';
 import { Observable } from 'rxjs';
+import { Jwt } from '../model/jwt';
 import { User } from '../model/user';
 
 @Injectable({
@@ -23,5 +25,16 @@ export class UserService {
 
   login(login:any): Observable<any> {
     return this.http.post<any>(this.apiHost + 'user/login', login);
+  }
+
+  decodeToken(): Jwt | undefined{
+    const token = localStorage.getItem('token')
+    if(token) 
+      return jwtDecode<Jwt>(token)
+    return undefined
+  }
+
+  getByEmail(email : any): Observable<any> {
+    return this.http.get<any>(this.apiHost + 'user/by-email/' + email);
   }
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/HTTP"
+	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Services"
 )
 
@@ -13,4 +14,14 @@ func GetAllUsers(ctx *gin.Context) {
 	httpGin := HTTP.Gin{Context: ctx}
 	users := Services.GetAllUsers()
 	httpGin.OK(users)
+}
+
+func GetUserByEmail(ctx *gin.Context) {
+	fmt.Println("GetUserByEmail")
+	httpGin := HTTP.Gin{Context: ctx}
+	user := Models.User{}
+	email := ctx.Param("email")
+	fmt.Println(email)
+	user, _ = Services.GetUserByEmail(email)
+	httpGin.OK(user)
 }

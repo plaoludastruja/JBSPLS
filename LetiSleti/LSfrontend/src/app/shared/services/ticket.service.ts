@@ -5,23 +5,19 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class FlightService {
+export class TicketService {
 
   apiHost: string = 'http://localhost:8080/';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }
 
-  register(flight: any): Observable<any> {
-    return this.http.post<any>(this.apiHost + 'flight/register', flight);
+  create(ticket: any): Observable<any> {
+    return this.http.post<any>(this.apiHost + 'ticket', ticket, {headers: this.headers});
   }
 
   getAll(): Observable<any> {
-    return this.http.get<any>(this.apiHost + 'flight/getAll');
-  }
-
-  changePlacesLeft(flightId: any): Observable<any> {
-    return this.http.get<any>(this.apiHost + 'flight/change-places-left/' + flightId);
+    return this.http.get<any>(this.apiHost + 'ticket/getAll', {headers: this.headers});
   }
 
 }

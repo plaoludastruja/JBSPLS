@@ -1,32 +1,32 @@
-version: '3.3'
+version: "3.3"
 services:
-    #baza
-    mongo:
-        image: 'mongo:latest'
-        container_name: 'mongo'
-        ports:
-            - '27017:27017'
-        volumes:
-            - type: bind
-              source: ./data
-              target: /data/db
-    #back
-    lsbackend:
-        container_name: 'lsbackend'
-        build: './LetiSleti/LSbackend'
-        ports:
-            - '8080:8080'
-        volumes:
-            - './LetiSleti/LSbackend:/app'
-        depends_on:
-            - 'mongo'
-    #front
-    lsfrontend:
-        container_name: 'lsfrontend'
-        build: './LetiSleti/LSfrontend'
-        ports:
-            - '4200:4200'
-        volumes:
-            - './LetiSleti/LSfrontend:/usr/local/app'
-        depends_on:
-            - 'lsbackend'
+  #baza
+  mongo:
+    image: "mongo:latest"
+    container_name: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - type: bind
+        source: ./data
+        target: /data/db
+  #back
+  lsbackend:
+    container_name: "lsbackend"
+    build: "./LetiSleti/LSbackend"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./LetiSleti/LSbackend:/app"
+    depends_on:
+      - "mongo"
+  #front
+  lsfrontend:
+    container_name: "lsfrontend"
+    build: "./LetiSleti/LSfrontend"
+    ports:
+      - "4200:4200"
+    volumes:
+      - "./LetiSleti/LSfrontend:/usr/local/app"
+    depends_on:
+      - "lsbackend"

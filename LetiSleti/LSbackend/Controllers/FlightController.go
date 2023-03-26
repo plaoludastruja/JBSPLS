@@ -32,3 +32,14 @@ func GetAllFlights(ctx *gin.Context) {
 	flights := Services.GetAllFlights()
 	httpGin.OK(flights)
 }
+
+func ChangePlacesLeft(ctx *gin.Context) {
+	fmt.Println("ChangePlacesLeft")
+	httpGin := HTTP.Gin{Context: ctx}
+
+	flightId := ctx.Param("flightId")
+	fmt.Println(flightId)
+	Services.ChangePlacesLeft(flightId)
+
+	httpGin.OK(flightId)
+}

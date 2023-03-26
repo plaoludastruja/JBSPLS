@@ -8,3 +8,7 @@ import (
 func GetAllUsers() []Models.User {
 	return Repository.GetAllUsers()
 }
+
+func GetUserByEmail(email string) (Models.User, error) {
+	return Repository.GetUserByEmail(email)
+}
