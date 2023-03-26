@@ -25,7 +25,7 @@ export class ShowFlightsComponent implements OnInit{
     
   }
 
-  createTicket(flight : IFlight){
+createTicket(flight : IFlight){
     this.userService.getByEmail(this.userService.decodeToken()?.email).subscribe(res => {
       this.user = res
       let ticket: TicketDTO = {
@@ -48,5 +48,18 @@ export class ShowFlightsComponent implements OnInit{
     })
   }
 
-  
+splitDate(date: string){
+    var forShowing = '';
+    var splittedOnT = date.split("T");
+    console.log(splittedOnT);
+    console.log(splittedOnT[0]);
+    var splittedDate = splittedOnT[0].split('-');
+    console.log(splittedDate);
+    console.log(splittedDate[0]);
+    forShowing= forShowing + splittedDate[2] + '.' + splittedDate[1] + '.' + splittedDate[0] +'.';
+    var splittedTime = splittedOnT[1].split(':');
+    forShowing.concat(" ");
+    forShowing= forShowing + splittedTime[0] + ":" + splittedTime[1];
+    return forShowing;
+  }
 }
