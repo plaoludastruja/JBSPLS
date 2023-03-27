@@ -27,13 +27,6 @@ export class UserService {
     return this.http.post<any>(this.apiHost + 'user/login', login);
   }
 
-  decodeToken(): Jwt | undefined{
-    const token = localStorage.getItem('token')
-    if(token) 
-      return jwtDecode<Jwt>(token)
-    return undefined
-  }
-
   getByEmail(email : any): Observable<any> {
     return this.http.get<any>(this.apiHost + 'user/by-email/' + email);
   }
