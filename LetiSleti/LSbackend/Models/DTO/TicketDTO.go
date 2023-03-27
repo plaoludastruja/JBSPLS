@@ -11,4 +11,5 @@ type TicketDTO struct {
 	End        time.Time `json:"endTime" bson:"end_time" binding:"required"`
 	EndPlace   string    `json:"endPlace" bson:"end_place" binding:"required"`
 	Price      int       `json:"price" bson:"price" binding:"required"`
+	Count      int       `json:"count" bson:"count" binding:"required"`
 }

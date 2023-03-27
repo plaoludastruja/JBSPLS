@@ -12,4 +12,5 @@ type Ticket struct {
 	End        string        `json:"end"  bson:"end" binding:"required"`
 	EndPlace   string        `json:"endPlace" bson:"endPlace" binding:"required"`
 	Price      int           `json:"price" bson:"price" binding:"required"`
+	Count      int           `json:"count" bson:"count" binding:"required"`
 }

@@ -7,4 +7,5 @@ export class TicketDTO {
     End: string = '';
     EndPlace: string = '';
     Price: number = 0;
+    Count: number = 0;
 }
