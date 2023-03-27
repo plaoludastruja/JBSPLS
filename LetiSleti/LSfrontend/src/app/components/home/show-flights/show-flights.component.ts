@@ -79,7 +79,8 @@ createTicket(flight : IFlight){
         Price: flight.pricePerPlace,
         FirstName: this.user.firstName,
         LastName: this.user.lastName,
-        Email: this.user.email
+        Email: this.user.email,
+        Count: this.count
       }
       console.log(ticket)
       this.ticketService.create(ticket).subscribe(res => {
