@@ -1,11 +1,10 @@
-import { DeleteDto } from './../../../shared/model/DTO/deleteDTO';
-import { SearchDto } from './../../../shared/model/DTO/searchDTO';
 import { Component, OnInit } from '@angular/core';
 import { IFlight } from 'src/app/shared/material/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
 import { TicketDTO } from 'src/app/shared/model/DTO/ticketDTO';
 import { TicketService } from 'src/app/shared/services/ticket.service';
 import { User } from 'src/app/shared/model/user';
+import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
@@ -16,16 +15,23 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class ShowFlightsComponent implements OnInit{
 
   flights: IFlight[] = []
-  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'buy', 'delete'];
+  displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining'];
   user: User  = new User 
+  isSearchDisplayed: boolean = true;
   count: number = 1;
 
   constructor(
-    public flightService: FlightService, public ticketService: TicketService, public userService: UserService) {}
+    public flightService: FlightService, public ticketService: TicketService, public authService: AuthService, public userService: UserService) {}
 
   ngOnInit(): void {
     this.flightService.getAll().subscribe(data => this.flights=data);
-    
+    let userRole = this.authService.decodeToken()?.role
+    if(userRole === 'USERROLE')
+      this.displayedColumns =  ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'buy']
+    else if(userRole === 'ADMINROLE') {
+      this.isSearchDisplayed = false
+      this.displayedColumns =  ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'delete']
+    }
   }
 
   search(startPlace: string, endPlace: string, numberOfPlaces: string, date:string){
@@ -62,7 +68,8 @@ export class ShowFlightsComponent implements OnInit{
   }
 
 createTicket(flight : IFlight){
-    this.userService.getByEmail(this.userService.decodeToken()?.email).subscribe(res => {
+  if(flight.remaining > 0) {
+    this.userService.getByEmail(this.authService.decodeToken()?.email).subscribe(res => {
       this.user = res
       let ticket: TicketDTO = {
         Start: flight.start,
@@ -82,6 +89,9 @@ createTicket(flight : IFlight){
         })
       });
     })
+  } 
+  else alert("All tickets are sold out!") 
+    
   }
 
 splitDate(date: string){
