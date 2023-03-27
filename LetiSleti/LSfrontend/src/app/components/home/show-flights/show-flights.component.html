@@ -9,10 +9,10 @@
     <mat-label>Destination place</mat-label>
     <input matInput #endPlace/>
   </mat-form-field>
-
+  
   <mat-form-field appearance="fill" class="search">
     <mat-label>Date and time</mat-label>
-    <input matInput #dateTime type="datetime-local">
+    <input matInput #dateTime type="date">
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="search">
@@ -20,7 +20,7 @@
     <input matInput #numberOfPlaces type="number">
   </mat-form-field>
 
-  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, dateTime.value, numberOfPlaces.value)" type="button">
+  <button mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, numberOfPlaces.value, dateTime.value)" type="button">
     <mat-icon matSuffix>search</mat-icon>
   </button>
 </div>
