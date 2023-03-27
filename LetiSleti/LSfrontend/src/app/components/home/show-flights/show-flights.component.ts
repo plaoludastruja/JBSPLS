@@ -18,6 +18,7 @@ export class ShowFlightsComponent implements OnInit{
   flights: IFlight[] = []
   displayedColumns: string[] = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining', 'buy', 'delete'];
   user: User  = new User 
+  count: number = 1;
 
   constructor(
     public flightService: FlightService, public ticketService: TicketService, public userService: UserService) {}
@@ -27,17 +28,19 @@ export class ShowFlightsComponent implements OnInit{
     
   }
 
-  search(startPlace: string, endPlace: string, date: string, numberOfPlaces: string){
+  search(startPlace: string, endPlace: string, numberOfPlaces: string, date:string){
+    this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining','totalPrice', 'buy', 'delete'];
+    this.count = parseInt(numberOfPlaces);
     var numberOfPlacesConv = parseInt(numberOfPlaces);
     var dateConverted: Date = new Date(); 
     var searchCriteria;
     if(date != ""){
       var d = new Date(date);
-      dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours() + 1, d.getMinutes(), d.getSeconds(), d.getMilliseconds())
+      dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0)
       searchCriteria = {startPlace:startPlace,
         endPlace:endPlace,
         numberOfPlaces: numberOfPlacesConv,
-        date:dateConverted.toISOString()}
+        date:d.toISOString()}
     } else{
       searchCriteria = {startPlace:startPlace,
         endPlace:endPlace,
