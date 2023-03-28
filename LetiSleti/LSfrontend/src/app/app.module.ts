@@ -19,6 +19,7 @@ import { ShowFlightsComponent } from './components/home/show-flights/show-flight
 import { MatTableModule } from '@angular/material/table';
 import { TicketsInfoComponent } from './components/customer/tickets-info/tickets-info.component';
 import { AuthInterceptor } from 'auth.interceptor';
+import { CreateFlightComponent } from './components/admin-module/create-flight/create-flight.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AuthInterceptor } from 'auth.interceptor';
     HomepageMenuComponent,
     CorouselComponent,
     ShowFlightsComponent,
-    TicketsInfoComponent
+    TicketsInfoComponent,
+    CreateFlightComponent
   ],
   imports: [
     BrowserModule,

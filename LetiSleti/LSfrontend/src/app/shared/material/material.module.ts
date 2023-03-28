@@ -42,6 +42,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatIcon } from '@angular/material/icon';
+//
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+//import { DateTimePickerModule, MaskedDateTimeService } from '@syncfusion/ej2-angular-calendars';
+import { DateTimePickerModule } from '@smart-webcomponents-angular/datetimepicker';
 
 const Material = [
     CommonModule,
@@ -80,7 +84,10 @@ const Material = [
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DateTimePickerModule
 ]
 
 @NgModule({
