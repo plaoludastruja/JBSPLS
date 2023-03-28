@@ -10,7 +10,7 @@ import { DateTimePickerModule } from '@smart-webcomponents-angular/datetimepicke
 
 @NgModule({
   declarations: [
-    CreateFlightComponent
+    //CreateFlightComponent
   ],
   imports: [
     CommonModule,
