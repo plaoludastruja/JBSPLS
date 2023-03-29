@@ -16,9 +16,6 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin():void{
-    this.userService.login(this.loginDto).subscribe(res => {
-      console.log(res)
-      localStorage.setItem('token', res)
-    });
+    this.userService.login(this.loginDto)
   }
 }
