@@ -12,14 +12,15 @@ import { RegisterComponent } from './components/home/register/register.component
 import { HomepageComponent } from './components/home/homepage/homepage.component';
 import { HomepageMenuComponent } from './components/home/homepage-menu/homepage-menu.component';
 import { CorouselComponent } from './components/home/corousel/corousel.component';
-import { AdminModuleModule } from './components/admin-module/admin-module.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ShowFlightsComponent } from './components/home/show-flights/show-flights.component';
 import { MatTableModule } from '@angular/material/table';
-import { TicketsInfoComponent } from './components/customer/tickets-info/tickets-info.component';
+import { TicketsInfoComponent } from './components/home/tickets-info/tickets-info.component';
 import { AuthInterceptor } from 'auth.interceptor';
-import { CreateFlightComponent } from './components/admin-module/create-flight/create-flight.component';
+import { CreateFlightComponent } from './components/home/create-flight/create-flight.component';
+import { ToastrModule } from 'ngx-toastr';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { CreateFlightComponent } from './components/admin-module/create-flight/c
     CorouselComponent,
     ShowFlightsComponent,
     TicketsInfoComponent,
-    CreateFlightComponent
+    CreateFlightComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,12 +41,14 @@ import { CreateFlightComponent } from './components/admin-module/create-flight/c
     BrowserAnimationsModule,
     MaterialModule,
     NgbModule,
-    AdminModuleModule,
     HttpClientModule,
     FormsModule,
-    MatTableModule 
+    MatTableModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+      JwtHelperService,
     {
       provide : HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

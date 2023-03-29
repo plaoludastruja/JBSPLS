@@ -1,4 +1,4 @@
-import { IFlight } from 'src/app/shared/material/Flight';
+import { IFlight } from 'src/app/shared/model/Flight';
 import { DeleteDto } from './../model/DTO/deleteDTO';
 import { SearchDto } from './../model/DTO/searchDTO';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -16,7 +16,7 @@ export class FlightService {
   constructor(private http: HttpClient) { }
 
   register(flight: any): Observable<any> {
-    return this.http.post<any>(this.apiHost + 'flight/register', flight);
+    return this.http.post<any>(this.apiHost + 'admin/flight/register', flight);
   }
 
   getAll(): Observable<any> {

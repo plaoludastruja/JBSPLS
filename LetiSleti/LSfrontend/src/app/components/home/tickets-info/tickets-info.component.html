@@ -1,5 +1,6 @@
 <app-homepage-menu></app-homepage-menu>
-<table mat-table [dataSource]="tickets" class="mat-elevation-z8">
+<div>
+  <table mat-table [dataSource]="tickets" class="mat-elevation-z8 mt-3">
 
     <ng-container matColumnDef="from">
       <th mat-header-cell *matHeaderCellDef> From </th>
@@ -39,3 +40,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+</div>

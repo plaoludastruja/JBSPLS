@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { IFlight } from 'src/app/shared/material/Flight';
+import { IFlight } from 'src/app/shared/model/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
 import { TicketDTO } from 'src/app/shared/model/DTO/ticketDTO';
 import { TicketService } from 'src/app/shared/services/ticket.service';
 import { User } from 'src/app/shared/model/user';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-show-flights',
@@ -21,7 +22,7 @@ export class ShowFlightsComponent implements OnInit{
   count: number = 1;
 
   constructor(
-    public flightService: FlightService, public ticketService: TicketService, public authService: AuthService, public userService: UserService) {}
+    public flightService: FlightService, public ticketService: TicketService, public authService: AuthService, public userService: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.flightService.getAll().subscribe(data => this.flights=data);
@@ -63,6 +64,7 @@ export class ShowFlightsComponent implements OnInit{
     //const deleteId: DeleteDto = {id:id}
     this.flightService.delete(flight.id).subscribe(() => {
       console.log('super');
+      this.toastr.success('Flight deleted successfully', '', { closeButton: true, timeOut : 1500  });
       this.flightService.getAll().subscribe(data => this.flights=data);
     });
   }
@@ -84,7 +86,7 @@ createTicket(flight : IFlight){
       }
       console.log(ticket)
       this.ticketService.create(ticket).subscribe(res => {
-        alert("Ticket is successfully created.")
+        this.toastr.success('Ticket created successfully', '', { closeButton: true, timeOut : 1500  });
         this.flightService.changePlacesLeft(flight.id).subscribe(res => {
           window.location.reload()
         })
