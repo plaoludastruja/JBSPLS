@@ -26,11 +26,11 @@ export class RegisterComponent implements OnInit {
             this.user.role = "USERROLE"
             this.userService.registerUser(this.user).subscribe({
                 next: (res) => {
-                    this.toastr.success('User successfully created', '', { closeButton: true });
+                    this.toastr.success('User successfully created', '', { closeButton: true, timeOut : 1500  });
                     this.router.navigate(['login'])
                 },
                 error: () => {
-                    this.toastr.error('Username taken', '', { closeButton: true });
+                    this.toastr.error('Username taken', '', { closeButton: true, timeOut : 1500  });
                 }
             });
         }

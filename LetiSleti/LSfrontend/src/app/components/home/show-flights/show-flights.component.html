@@ -1,27 +1,30 @@
 <div *ngIf = "isSearchDisplayed" class="search-container">
-    <mat-form-field appearance="fill" class="search mx-1">
+  <div class="row">
+    <mat-form-field appearance="fill" class="search mx-1 col">
       <mat-label>Start place</mat-label>
       <input matInput #startPlace placeholder="Enter your name"/>
     </mat-form-field>
   
-  <mat-form-field appearance="fill" class="search mx-1"> 
+  <mat-form-field appearance="fill" class="search mx-1 col"> 
     <mat-label>Destination place</mat-label>
     <input matInput #endPlace/>
   </mat-form-field>
   
-  <mat-form-field appearance="fill" class="search mx-1">
+  <mat-form-field appearance="fill" class="search mx-1 col">
     <mat-label>Date and time</mat-label>
     <input matInput #dateTime type="date">
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="search mx-1">
+  <mat-form-field appearance="fill" class="search mx-1 col">
      <mat-label>Number of places</mat-label>
         <input matInput #numberOfPlaces type="number">
   </mat-form-field>
 
-  <button  mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, numberOfPlaces.value, dateTime.value)" type="button">
+  <button class="col search-button" mat-button mat-stroked-button color="primary" (click)="search(startPlace.value, endPlace.value, numberOfPlaces.value, dateTime.value)" type="button">
     <mat-icon matSuffix>search</mat-icon>
   </button>
+  </div>
+    
 </div>
 
 <table mat-table [dataSource]="flights" class="mat-elevation-z8 my-3">

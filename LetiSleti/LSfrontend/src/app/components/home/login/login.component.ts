@@ -10,12 +10,25 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class LoginComponent implements OnInit {
 
   loginDto: LoginDTO = new LoginDTO;
+  errorMessage: string = ''
   constructor(private userService:UserService) { }
 
   ngOnInit(): void {
   }
 
   onLogin():void{
-    this.userService.login(this.loginDto)
+    if(!this.CheckFields()){
+      this.errorMessage ="All fields must be entered"
+    }else{
+      this.userService.login(this.loginDto)
+    }
+    
   }
+
+  CheckFields(): boolean {
+    if ( this.loginDto.email == '' || this.loginDto.password == '' ){
+        return false
+    }
+    return true
+}
 }
