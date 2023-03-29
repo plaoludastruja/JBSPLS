@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IFlight } from 'src/app/shared/material/Flight';
+import { IFlight } from 'src/app/shared/model/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
 import { TicketDTO } from 'src/app/shared/model/DTO/ticketDTO';
 import { TicketService } from 'src/app/shared/services/ticket.service';

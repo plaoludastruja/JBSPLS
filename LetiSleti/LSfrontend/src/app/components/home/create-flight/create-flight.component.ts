@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IFlight } from 'src/app/shared/material/Flight';
+import { IFlight } from 'src/app/shared/model/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
 
 @Component({
