@@ -1,17 +1,11 @@
 .carousel {
-    height: 100vh;
+    height: 80%;
     width: 100%;
     overflow-y: hidden;
 }
 
 .carousel .carousel-inner {
     height:95%;    
-}
-
-.container {
-    position: relative;
-    text-align: center;
-    color: white;
 }
 
 /* Centered text */

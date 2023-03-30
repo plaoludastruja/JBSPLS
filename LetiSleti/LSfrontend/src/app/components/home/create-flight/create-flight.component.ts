@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IFlight } from 'src/app/shared/material/Flight';
+import { IFlight } from 'src/app/shared/model/Flight';
 import { FlightService } from 'src/app/shared/services/flight.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-flight',
@@ -16,6 +18,8 @@ export class CreateFlightComponent implements OnInit {
   public errorMessage: String = "";
 
   constructor(
+    private router: Router,
+    private toastr: ToastrService,
     fb: FormBuilder,
     public flightService: FlightService) {
       this.form = fb.group({
@@ -73,7 +77,11 @@ export class CreateFlightComponent implements OnInit {
     console.log(flight)
     if(this.form.valid && this.compareDates(this.startDateTime, this.endDateTime)){
       this.errorMessage=""
-      this.flightService.register(flight).subscribe();
+      this.flightService.register(flight).subscribe(res=> {
+        this.toastr.success('Flight created successfully', '', { closeButton: true, timeOut : 1500 })
+        this.router.navigate(['home'])
+      });
+      
     }else{
       if(this.errorMessage=="") this.errorMessage="All fields must be entered"
     }

@@ -1,6 +1,8 @@
 package Services
 
 import (
+	"fmt"
+
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/Token"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Repository"
@@ -8,6 +10,11 @@ import (
 )
 
 func RegisterUser(user Models.User) bool {
+	_, err := Repository.GetUserByEmail(user.Email)
+	if err == nil {
+		fmt.Println("Username taken!")
+		return false
+	}
 	HashPassword(&user)
 	return Repository.CreateUser(user)
 }
