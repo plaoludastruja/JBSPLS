@@ -55,6 +55,10 @@ func DeleteFlight(flightId string) int64 {
 	if err != nil {
 		log.Println("Invalid id")
 	}
+	_, err1 := ticketsCollection.DeleteMany(context.TODO(), bson.D{{Key: "flightId", Value: objectId}})
+	if err1 != nil {
+		log.Fatal(err)
+	}
 	res, err := flightsCollection.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: objectId}})
 	if err != nil {
 		log.Fatal(err)

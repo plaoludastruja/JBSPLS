@@ -81,13 +81,14 @@ createTicket(flight : IFlight){
         FirstName: this.user.firstName,
         LastName: this.user.lastName,
         Email: this.user.email,
-        Count: this.count
+        Count: this.count,
+        FlightId: flight.id
       }
       console.log(ticket)
       this.ticketService.create(ticket).subscribe(res => {
         this.toastr.success('Ticket created successfully', '', { closeButton: true, timeOut : 1500  });
         this.flightService.changePlacesLeft(flight.id).subscribe(res => {
-          window.location.reload()
+          this.flightService.getAll().subscribe(data => this.flights=data);
         })
       });
     })
