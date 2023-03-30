@@ -28,7 +28,7 @@ func GetAllFlights() []Models.Flight {
 
 func SearchFlights(searchCriteria DTO.SearchDTO) []Models.Flight {
 	results := []Models.Flight{}
-
+	fmt.Println(searchCriteria.Date)
 	//date := time.Date(searchCriteria.Date.Year(), searchCriteria.Date.Month(), searchCriteria.Date.Year(), searchCriteria.Date.Day(), searchCriteria.Date.Hour(), searchCriteria.Date.Minute(), searchCriteria.Date.Second(), time.UTC)
 	end := time.Date(searchCriteria.Date.Year(), searchCriteria.Date.Month(), searchCriteria.Date.Day(), 23, 59, 59, 999999999, time.UTC)
 	filter := bson.M{"startPlace": searchCriteria.StartPlace, "endPlace": searchCriteria.EndPlace, "start": bson.M{"$gte": searchCriteria.Date, "$lt": end}, "remaining": bson.M{"$gte": searchCriteria.NumberOfPlaces}}
