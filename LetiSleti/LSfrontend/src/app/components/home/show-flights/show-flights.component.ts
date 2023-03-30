@@ -36,23 +36,22 @@ export class ShowFlightsComponent implements OnInit{
   }
 
   search(startPlace: string, endPlace: string, numberOfPlaces: string, date:string){
-    this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace', 'remaining','totalPrice', 'buy', 'delete'];
+    if(startPlace == '' || endPlace == '' || numberOfPlaces == '' || date == ''){
+      this.toastr.error('All criteria must be entered!', '', { closeButton: true, timeOut : 1500  });
+      return;
+    }
+    this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace','totalPrice', 'remaining', 'buy'];
     this.count = parseInt(numberOfPlaces);
     var numberOfPlacesConv = parseInt(numberOfPlaces);
-    var dateConverted: Date = new Date(); 
-    var searchCriteria;
-    if(date != ""){
-      var d = new Date(date);
-      dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0)
-      searchCriteria = {startPlace:startPlace,
+    var d = new Date(date);
+    //var dateConverted = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0)
+    console.log("datum iz searcha")
+    console.log(d)
+    //d.setHours(0, 0, 0);
+    var searchCriteria = {startPlace:startPlace,
         endPlace:endPlace,
         numberOfPlaces: numberOfPlacesConv,
         date:d.toISOString()}
-    } else{
-      searchCriteria = {startPlace:startPlace,
-        endPlace:endPlace,
-        numberOfPlaces: numberOfPlacesConv}
-    }
     
     this.flightService.search(searchCriteria).subscribe((data) => {
       this.flights = data;
@@ -82,18 +81,19 @@ createTicket(flight : IFlight){
         FirstName: this.user.firstName,
         LastName: this.user.lastName,
         Email: this.user.email,
-        Count: this.count
+        Count: this.count,
+        FlightId: flight.id
       }
       console.log(ticket)
       this.ticketService.create(ticket).subscribe(res => {
         this.toastr.success('Ticket created successfully', '', { closeButton: true, timeOut : 1500  });
         this.flightService.changePlacesLeft(flight.id).subscribe(res => {
-          window.location.reload()
+          this.flightService.getAll().subscribe(data => this.flights=data);
         })
       });
     })
   } 
-  else alert("All tickets are sold out!") 
+  else this.toastr.error('All tickets are sold out!', '', { closeButton: true, timeOut : 1500  });
     
   }
 

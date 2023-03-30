@@ -8,4 +8,5 @@ export class TicketDTO {
     EndPlace: string = '';
     Price: number = 0;
     Count: number = 0;
+    FlightId: string = '';
 }
