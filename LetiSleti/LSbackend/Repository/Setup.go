@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const DATABASE_URI = "mongodb://mongo"
+const DATABASE_URI = "mongodb://localhost"
 
 var usersCollection *mongo.Collection
 var flightsCollection *mongo.Collection
