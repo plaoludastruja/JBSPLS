@@ -40,7 +40,13 @@ export class ShowFlightsComponent implements OnInit{
       this.toastr.error('All criteria must be entered!', '', { closeButton: true, timeOut : 1500  });
       return;
     }
-    this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace','totalPrice', 'remaining', 'buy'];
+    let userRole = this.authService.decodeToken()?.role
+    if(userRole === 'USERROLE'){
+      this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace','totalPrice', 'remaining', 'buy'];
+    }else{
+      this.displayedColumns = ['start', 'startPlace', 'end', 'endPlace', 'pricePerPlace','totalPrice', 'remaining'];
+    }
+    
     this.count = parseInt(numberOfPlaces);
     var numberOfPlacesConv = parseInt(numberOfPlaces);
     var d = new Date(date);

@@ -17,7 +17,7 @@ export class TicketService {
   }
 
   getAll(): Observable<any> {
-    return this.http.get<any>(this.apiHost + 'ticket/getAll', {headers: this.headers});
+    return this.http.get<any>(this.apiHost + 'user/ticket/getAll', {headers: this.headers});
   }
 
 }
