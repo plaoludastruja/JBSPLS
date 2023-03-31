@@ -69,7 +69,7 @@ export class ShowFlightsComponent implements OnInit{
   }
 
 createTicket(flight : IFlight){
-  if(flight.remaining > 0) {
+  if(flight.remaining >= this.count) {
     this.userService.getByEmail(this.authService.decodeToken()?.email).subscribe(res => {
       this.user = res
       let ticket: TicketDTO = {
@@ -87,7 +87,7 @@ createTicket(flight : IFlight){
       console.log(ticket)
       this.ticketService.create(ticket).subscribe(res => {
         this.toastr.success('Ticket created successfully', '', { closeButton: true, timeOut : 1500  });
-        this.flightService.changePlacesLeft(flight.id).subscribe(res => {
+        this.flightService.changePlacesLeft(flight.id, this.count).subscribe(res => {
           this.flightService.getAll().subscribe(data => this.flights=data);
         })
       });

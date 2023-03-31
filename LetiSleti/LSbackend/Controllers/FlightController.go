@@ -2,6 +2,7 @@ package Controllers
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/HTTP"
@@ -68,8 +69,11 @@ func ChangePlacesLeft(ctx *gin.Context) {
 	httpGin := HTTP.Gin{Context: ctx}
 
 	flightId := ctx.Param("flightId")
+	count := ctx.Param("count")
+	fmt.Println(count)
 	fmt.Println(flightId)
-	Services.ChangePlacesLeft(flightId)
+	countConverted, _ := strconv.Atoi(count)
+	Services.ChangePlacesLeft(flightId, countConverted)
 
 	httpGin.OK(flightId)
 }
