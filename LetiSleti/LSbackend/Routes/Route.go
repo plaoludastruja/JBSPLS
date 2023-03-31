@@ -30,10 +30,10 @@ func InitRoutes() *gin.Engine {
 	public.DELETE("/user/:userId", Controllers.DeleteUser)
 
 	public.POST("/ticket", Controllers.CreateTicket)
-	public.GET("/ticket/getAll", Controllers.GetAllTickets)
+	user.GET("/ticket/getAll", Controllers.GetAllTickets)
 
 	admin.POST("/flight/register", Controllers.RegisterFlight)
-	public.GET("/flight/change-places-left/:flightId", Controllers.ChangePlacesLeft)
+	public.GET("/flight/change-places-left/:flightId/:count", Controllers.ChangePlacesLeft)
 	public.GET("/flight/getAll", Controllers.GetAllFlights)
 	public.POST("/flight/search", Controllers.SearchFlights)
 	admin.DELETE("/flight/:flightId", Controllers.DeleteFlight)

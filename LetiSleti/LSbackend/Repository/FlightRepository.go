@@ -67,14 +67,14 @@ func DeleteFlight(flightId string) int64 {
 	return res.DeletedCount
 }
 
-func ChangePlacesLeft(id string) error {
+func ChangePlacesLeft(id string, count int) error {
 
 	var flight Models.Flight
 	objID, _ := primitive.ObjectIDFromHex(id)
 	err := flightsCollection.FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&flight)
 	filter := bson.M{"_id": objID}
 	update := bson.M{"$set": bson.M{
-		"remaining": flight.Remaining - 1,
+		"remaining": flight.Remaining - count,
 	}}
 	flightsCollection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
