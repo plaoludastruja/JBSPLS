@@ -12,6 +12,15 @@ import { RegisterComponent } from './components/home/register/register.component
 import { HomepageComponent } from './components/home/homepage/homepage.component';
 import { HomepageMenuComponent } from './components/home/homepage-menu/homepage-menu.component';
 import { CorouselComponent } from './components/home/corousel/corousel.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ShowFlightsComponent } from './components/home/show-flights/show-flights.component';
+import { MatTableModule } from '@angular/material/table';
+import { TicketsInfoComponent } from './components/home/tickets-info/tickets-info.component';
+import { AuthInterceptor } from 'auth.interceptor';
+import { CreateFlightComponent } from './components/home/create-flight/create-flight.component';
+import { ToastrModule } from 'ngx-toastr';
+import { JWT_OPTIONS, JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -21,16 +30,32 @@ import { CorouselComponent } from './components/home/corousel/corousel.component
     RegisterComponent,
     HomepageComponent,
     HomepageMenuComponent,
-    CorouselComponent
+    CorouselComponent,
+    ShowFlightsComponent,
+    TicketsInfoComponent,
+    CreateFlightComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule,
+    FormsModule,
+    MatTableModule,
+    ToastrModule.forRoot(),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+      JwtHelperService,
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi   : true,
+    }
+  ],
+  bootstrap: [AppComponent],
+  exports: [HomepageMenuComponent]
 })
 export class AppModule { }
