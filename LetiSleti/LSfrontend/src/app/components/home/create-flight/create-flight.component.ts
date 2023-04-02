@@ -76,11 +76,16 @@ export class CreateFlightComponent implements OnInit {
     }
     console.log(flight)
     if(this.form.valid && this.compareDates(this.startDateTime, this.endDateTime)){
-      this.errorMessage=""
-      this.flightService.register(flight).subscribe(res=> {
+      if(flight.maxNumberOfPlaces <= 0 || flight.pricePerPlace <= 0){
+        this.errorMessage="Maximum number of places and price must be greater than 0";
+      }else{
+        this.errorMessage=""
+        this.flightService.register(flight).subscribe(res=> {
         this.toastr.success('Flight created successfully', '', { closeButton: true, timeOut : 1500 })
         this.router.navigate(['home'])
       });
+      }
+      
       
     }else{
       if(this.errorMessage=="") this.errorMessage="All fields must be entered"
