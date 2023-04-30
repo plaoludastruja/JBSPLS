@@ -5,7 +5,7 @@ services:
     container_name: user_service
     build:
       context: .
-      dockerfile: ./user_service/Dockerfile
+      dockerfile: ./Skitnica/backend/user_service/Dockerfile
     restart: on-failure
     environment:
       USER_DB_HOST: ${USER_DB_HOST}
@@ -21,7 +21,7 @@ services:
     container_name: api_gateway
     build:
       context: .
-      dockerfile: ./api_gateway/Dockerfile
+      dockerfile: ./Skitnica/backend/api_gateway/Dockerfile
     restart: on-failure
     ports:
       - ${GATEWAY_PORT}:${GATEWAY_PORT}

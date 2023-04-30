@@ -31,9 +31,9 @@ func (server *Server) Start() {
 	mongoClient := server.initMongoClient()
 	productStore := repository.NewUserMongoDBStore(mongoClient)
 
-	productService := service.NewProductService(productStore)
+	productService := service.NewUserService(productStore)
 
-	userHandler := handler.NewProductHandler(productService)
+	userHandler := handler.NewUserHandler(productService)
 
 	server.startGrpcServer(userHandler)
 }
@@ -48,7 +48,7 @@ func (server *Server) initMongoClient() *mongo.Client {
 	return client
 }
 
-func (server *Server) startGrpcServer(productHandler *handler.ProductHandler) {
+func (server *Server) startGrpcServer(productHandler *handler.UserHandler) {
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", server.config.Port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

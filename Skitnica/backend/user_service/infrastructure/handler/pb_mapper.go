@@ -7,8 +7,8 @@ import (
 
 func mapUser(user *domain.User) *pb.User {
 	userPb := &pb.User{
-		Id:   user.Id.Hex(),
-		Name: user.Name,
+		Id:       user.Id.Hex(),
+		Username: user.Name,
 	}
 	return userPb
 }
