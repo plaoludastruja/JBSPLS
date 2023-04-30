@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/user";
+
+package user;
+
+import "google/api/annotations.proto";
+
+service UserService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/user/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+        	    option (google.api.http) = {
+                  get: "/user"
+              };
+        }
+        rpc CreateOrder(CreateOrderRequest) returns(CreateOrderResponse) {
+              option (google.api.http) = {
+                  post: "/user"
+                  body: "user"
+              };
+        }
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        User user = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated User users = 1;
+}
+
+message CreateOrderRequest {
+        User user = 1;
+}
+
+message CreateOrderResponse {
+        User user = 1;
+}
+
+message User {
+        string id = 1;
+        string username = 2;
+}
