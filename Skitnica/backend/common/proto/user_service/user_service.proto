@@ -17,7 +17,7 @@ service UserService {
                   get: "/user"
               };
         }
-        rpc CreateOrder(CreateOrderRequest) returns(CreateOrderResponse) {
+        rpc CreateUser(CreateUserRequest) returns(CreateUserResponse) {
               option (google.api.http) = {
                   post: "/user"
                   body: "user"
@@ -40,11 +40,11 @@ message GetAllResponse {
         repeated User users = 1;
 }
 
-message CreateOrderRequest {
+message CreateUserRequest {
         User user = 1;
 }
 
-message CreateOrderResponse {
+message CreateUserResponse {
         User user = 1;
 }
 

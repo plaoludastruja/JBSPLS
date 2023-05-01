@@ -10,9 +10,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 
-	catalogue "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/infrastructure/handler"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/infrastructure/repository"
+	userPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/handler"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/repository"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/service"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/startup/config"
 )
@@ -29,12 +29,9 @@ func NewServer(config *config.Config) *Server {
 
 func (server *Server) Start() {
 	mongoClient := server.initMongoClient()
-	productStore := repository.NewUserMongoDBStore(mongoClient)
-
+	productStore := repository.NewUserRepo(mongoClient)
 	productService := service.NewUserService(productStore)
-
 	userHandler := handler.NewUserHandler(productService)
-
 	server.startGrpcServer(userHandler)
 }
 
@@ -54,7 +51,7 @@ func (server *Server) startGrpcServer(productHandler *handler.UserHandler) {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	catalogue.RegisterUserServiceServer(grpcServer, productHandler)
+	userPb.RegisterUserServiceServer(grpcServer, productHandler)
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}

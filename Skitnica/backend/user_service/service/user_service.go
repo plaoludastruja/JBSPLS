@@ -6,10 +6,10 @@ import (
 )
 
 type UserService struct {
-	store domain.UserStore
+	store domain.IUserRepo
 }
 
-func NewUserService(store domain.UserStore) *UserService {
+func NewUserService(store domain.IUserRepo) *UserService {
 	return &UserService{
 		store: store,
 	}
@@ -21,4 +21,8 @@ func (service *UserService) Get(id primitive.ObjectID) (*domain.User, error) {
 
 func (service *UserService) GetAll() ([]*domain.User, error) {
 	return service.store.GetAll()
+}
+
+func (service *UserService) Insert(user domain.User) error {
+	return service.store.Insert(&user)
 }

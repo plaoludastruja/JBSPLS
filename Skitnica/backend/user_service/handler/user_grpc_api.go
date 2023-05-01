@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service"
+	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -49,4 +49,17 @@ func (handler *UserHandler) GetAll(ctx context.Context, request *pb.GetAllReques
 		response.Users = append(response.Users, current)
 	}
 	return response, nil
+}
+
+func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	//order := mapNewOrder(request.Order)
+	user := mapUserPb(request.User)
+	//err := handler.service.Create(order, request.Order.Address)
+	err := handler.service.Insert(*user)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateUserResponse{
+		User: mapUser(user),
+	}, nil
 }

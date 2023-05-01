@@ -14,28 +14,28 @@ const (
 	COLLECTION = "users"
 )
 
-type UserMongoDBStore struct {
+type UserRepo struct {
 	users *mongo.Collection
 }
 
-func NewUserMongoDBStore(client *mongo.Client) domain.UserStore {
+func NewUserRepo(client *mongo.Client) domain.IUserRepo {
 	usersCollection := client.Database(DATABASE).Collection(COLLECTION)
-	return &UserMongoDBStore{
+	return &UserRepo{
 		users: usersCollection,
 	}
 }
 
-func (store *UserMongoDBStore) Get(id primitive.ObjectID) (*domain.User, error) {
+func (store *UserRepo) Get(id primitive.ObjectID) (*domain.User, error) {
 	filter := bson.M{"_id": id}
 	return store.filterOne(filter)
 }
 
-func (store *UserMongoDBStore) GetAll() ([]*domain.User, error) {
+func (store *UserRepo) GetAll() ([]*domain.User, error) {
 	filter := bson.D{{}}
 	return store.filter(filter)
 }
 
-func (store *UserMongoDBStore) Insert(user *domain.User) error {
+func (store *UserRepo) Insert(user *domain.User) error {
 	result, err := store.users.InsertOne(context.TODO(), user)
 	if err != nil {
 		return err
@@ -44,11 +44,11 @@ func (store *UserMongoDBStore) Insert(user *domain.User) error {
 	return nil
 }
 
-func (store *UserMongoDBStore) DeleteAll() {
+func (store *UserRepo) DeleteAll() {
 	store.users.DeleteMany(context.TODO(), bson.D{{}})
 }
 
-func (store *UserMongoDBStore) filter(filter interface{}) ([]*domain.User, error) {
+func (store *UserRepo) filter(filter interface{}) ([]*domain.User, error) {
 	cursor, err := store.users.Find(context.TODO(), filter)
 	defer cursor.Close(context.TODO())
 
@@ -58,7 +58,7 @@ func (store *UserMongoDBStore) filter(filter interface{}) ([]*domain.User, error
 	return decode(cursor)
 }
 
-func (store *UserMongoDBStore) filterOne(filter interface{}) (user *domain.User, err error) {
+func (store *UserRepo) filterOne(filter interface{}) (user *domain.User, err error) {
 	result := store.users.FindOne(context.TODO(), filter)
 	err = result.Decode(&user)
 	return
