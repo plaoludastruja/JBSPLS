@@ -26,3 +26,11 @@ func (service *UserService) GetAll() ([]*domain.User, error) {
 func (service *UserService) Insert(user domain.User) error {
 	return service.store.Insert(&user)
 }
+
+func (service *UserService) Delete(id primitive.ObjectID) error {
+	return service.store.Delete(id)
+}
+
+func (service *UserService) Edit(user domain.User) error {
+	return service.store.Edit(&user)
+}

@@ -38,6 +38,8 @@ services:
     restart: on-failure
     networks:
       - network
+    ports:
+      - ${USER_DB_PORT}:${USER_DB_PORT}
 
 networks:
   network:

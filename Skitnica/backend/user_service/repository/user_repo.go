@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/domain"
 	"go.mongodb.org/mongo-driver/bson"
@@ -44,8 +45,27 @@ func (store *UserRepo) Insert(user *domain.User) error {
 	return nil
 }
 
+func (store *UserRepo) Edit(user *domain.User) error {
+	filter := bson.M{"_id": user.Id}
+	update := bson.M{"$set": bson.M{
+		"username":   user.Username,
+		"password":   user.Password,
+		"first_name": user.FirstName,
+		"last_name":  user.LastName,
+	}}
+	_, err := store.users.UpdateOne(context.TODO(), filter, update)
+
+	return err
+}
+
 func (store *UserRepo) DeleteAll() {
 	store.users.DeleteMany(context.TODO(), bson.D{{}})
+}
+
+func (store *UserRepo) Delete(id primitive.ObjectID) error {
+	res, err := store.users.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: id}})
+	fmt.Printf("deleted %v documents\n", res.DeletedCount)
+	return err
 }
 
 func (store *UserRepo) filter(filter interface{}) ([]*domain.User, error) {

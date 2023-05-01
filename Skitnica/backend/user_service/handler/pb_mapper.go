@@ -8,8 +8,12 @@ import (
 
 func mapUser(user *domain.User) *pb.User {
 	userPb := &pb.User{
-		Id:       user.Id.Hex(),
-		Username: user.Name,
+		Id:        user.Id.Hex(),
+		Username:  user.Username,
+		Password:  user.Password,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Role:      user.Role,
 	}
 	return userPb
 }
@@ -17,8 +21,12 @@ func mapUser(user *domain.User) *pb.User {
 func mapUserPb(userPb *pb.User) *domain.User {
 	userPbId, _ := primitive.ObjectIDFromHex(userPb.Id)
 	user := &domain.User{
-		Id:   userPbId,
-		Name: userPb.Username,
+		Id:        userPbId,
+		Username:  userPb.Username,
+		Password:  userPb.Password,
+		FirstName: userPb.FirstName,
+		LastName:  userPb.LastName,
+		Role:      userPb.Role,
 	}
 	return user
 }

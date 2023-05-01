@@ -52,9 +52,7 @@ func (handler *UserHandler) GetAll(ctx context.Context, request *pb.GetAllReques
 }
 
 func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
-	//order := mapNewOrder(request.Order)
 	user := mapUserPb(request.User)
-	//err := handler.service.Create(order, request.Order.Address)
 	err := handler.service.Insert(*user)
 	if err != nil {
 		return nil, err
@@ -62,4 +60,27 @@ func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.CreateUs
 	return &pb.CreateUserResponse{
 		User: mapUser(user),
 	}, nil
+}
+
+func (handler *UserHandler) EditUser(ctx context.Context, request *pb.EditUserRequest) (*pb.EditUserResponse, error) {
+	user := mapUserPb(request.User)
+	err := handler.service.Edit(*user)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.EditUserResponse{
+		User: mapUser(user),
+	}, nil
+}
+
+func (handler *UserHandler) DeleteUser(ctx context.Context, request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+	errr := handler.service.Delete(objectId)
+	if errr != nil {
+		return nil, err
+	}
+	return &pb.DeleteResponse{}, nil
 }

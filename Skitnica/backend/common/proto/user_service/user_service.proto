@@ -13,16 +13,28 @@ service UserService {
             };
         }
         rpc GetAll(GetAllRequest) returns(GetAllResponse) {
-        	    option (google.api.http) = {
-                  get: "/user"
-              };
+            option (google.api.http) = {
+                get: "/user"
+            };
         }
         rpc CreateUser(CreateUserRequest) returns(CreateUserResponse) {
-              option (google.api.http) = {
-                  post: "/user"
-                  body: "user"
-              };
+            option (google.api.http) = {
+                post: "/user"
+                body: "user"
+            };
         }
+        rpc EditUser(EditUserRequest) returns(EditUserResponse) {
+            option (google.api.http) = {
+                put: "/user"
+                body: "user"
+            };
+        }
+        rpc DeleteUser(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/user/{id}"
+            };
+        }
+        
 }
 
 message GetRequest {
@@ -40,6 +52,13 @@ message GetAllResponse {
         repeated User users = 1;
 }
 
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
 message CreateUserRequest {
         User user = 1;
 }
@@ -48,7 +67,19 @@ message CreateUserResponse {
         User user = 1;
 }
 
+message EditUserRequest {
+        User user = 1;
+}
+
+message EditUserResponse {
+        User user = 1;
+}
+
 message User {
         string id = 1;
         string username = 2;
+        string password = 3;
+        string firstName = 4;
+        string lastName = 5;
+        string role = 6;
 }
