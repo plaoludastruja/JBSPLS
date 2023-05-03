@@ -1,0 +1,8 @@
+go 1.20
+
+use (
+	./LetiSleti/LSbackend
+	./Skitnica/backend/api_gateway
+	./Skitnica/backend/common
+	./Skitnica/backend/user_service
+)
