@@ -15,6 +15,21 @@ services:
       - user_db
     networks:
       - network
+  accomodation_service:
+    image: accomodation_service
+    container_name: accomodation_service
+    build:
+      context: .
+      dockerfile: ./Skitnica/backend/accomodation_service/Dockerfile
+    restart: on-failure
+    environment:
+      ACCOMODATION_DB_HOST: ${ACCOMODATION_DB_HOST}
+      ACCOMODATION_DB_PORT: ${ACCOMODATION_DB_PORT}
+      ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_SERVICE_PORT}
+    depends_on:
+      - accomodation_db
+    networks:
+      - network
 
   api_gateway:
     image: api_gateway
@@ -29,6 +44,8 @@ services:
       GATEWAY_PORT: ${GATEWAY_PORT}
       USER_SERVICE_HOST: ${USER_SERVICE_HOST}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
+      ACCOMODATION_SERVICE_HOST: ${ACCOMODATION_SERVICE_HOST}
+      ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_SERVICE_PORT}
     networks:
       - network
 
@@ -40,6 +57,15 @@ services:
       - network
     ports:
       - ${USER_DB_PORT}:${USER_DB_PORT}
+
+  accomodation_db:
+    image: mongo
+    container_name: accomodation_db
+    restart: on-failure
+    networks:
+      - network
+    ports:
+      - ${ACCOMDOATION_DB_PORT}:${ACCOMODATION_DB_PORT}
 
 networks:
   network:
