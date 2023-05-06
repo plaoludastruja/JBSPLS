@@ -64,8 +64,6 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - ${ACCOMODATION_DB_PORT}:${ACCOMODATION_DB_PORT}
 
 networks:
   network:
