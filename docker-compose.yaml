@@ -65,7 +65,7 @@ services:
     networks:
       - network
     ports:
-      - ${ACCOMDOATION_DB_PORT}:${ACCOMODATION_DB_PORT}
+      - ${ACCOMODATION_DB_PORT}:${ACCOMODATION_DB_PORT}
 
 networks:
   network:
