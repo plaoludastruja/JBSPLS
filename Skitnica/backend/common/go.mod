@@ -2,6 +2,8 @@ module github.com/plaoludastruja/JBSPLS/Skitnica/backend/common
 
 go 1.20
 
+replace github.com/plaoludastruja/JBSPLS/Skitnica/backend/common => ../common
+
 require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1

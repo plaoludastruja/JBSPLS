@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/appointment";
+
+package accomodation;
+
+import "google/api/annotations.proto";
+
+service AppointmentService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/appointment/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation"
+            };
+        }
+        rpc CreateAppointment(CreateAppointmentRequest) returns(CreateAppointmentResponse) {
+            option (google.api.http) = {
+                post: "/appointment"
+                body: "appointment"
+            };
+        }
+        rpc EditAppointment(EditAppointmentRequest) returns(EditAppointmentResponse) {
+            option (google.api.http) = {
+                put: "/appointment"
+                body: "appointment"
+            };
+        }
+        rpc DeleteAppointment(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/appointment/{id}"
+            };
+        }
+        
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        Appointment appointment = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated Appointment appointments = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateAppointmentRequest {
+        Appointment appointment = 1;
+}
+
+message CreateAppointmentResponse {
+        Appointment appointment = 1;
+}
+
+message EditAppointmentRequest {
+        Appointment appointment = 1;
+}
+
+message EditAppointmentResponse {
+        Appointment appointment = 1;
+}
+
+message Appointment {
+        string id = 1;
+        string accomodationId = 2;
+        int64 start = 3;
+        int64 end = 4;
+        string priceType = 5;
+        int32 price = 6;
+        string status = 7;
+}
