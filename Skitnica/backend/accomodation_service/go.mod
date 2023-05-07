@@ -1,4 +1,4 @@
-module github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service
+module github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service
 
 go 1.20
 
@@ -6,8 +6,8 @@ replace github.com/plaoludastruja/JBSPLS/Skitnica/backend/common => ../common
 
 require (
 	github.com/plaoludastruja/JBSPLS/Skitnica/backend/common v0.0.0-00010101000000-000000000000
-	go.mongodb.org/mongo-driver v1.11.4
-	google.golang.org/grpc v1.54.0
+	go.mongodb.org/mongo-driver v1.11.6
+	google.golang.org/grpc v1.55.0
 )
 
 require (
