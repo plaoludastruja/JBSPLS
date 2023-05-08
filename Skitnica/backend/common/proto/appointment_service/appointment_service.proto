@@ -78,8 +78,8 @@ message EditAppointmentResponse {
 message Appointment {
         string id = 1;
         string accomodationId = 2;
-        int64 start = 3;
-        int64 end = 4;
+        string start = 3;
+        string end = 4;
         string priceType = 5;
         int32 price = 6;
         string status = 7;

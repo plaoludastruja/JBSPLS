@@ -14,6 +14,7 @@ import (
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/appointment_service/repository"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/appointment_service/service"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/appointment_service/startup/config"
+	appointmentPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
 )
 
 type Server struct {
