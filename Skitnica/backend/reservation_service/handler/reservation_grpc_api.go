@@ -1,0 +1,86 @@
+package handler
+
+import (
+	"context"
+
+	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/service"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
+type ReservationHandler struct {
+	pb.UnimplementedReservationServiceServer
+	service *service.ReservationService
+}
+
+func NewReservationHandler(service *service.ReservationService) *ReservationHandler {
+	return &ReservationHandler{
+		service: service,
+	}
+}
+
+func (handler *ReservationHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
+	id := request.Id
+	objectId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+	reservation, err := handler.service.Get(objectId)
+	if err != nil {
+		return nil, err
+	}
+	reservationPb := mapReservation(reservation)
+	response := &pb.GetResponse{
+		Reservation: reservationPb,
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) GetAll(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
+	reservations, err := handler.service.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservation(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
+	reservation := mapReservationPb(request.Reservation)
+	err := handler.service.Insert(*reservation)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.CreateReservationResponse{
+		Reservation: mapReservation(reservation),
+	}, nil
+}
+
+func (handler *ReservationHandler) EditReservation(ctx context.Context, request *pb.EditReservationRequest) (*pb.EditReservationResponse, error) {
+	reservation := mapReservationPb(request.Reservation)
+	err := handler.service.Edit(*reservation)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.EditReservationResponse{
+		Reservation: mapReservation(reservation),
+	}, nil
+}
+
+func (handler *ReservationHandler) DeleteReservation(ctx context.Context, request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	objectId, err := primitive.ObjectIDFromHex(request.Id)
+	if err != nil {
+		return nil, err
+	}
+	errr := handler.service.Delete(objectId)
+	if errr != nil {
+		return nil, err
+	}
+	return &pb.DeleteResponse{}, nil
+}

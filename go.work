@@ -5,5 +5,6 @@ use (
 	./Skitnica/backend/accomodation_service
 	./Skitnica/backend/api_gateway
 	./Skitnica/backend/common
+	./Skitnica/backend/reservation_service
 	./Skitnica/backend/user_service
 )
