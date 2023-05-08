@@ -31,6 +31,22 @@ services:
     networks:
       - network
 
+  reservation_service:
+    image: reservation_service
+    container_name: reservation_service
+    build:
+      context: .
+      dockerfile: ./Skitnica/backend/reservation_service/Dockerfile
+    restart: on-failure
+    environment:
+      RESERVATION_DB_HOST: ${RESERVATION_DB_HOST}
+      RESERVATION_DB_PORT: ${RESERVATION_DB_PORT}
+      RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
+    depends_on:
+      - reservation_db
+    networks:
+      - network
+
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -46,6 +62,9 @@ services:
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
       ACCOMODATION_SERVICE_HOST: ${ACCOMODATION_SERVICE_HOST}
       ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_SERVICE_PORT}
+      RESERVATION_SERVICE_HOST: ${RESERVATION_SERVICE_HOST}
+      RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
+
     networks:
       - network
 
@@ -61,6 +80,13 @@ services:
   accomodation_db:
     image: mongo
     container_name: accomodation_db
+    restart: on-failure
+    networks:
+      - network
+
+  reservation_db:
+    image: mongo
+    container_name: reservation_db
     restart: on-failure
     networks:
       - network

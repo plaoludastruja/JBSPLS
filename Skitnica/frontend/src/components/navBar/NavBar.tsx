@@ -4,10 +4,6 @@ import "./NavBar.css";
 
 import { CgLogIn as LoginIcon, CgLogOut as LogoutIcon } from "react-icons/cg";
 
-const logout = () => {
-  //TODO
-};
-
 function NavBar() {
   return (
     <nav
@@ -49,13 +45,7 @@ function NavBar() {
             </a>
           </li>
           <li className="nav-item active">
-            <a
-              className="nav-link"
-              href="/login"
-              onClick={() => {
-                logout();
-              }}
-            >
+            <a className="nav-link" href="/login">
               <b>LOGOUT</b>
               <LogoutIcon className="icon" size={25} color="#d88a3f" />
             </a>

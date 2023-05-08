@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/reservation";
+
+package reservation;
+
+import "google/api/annotations.proto";
+
+service ReservationService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/reservation/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/reservation"
+            };
+        }
+        rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
+            option (google.api.http) = {
+                post: "/reservation"
+                body: "reservation"
+            };
+        }
+        rpc EditReservation(EditReservationRequest) returns(EditReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation"
+                body: "reservation"
+            };
+        }
+        rpc DeleteReservation(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/reservation/{id}"
+            };
+        }
+        
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        Reservation reservation = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated Reservation reservations = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateReservationRequest {
+        Reservation reservation = 1;
+}
+
+message CreateReservationResponse {
+        Reservation reservation = 1;
+}
+
+message EditReservationRequest {
+        Reservation reservation = 1;
+}
+
+message EditReservationResponse {
+        Reservation reservation = 1;
+}
+
+message Reservation {
+        string id = 1;
+        string accomodationId = 2;
+        string username = 3;
+        string startDate = 4;
+        string endDate = 5;
+        int32 guestNumber = 6;
+}
