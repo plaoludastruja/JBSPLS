@@ -4,6 +4,7 @@ use (
 	./LetiSleti/LSbackend
 	./Skitnica/backend/accomodation_service
 	./Skitnica/backend/api_gateway
+	./Skitnica/backend/appointment_service
 	./Skitnica/backend/common
 	./Skitnica/backend/reservation_service
 	./Skitnica/backend/user_service
