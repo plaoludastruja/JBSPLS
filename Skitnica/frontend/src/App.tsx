@@ -4,6 +4,7 @@ import NavBar from "./components/navBar/NavBar";
 import Login from "./components/login/Login";
 import HomePage from "./components/homePage/HomePage";
 import RegisterAccomodation from "./components/register-accomodation/RegisterAccomodation";
+import RegisterPrice from "./components/register-price/RegisterPrice";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<Login />} />
             <Route path="/create-accomodation" element={<RegisterAccomodation />} />
+            <Route path="/create-price" element={<RegisterPrice/>}/>
           </Routes>
         </div>
       </div>
