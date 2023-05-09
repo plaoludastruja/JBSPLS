@@ -235,7 +235,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accomodation.AppointmentService/Get", runtime.WithHTTPPathPattern("/appointment/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/Get", runtime.WithHTTPPathPattern("/appointment/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -260,7 +260,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accomodation.AppointmentService/GetAll", runtime.WithHTTPPathPattern("/accomodation"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/GetAll", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -285,7 +285,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accomodation.AppointmentService/CreateAppointment", runtime.WithHTTPPathPattern("/appointment"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/CreateAppointment", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -310,7 +310,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accomodation.AppointmentService/EditAppointment", runtime.WithHTTPPathPattern("/appointment"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/EditAppointment", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -335,7 +335,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/accomodation.AppointmentService/DeleteAppointment", runtime.WithHTTPPathPattern("/appointment/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/DeleteAppointment", runtime.WithHTTPPathPattern("/appointment/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -399,7 +399,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accomodation.AppointmentService/Get", runtime.WithHTTPPathPattern("/appointment/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/Get", runtime.WithHTTPPathPattern("/appointment/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -421,7 +421,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accomodation.AppointmentService/GetAll", runtime.WithHTTPPathPattern("/accomodation"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/GetAll", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -443,7 +443,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accomodation.AppointmentService/CreateAppointment", runtime.WithHTTPPathPattern("/appointment"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/CreateAppointment", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -465,7 +465,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accomodation.AppointmentService/EditAppointment", runtime.WithHTTPPathPattern("/appointment"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/EditAppointment", runtime.WithHTTPPathPattern("/appointment"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -487,7 +487,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/accomodation.AppointmentService/DeleteAppointment", runtime.WithHTTPPathPattern("/appointment/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/DeleteAppointment", runtime.WithHTTPPathPattern("/appointment/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -509,7 +509,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 var (
 	pattern_AppointmentService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"appointment", "id"}, ""))
 
-	pattern_AppointmentService_GetAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"accomodation"}, ""))
+	pattern_AppointmentService_GetAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"appointment"}, ""))
 
 	pattern_AppointmentService_CreateAppointment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"appointment"}, ""))
 

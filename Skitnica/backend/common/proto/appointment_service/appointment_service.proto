@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/appointment";
 
-package accomodation;
+package appointment;
 
 import "google/api/annotations.proto";
 
@@ -14,7 +14,7 @@ service AppointmentService {
         }
         rpc GetAll(GetAllRequest) returns(GetAllResponse) {
             option (google.api.http) = {
-                get: "/accomodation"
+                get: "/appointment"
             };
         }
         rpc CreateAppointment(CreateAppointmentRequest) returns(CreateAppointmentResponse) {

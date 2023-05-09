@@ -101,6 +101,8 @@ services:
     restart: on-failure
     networks:
       - network
+    ports:
+      - 27018:${ACCOMODATION_DB_PORT} # test
   
   appointment_db:
     image: mongo
