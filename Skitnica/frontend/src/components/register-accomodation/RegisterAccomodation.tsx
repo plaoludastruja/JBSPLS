@@ -1,20 +1,17 @@
 import { useState } from 'react';
 import './RegisterAccomodation.css';
 import Accomodation from '../../model/Accomodation';
+import accomodationService from '../../services/accomodation.service';
 
 function RegisterAccomodation() {
 
-    const [accomodation, setAccomodation] = useState<Accomodation>({ Id: '', Name: '', Location : '', Facilities : '', MaxNumberOfGuests : 0, MinNumberOfGuests : 0 })
+    const [accomodation, setAccomodation] = useState<Accomodation>({ Id: '', Name: 'Naziv', Location : '', Facilities : '', MaxNumberOfGuests : 0, MinNumberOfGuests : 0 })
     
     const createAccomodation = () => {
-        /*if(validateInput()) {
-          authorService.createAuthor(author).then(() => {
-            props.closeModal()
-            props.setIsAuthorsChanged(true)
-          })
-            .catch(() => {setErrorMessage('Unable to create new author.')})
-        }*/
-        console.log(accomodation);
+        console.log(accomodation)
+        accomodationService.createAccomodation(accomodation).then(() => {
+                console.log('bravo');
+        })
       }
     
     return <>
@@ -58,7 +55,7 @@ function RegisterAccomodation() {
             </div>
             <div className='field'>
             <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            e.stopPropagation()
+            //e.stopPropagation()
             createAccomodation()
           }}
           >Create
