@@ -53,17 +53,6 @@ func (server *Server) startGrpcServer(reservationHandler *handler.ReservationHan
 	}
 	grpcServer := grpc.NewServer()
 	reservationPb.RegisterReservationServiceServer(grpcServer, reservationHandler)
-	// router := mux.NewRouter().StrictSlash(true)
-
-	// router.Methods("OPTIONS").HandlerFunc(
-	// 	func(w http.ResponseWriter, r *http.Request) {
-	// 		w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-	// 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	// 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
-	// 		w.Header().Set("Access-Control-Allow-Credentials", "true")
-	// 		w.WriteHeader(http.StatusNoContent)
-	// 	})
-	// fmt.Println("server running ")
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
