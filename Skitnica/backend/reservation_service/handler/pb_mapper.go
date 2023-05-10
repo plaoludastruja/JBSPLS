@@ -23,8 +23,9 @@ func mapReservation(reservation *domain.Reservation) *pb.Reservation {
 
 func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 	reservationPbId, _ := primitive.ObjectIDFromHex(reservationPb.Id)
-	startDate, _ := time.Parse("DD-MM-YYYY", reservationPb.StartDate)
-	endDate, _ := time.Parse("DD-MM-YYYY", reservationPb.EndDate)
+	const layout = "2006-01-02"
+	startDate, _ := time.Parse(layout, reservationPb.StartDate)
+	endDate, _ := time.Parse(layout, reservationPb.EndDate)
 	reservation := &domain.Reservation{
 		Id:             reservationPbId,
 		AccomodationId: reservationPb.AccomodationId,

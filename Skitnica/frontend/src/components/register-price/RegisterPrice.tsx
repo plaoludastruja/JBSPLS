@@ -26,16 +26,9 @@ function RegisterPrice() {
   const createAppointment = () => {
     console.log(appointment);
     priceService.createAppointment(appointment).then(() => {
-      console.log('bravo');
-})
+      console.log("bravo");
+    });
   };
-  /*
-        <select>
-            {accomodations.map(accomodation => (
-                <option value={accomodation.id}>{accomodation.name}</option>
-            ))}
-        </select>
-    */
 
   return (
     <>
@@ -44,7 +37,14 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodationnnn:</label>
-            <select onChange={(e) => setAppointment(prevState => ({ ...prevState, accomodationId: e.target.value }))}>
+            <select
+              onChange={(e) =>
+                setAppointment((prevState) => ({
+                  ...prevState,
+                  accomodationId: e.target.value,
+                }))
+              }
+            >
               {accomodations.map((accomodation, index) => (
                 <option value={accomodation.id} key={index}>
                   {accomodation.name}
