@@ -7,6 +7,7 @@ import RegisterAccomodation from "./components/register-accomodation/RegisterAcc
 import Reservations from "./components/reservations/Reservations";
 import Register from "./components/registerPage/Register";
 import RegisterPrice from "./components/register-price/RegisterPrice";
+import Accomodations from "./components/accomodations/Accomodations";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             />
             <Route path="/reservations" element={<Reservations />} />
             <Route path="/create-price" element={<RegisterPrice />} />
+            <Route path="/accomodations" element={<Accomodations />} />
           </Routes>
         </div>
       </div>
