@@ -27,7 +27,7 @@ func NewSearchHandler(accomodationClientAddress, appointmentClientAddress, reser
 }
 
 func (handler *SearchHandler) Init(mux *runtime.ServeMux) {
-	err := mux.HandlePath("GET", "/accomodation/search/{location}/{guestNumber}", handler.Search)
+	err := mux.HandlePath("GET", "/accomodation/search/{location}/{guestNumber}/{startDay}/{startMonth}/{startYear}/{endDay}/{endMonth}/{endYear}", handler.Search)
 	if err != nil {
 		panic(err)
 	}
@@ -36,6 +36,25 @@ func (handler *SearchHandler) Init(mux *runtime.ServeMux) {
 func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 	location := pathParams["location"]
 	guestNumber := pathParams["guestNumber"]
+
+	startDayString := pathParams["startDay"]
+	fmt.Println("startDayString", startDayString)
+
+	startMonthString := pathParams["startMonth"]
+	fmt.Println("startMonthString", startMonthString)
+
+	startYearString := pathParams["startYear"]
+	fmt.Println("startYearString", startYearString)
+
+	endDayString := pathParams["endDay"]
+	fmt.Println("endDayString", endDayString)
+
+	endMonthString := pathParams["endMonth"]
+	fmt.Println("endMonthString", endMonthString)
+
+	endYearString := pathParams["endYear"]
+	fmt.Println("endYearString", endYearString)
+
 	if location == "" || guestNumber == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -45,10 +64,11 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 		fmt.Println("Greška pri parsiranju:", err)
 		return
 	}
+	num2 := int32(num)
 	fmt.Println(num)
 	//searchResult := &domain.SearchResult{Name: ""}
 	accomodationClient := service.NewAccomodationClient(handler.accomodationClientAddress)
-	accomodations, err := accomodationClient.GetAll(context.TODO(), &accomodation.GetAllRequest{})
+	accomodations, err := accomodationClient.Search(context.TODO(), &accomodation.SearchRequest{Location: location, GuestNumber: num2})
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
