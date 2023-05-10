@@ -5,6 +5,8 @@ import Login from "./components/login/Login";
 import HomePage from "./components/homePage/HomePage";
 import RegisterAccomodation from "./components/register-accomodation/RegisterAccomodation";
 import Reservations from "./components/reservations/Reservations";
+import Register from "./components/registerPage/Register";
+import RegisterPrice from "./components/register-price/RegisterPrice";
 
 function App() {
   return (
@@ -16,11 +18,13 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<HomePage />} />
             <Route path="*" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route
               path="/create-accomodation"
               element={<RegisterAccomodation />}
             />
             <Route path="/reservations" element={<Reservations />} />
+            <Route path="/create-price" element={<RegisterPrice />} />
           </Routes>
         </div>
       </div>

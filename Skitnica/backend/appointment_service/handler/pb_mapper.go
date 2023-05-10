@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/appointment_service/domain"
@@ -23,8 +24,11 @@ func mapAppointment(appointment *domain.Appointment) *pb.Appointment {
 
 func mapAppointmentPb(appointmentPb *pb.Appointment) *domain.Appointment {
 	appointmentPbId, _ := primitive.ObjectIDFromHex(appointmentPb.Id)
-	start, _ := time.Parse("DD-MM-YYYY", appointmentPb.Start)
-	end, _ := time.Parse("DD-MM-YYYY", appointmentPb.End)
+	const layout = "2006-01-02"
+	fmt.Println(appointmentPb.Start)
+	start, _ := time.Parse(layout, appointmentPb.Start)
+	fmt.Println(start)
+	end, _ := time.Parse(layout, appointmentPb.End) //"YYYY-MM-DD"
 	appointment := &domain.Appointment{
 
 		Id:             appointmentPbId,
