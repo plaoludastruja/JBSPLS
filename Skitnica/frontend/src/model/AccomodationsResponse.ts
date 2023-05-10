@@ -1,5 +1,5 @@
 import Accomodation from "./Accomodation";
 
-export default interface AccomodationResponse{
+export default interface AccomodationsResponse{
     accomodations: Accomodation[]
 }
