@@ -22,7 +22,7 @@ function RegisterPrice() {
       setAccomodations(response.data.accomodations);
     });
   }, []);
-  console.log(accomodations);
+  //console.log(accomodations);
 
   
 
