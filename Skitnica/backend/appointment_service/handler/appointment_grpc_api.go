@@ -84,3 +84,18 @@ func (handler *AppointmentHandler) DeleteAppointment(ctx context.Context, reques
 	}
 	return &pb.DeleteResponse{}, nil
 }
+
+func (handler *AppointmentHandler) GetByAccomodation(ctx context.Context, request *pb.GetAccomodationRequest) (*pb.GetAccomodationResponse, error) {
+	appointments, err := handler.service.GetByAccomodation(request.AccomodationId)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAccomodationResponse{
+		Appointments: []*pb.Appointment{},
+	}
+	for _, appointment := range appointments {
+		current := mapAppointment(appointment)
+		response.Appointments = append(response.Appointments, current)
+	}
+	return response, nil
+}
