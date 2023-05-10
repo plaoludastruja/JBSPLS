@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson"
@@ -47,16 +48,20 @@ func (store *ReservationRepo) Insert(reservation *domain.Reservation) error {
 
 func (store *ReservationRepo) Edit(reservation *domain.Reservation) error {
 	filter := bson.M{"_id": reservation.Id}
-	update := bson.M{"$set": bson.M{
-		"accomodationId": reservation.AccomodationId,
-		"username":       reservation.Username,
-		"startDate":      reservation.StartDate,
-		"endDate":        reservation.EndDate,
-		"guestNumber":    reservation.GuestNumber,
-	}}
-	_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+	if reservation.StartDate.Compare(time.Now().Add(time.Hour*24)) == -1 && reservation.Status == "APPROVED" {
+		update := bson.M{"$set": bson.M{
+			"accomodationId": reservation.AccomodationId,
+			"username":       reservation.Username,
+			"startDate":      reservation.StartDate,
+			"endDate":        reservation.EndDate,
+			"guestNumber":    reservation.GuestNumber,
+			"status":         "CANCELED",
+		}}
+		_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
 
-	return err
+		return err
+	}
+	return nil
 }
 
 func (store *ReservationRepo) DeleteAll() {
@@ -64,9 +69,13 @@ func (store *ReservationRepo) DeleteAll() {
 }
 
 func (store *ReservationRepo) Delete(id primitive.ObjectID) error {
-	res, err := store.reservations.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: id}})
-	fmt.Printf("deleted %v documents\n", res.DeletedCount)
-	return err
+	reservation, _ := store.Get(id)
+	if reservation.Status == "PENDING" || (reservation.StartDate.Compare(time.Now().Add(time.Hour*48)) == -1 && reservation.Status == "APPROVED") {
+		res, err := store.reservations.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: id}})
+		fmt.Printf("deleted %v documents\n", res.DeletedCount)
+		return err
+	}
+	return nil
 }
 
 func (store *ReservationRepo) filter(filter interface{}) ([]*domain.Reservation, error) {

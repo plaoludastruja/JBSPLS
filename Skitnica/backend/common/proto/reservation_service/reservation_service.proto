@@ -82,4 +82,5 @@ message Reservation {
         string startDate = 4;
         string endDate = 5;
         int32 guestNumber = 6;
+        string status = 7;
 }
