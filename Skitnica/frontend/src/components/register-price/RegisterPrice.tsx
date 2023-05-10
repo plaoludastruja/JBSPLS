@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Appointment from '../../model/Appointment';
 import Accomodation from '../../model/Accomodation';
 import accomodationService from '../../services/accomodation.service';
+import priceService from '../../services/price.service';
 
 function RegisterPrice() {
 
@@ -11,15 +12,15 @@ function RegisterPrice() {
     useEffect(() => {
         accomodationService.getAccomodations().then((response) => {
             setAccomodations(response.data.accomodations) 
-            //console.log(accomodations)
         })
 
-        //console.log(Array.isArray(accomodations))
     }, [accomodations])
-    //console.log(accomodations)
 
     const createAppointment = () => {
         console.log(appointment)
+        priceService.createAppointment(appointment).then(() => {
+                console.log('bravo');
+        })
     }
     
     return <>
@@ -40,14 +41,14 @@ function RegisterPrice() {
                 <label>
                 Start:
                 <input type="date" name="name"
-                 onChange={(e) => setAppointment(prevState => ({ ...prevState, start: e.target.value }))}/>
+                 onChange={(e) => setAppointment(prevState => ({ ...prevState, start: new Date(e.target.value).toISOString() }))}/>
                 </label>
             </div>
             <div className='field'>
                 <label>
                 End:
                 <input type="date" name="name" 
-                onChange={(e) => setAppointment(prevState => ({ ...prevState, end: e.target.value }))}/>
+                onChange={(e) => setAppointment(prevState => ({ ...prevState, end: new Date(e.target.value).toISOString() }))}/>
                 </label>
             </div>
             <div className='field'>
