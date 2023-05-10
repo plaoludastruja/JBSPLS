@@ -13,7 +13,6 @@ function RegisterPrice() {
         accomodationService.getAccomodations().then((response) => {
             setAccomodations(response.data.accomodations) 
         })
-
     }, [accomodations])
 
     const createAppointment = () => {
@@ -41,14 +40,14 @@ function RegisterPrice() {
                 <label>
                 Start:
                 <input type="date" name="name"
-                 onChange={(e) => setAppointment(prevState => ({ ...prevState, start: new Date(e.target.value).toISOString() }))}/>
+                 onChange={(e) => setAppointment(prevState => ({ ...prevState, start: e.target.value  }))}/>
                 </label>
             </div>
             <div className='field'>
                 <label>
                 End:
                 <input type="date" name="name" 
-                onChange={(e) => setAppointment(prevState => ({ ...prevState, end: new Date(e.target.value).toISOString() }))}/>
+                onChange={(e) => setAppointment(prevState => ({ ...prevState, end: e.target.value}))}/>
                 </label>
             </div>
             <div className='field'>
