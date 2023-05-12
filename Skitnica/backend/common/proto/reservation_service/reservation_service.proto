@@ -34,6 +34,11 @@ service ReservationService {
                 delete: "/reservation/{id}"
             };
         }
+        rpc Search(SearchRequest) returns(SearchResponse) {
+            option (google.api.http) = {
+                get: "/reservation/search/{startDay}/{startMonth}/{startYear}/{endDay}/{endMonth}/{endYear}"
+            };
+        }
         
 }
 
@@ -73,6 +78,19 @@ message EditReservationRequest {
 
 message EditReservationResponse {
         Reservation reservation = 1;
+}
+
+message SearchRequest {
+        string startDay = 1;
+        string startMonth = 2;
+        string startYear = 3;
+        string endDay = 4;
+        string endMonth = 5;
+        string endYear = 6;
+}
+
+message SearchResponse {
+        repeated Reservation reservations = 1;
 }
 
 message Reservation {

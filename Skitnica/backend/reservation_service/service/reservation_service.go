@@ -34,3 +34,7 @@ func (service *ReservationService) Delete(id primitive.ObjectID) error {
 func (service *ReservationService) Edit(reservation domain.Reservation) error {
 	return service.store.Edit(&reservation)
 }
+
+func (service *ReservationService) Search(startDay string, startMonth string, startYear string, endDay string, endMonth string, endYear string) ([]*domain.Reservation, error) {
+	return service.store.Search(startDay, startMonth, startYear, endDay, endMonth, endYear)
+}

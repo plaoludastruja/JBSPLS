@@ -10,6 +10,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/infrastructure/service"
 	accomodation "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
+	reservation "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 )
 
 type SearchHandler struct {
@@ -69,11 +70,42 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 	//searchResult := &domain.SearchResult{Name: ""}
 	accomodationClient := service.NewAccomodationClient(handler.accomodationClientAddress)
 	accomodations, err := accomodationClient.Search(context.TODO(), &accomodation.SearchRequest{Location: location, GuestNumber: num2})
+
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	response, err := json.Marshal(accomodations)
+
+	reservationClient := service.NewReservationClient(handler.reservationClientAddress)
+	reservations, _ := reservationClient.Search(context.TODO(), &reservation.SearchRequest{StartDay: startDayString, StartMonth: startMonthString, StartYear: startYearString, EndDay: endDayString, EndMonth: endMonthString, EndYear: endYearString})
+
+	fmt.Println(reservations.Reservations)
+
+	find := false
+
+	result := []accomodation.Accomodation{}
+	for _, accomodation := range accomodations.Accomodations {
+		for _, reservation := range reservations.Reservations {
+			fmt.Println("Usao u reservations for")
+			if accomodation.Id == reservation.AccomodationId {
+				fmt.Println("Usao u reservations if")
+				find = true
+				fmt.Println("Find:", find)
+			}
+		}
+		if !find {
+			fmt.Println("Usao u append if")
+			result = append(result, *accomodation)
+			fmt.Println(result)
+		}
+		find = false
+		fmt.Println("Find:", find)
+	}
+
+	/*appointmentClient := service.NewAppointmentClient(handler.appointmentClientAddress)
+	appointments, _ := appointmentClient.Search(context.TODO(), &reservation.SearchRequest{StartDay: startDayString, StartMonth: startMonthString, StartYear: startYearString, EndDay: endDayString, EndMonth: endMonthString, EndYear: endYearString})*/
+
+	response, err := json.Marshal(result)
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 
