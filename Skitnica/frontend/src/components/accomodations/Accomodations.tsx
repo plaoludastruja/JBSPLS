@@ -32,6 +32,8 @@ function Accomodations() {
     return appointments;
   }
 
+  
+
   return (
     <>
       Accomodations

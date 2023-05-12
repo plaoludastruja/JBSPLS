@@ -8,7 +8,7 @@ import (
 
 type Appointment struct {
 	Id             primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	AccomodationId string             `json:"accomodationdId" bson:"accomodationdId" binding:"required"`
+	AccomodationId string             `json:"accomodationdId" bson:"accomodationId" binding:"required"`
 	Start          time.Time          `json:"start" bson:"start" binding:"required"`
 	End            time.Time          `json:"end" bson:"end" binding:"required"`
 	PriceType      string             `json:"priceType" bson:"priceType" binding:"required"`

@@ -36,7 +36,7 @@ service AppointmentService {
         }
         rpc GetByAccomodation(GetAccomodationRequest) returns(GetAccomodationResponse) {
             option (google.api.http) = {
-                get: "/appointment/{accomodationId}"
+                get: "/appointment/by-accomodation/{accomodationId}"
             };
         }
         

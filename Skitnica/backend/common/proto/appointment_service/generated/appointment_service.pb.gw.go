@@ -412,7 +412,7 @@ func RegisterAppointmentServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/GetByAccomodation", runtime.WithHTTPPathPattern("/appointment/{accomodationId}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/appointment.AppointmentService/GetByAccomodation", runtime.WithHTTPPathPattern("/appointment/by-accomodation/{accomodationId}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -586,7 +586,7 @@ func RegisterAppointmentServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/GetByAccomodation", runtime.WithHTTPPathPattern("/appointment/{accomodationId}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/appointment.AppointmentService/GetByAccomodation", runtime.WithHTTPPathPattern("/appointment/by-accomodation/{accomodationId}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -616,7 +616,7 @@ var (
 
 	pattern_AppointmentService_DeleteAppointment_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"appointment", "id"}, ""))
 
-	pattern_AppointmentService_GetByAccomodation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"appointment", "accomodationId"}, ""))
+	pattern_AppointmentService_GetByAccomodation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"appointment", "by-accomodation", "accomodationId"}, ""))
 )
 
 var (
