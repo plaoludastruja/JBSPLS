@@ -54,6 +54,7 @@ function RegisterPrice() {
         </select>
     */
 
+
   return (
     <>
       <div className="form">
@@ -61,7 +62,14 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodationnnn:</label>
-            <select onChange={(e) => setAppointment(prevState => ({ ...prevState, accomodationId: e.target.value }))}>
+            <select
+              onChange={(e) =>
+                setAppointment((prevState) => ({
+                  ...prevState,
+                  accomodationId: e.target.value,
+                }))
+              }
+            >
               {accomodations.map((accomodation, index) => (
                 <option value={accomodation.id} key={index}>
                   {accomodation.name}

@@ -1,7 +1,7 @@
-import { HiOutlineHome as HomeIcon } from "react-icons/hi";
 import { AiOutlineUserAdd as RegisterIcon } from "react-icons/ai";
 import "./NavBar.css";
-
+import { BsListStars, BsHouseCheck } from "react-icons/bs";
+import { BiMoneyWithdraw } from "react-icons/bi";
 import { CgLogIn as LoginIcon, CgLogOut as LogoutIcon } from "react-icons/cg";
 
 function NavBar() {
@@ -27,21 +27,21 @@ function NavBar() {
       <div className="collapse navbar-collapse" id="navbarResponsive">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="/">
-              <b>HOME</b>
-              <HomeIcon className="icon" size={25} color="#d88a3f" />
+            <a className="nav-link" href="/create-accomodation">
+              <b>Create accomodation</b>
+              <BsHouseCheck className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/create-accomodation">
-              <b>Create accomodation</b>
-              <HomeIcon className="icon" size={25} color="#d88a3f" />
+            <a className="nav-link" href="/reservations">
+              <b>Reservations</b>
+              <BsListStars className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
           <li className="nav-item active">
             <a className="nav-link" href="/create-price">
               <b>Create price</b>
-              <HomeIcon className="icon" size={25} color="#d88a3f" />
+              <BiMoneyWithdraw className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
           <li className="nav-item active">
@@ -52,13 +52,13 @@ function NavBar() {
           </li>
           <li className="nav-item active">
             <a className="nav-link" href="/login">
-              <b>LOGIN</b>
+              <b>Login</b>
               <LoginIcon className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
           <li className="nav-item active">
             <a className="nav-link" href="/register">
-              <b>REGISTER</b>
+              <b>Register</b>
               <RegisterIcon className="icon" size={25} color="#d88a3f" />
             </a>
           </li>

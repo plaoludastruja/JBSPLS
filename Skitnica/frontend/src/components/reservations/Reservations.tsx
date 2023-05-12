@@ -34,7 +34,7 @@ function Reservations() {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Accomodation</th>
+                      <th>Accomodation name</th>
                       <th>Start date</th>
                       <th>End date</th>
                       <th>Status</th>
@@ -45,8 +45,8 @@ function Reservations() {
                     <tbody key={reservation.id}>
                       <tr>
                         <td>{reservation.accomodationId}</td>
-                        <td>{reservation.startDate}</td>
-                        <td>{reservation.endDate}</td>
+                        <td>{reservation.startDate.split(" ", 1)}</td>
+                        <td>{reservation.endDate.split(" ", 1)}</td>
                         <td>{reservation.status}</td>
                         <td>
                           {reservation.status === "REJECTED" ||
