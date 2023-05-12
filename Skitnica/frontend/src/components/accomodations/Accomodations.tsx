@@ -81,8 +81,8 @@ function Accomodations() {
                   {appointments.map((appointment) => (
                     <tbody key={appointment.id}>
                       <tr>
-                        <td>{appointment.start}</td>
-                        <td>{appointment.end}</td>
+                        <td>{appointment.start.split(" ", 1)}</td>
+                        <td>{appointment.end.split(" ", 1)}</td>
                         <td>{appointment.priceType}</td>
                         <td>{appointment.price}</td>
                       </tr>
