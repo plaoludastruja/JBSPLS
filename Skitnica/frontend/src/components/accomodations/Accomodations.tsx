@@ -18,6 +18,15 @@ function Accomodations() {
 
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointment, setAppointment] = useState<Appointment>({
+    id: "",
+    accomodationId: "",
+    start: "",
+    end: "",
+    priceType: "",
+    price: 0,
+    status: "Free",
+  });
 
   useEffect(() => {
     accomodationService.getAccomodations().then((response) => {
@@ -31,6 +40,28 @@ function Accomodations() {
       setAppointments(response.data.appointments);
       console.log(accomodationId)
     })
+  }
+
+  const editAppointment = (appointmentSent: Appointment) : void  => {
+    setAppointment((prevState) => ({
+      ...prevState,
+      id: appointmentSent.id,
+    }))
+    setAppointment((prevState) => ({
+      ...prevState,
+      accomodationId: appointmentSent.accomodationId,
+    }))
+    setAppointment((prevState) => ({
+      ...prevState,
+      priceType: appointmentSent.priceType,
+    }))
+    setAppointment((prevState) => ({
+      ...prevState,
+      status: appointmentSent.status,
+    }))
+    priceService.editAppointment(appointment).then((response) => {
+      console.log("bravo")
+    });
   }
 
   
@@ -76,6 +107,7 @@ function Accomodations() {
                       <th>End date</th>
                       <th>Type</th>
                       <th>Price</th>
+                      <th></th>
                     </tr>
                   </thead>
                   {appointments.map((appointment) => (
@@ -85,6 +117,7 @@ function Accomodations() {
                         <td>{appointment.end.split(" ", 1)}</td>
                         <td>{appointment.priceType}</td>
                         <td>{appointment.price}</td>
+                        <td><MDBBtn onClick={() => editAppointment(appointment)}>Edit</MDBBtn></td>
                       </tr>
                     </tbody>
                   ))}
@@ -94,6 +127,49 @@ function Accomodations() {
           </div>
         </div>
       </div>
+      </div>
+      <div>
+      <div className="field">
+            <label>
+              Start:
+              <input
+                type="date"
+                name="name"
+                onChange={(e) =>
+                  setAppointment((prevState) => ({
+                    ...prevState,
+                    start: e.target.value,
+                  }))
+                }
+              />
+            </label>
+            <label>
+              End:
+              <input
+                type="date"
+                name="name"
+                onChange={(e) =>
+                  setAppointment((prevState) => ({
+                    ...prevState,
+                    end: e.target.value,
+                  }))
+                }
+              />
+            </label>
+            <label>
+              Price:
+              <input
+                type="number"
+                name="name"
+                onChange={(e) =>
+                  setAppointment((prevState) => ({
+                    ...prevState,
+                    price: parseInt(e.target.value),
+                  }))
+                }
+              />
+            </label>
+          </div>
       </div>
     </>
   );
