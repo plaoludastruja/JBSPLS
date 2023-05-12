@@ -5,7 +5,7 @@ import accomodationService from '../../services/accomodation.service';
 
 function RegisterAccomodation() {
 
-    const [accomodation, setAccomodation] = useState<Accomodation>({ id: '', name: 'Naziv', location : '', facilities : '', maxNumberOfGuests : 0, minNumberOfGuests : 0 })
+    const [accomodation, setAccomodation] = useState<Accomodation>({ id: '', name: 'Naziv', location : '', facilities : '', maxNumberOfGuests : 0, minNumberOfGuests : 0, isAutomaticApproved: 'true' })
     
     const createAccomodation = () => {
         console.log(accomodation)
@@ -53,6 +53,22 @@ function RegisterAccomodation() {
                 onChange={(e) => setAccomodation(prevState => ({ ...prevState, maxNumberOfGuests: parseInt(e.target.value) }))}/>
                 </label>
             </div>
+            <div className="field">
+            <label>
+              Price type:
+              <select
+                onChange={(e) =>
+                  setAccomodation((prevState) => ({
+                    ...prevState,
+                    isAutomaticApproved: e.target.value ,
+                  }))
+                }
+              >
+                <option value="true">Automatic</option>
+                <option value="false">Manual</option>
+              </select>
+            </label>
+          </div>
             <div className='field'>
             <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.stopPropagation()

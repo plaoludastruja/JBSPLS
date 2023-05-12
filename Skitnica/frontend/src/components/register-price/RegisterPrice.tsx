@@ -15,20 +15,45 @@ function RegisterPrice() {
     status: "Free",
   });
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
+  const [ errorMessage, setErrorMessage ] = useState('')
 
   useEffect(() => {
     accomodationService.getAccomodations().then((response) => {
       setAccomodations(response.data.accomodations);
     });
   }, []);
-  console.log(accomodations);
+  //console.log(accomodations);
 
-  const createAppointment = () => {
+  
+
+  const checkDates = () : boolean => {
+    if (new Date(appointment.start) > new Date(appointment.end)){
+      console.log('udje ovde')
+      return false;
+    }
+    return true;
+  }
+  const createAppointment = () =>  {
     console.log(appointment);
-    priceService.createAppointment(appointment).then(() => {
-      console.log("bravo");
-    });
+    if(checkDates()){
+      priceService.createAppointment(appointment).then(() => {
+        console.log('bravo');
+      })
+    }else{
+      setErrorMessage('Incorrect dates');
+    }
+    
   };
+
+  
+  /*
+        <select>
+            {accomodations.map(accomodation => (
+                <option value={accomodation.id}>{accomodation.name}</option>
+            ))}
+        </select>
+    */
+
 
   return (
     <>
@@ -122,6 +147,7 @@ function RegisterPrice() {
             >
               Create
             </button>
+            {errorMessage && <label className='error-message'>{errorMessage}</label>}
           </div>
         </div>
       </div>

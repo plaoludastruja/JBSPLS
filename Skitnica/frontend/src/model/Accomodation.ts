@@ -5,4 +5,5 @@ export default interface Accomodation{
     facilities: string;
     minNumberOfGuests: number;
     maxNumberOfGuests: number;
+    isAutomaticApproved: string;
 }

@@ -11,4 +11,5 @@ type IAppointmentRepo interface {
 	Edit(appointment *Appointment) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	GetByAccomodation(accodomationId string) ([]*Appointment, error)
 }
