@@ -17,6 +17,7 @@ function Accomodations() {
 
 
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
     accomodationService.getAccomodations().then((response) => {
@@ -24,12 +25,12 @@ function Accomodations() {
     });
   }, [accomodations]);
 
-  const getByAccomodation = (accomodationId: string) : Appointment[] => {
+  const getByAccomodation = (accomodationId: string) : void  => {
     var appointments : Appointment[] = [];
     priceService.getByAccomodationId(accomodationId).then((response) => {
-        appointments = response.data.appointments;
+      setAppointments(response.data.appointments);
+      console.log(accomodationId)
     })
-    return appointments;
   }
 
   
@@ -56,11 +57,43 @@ function Accomodations() {
                         </div>
                     </div>
                 </MDBCardText>
-                <MDBBtn>Button</MDBBtn>
+                <MDBBtn onClick={() => getByAccomodation(accomodation.id)}>Show prices</MDBBtn>
                 </MDBCardBody>
                 </MDBCard>
             </div>
+            
       ))}
+      <div className="row">
+        <div className="col-xl-8">
+          <div className="card mb-4 mt-4">
+            <div className="card-header">Prices</div>
+            <div className="card-body">
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Start date</th>
+                      <th>End date</th>
+                      <th>Type</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  {appointments.map((appointment) => (
+                    <tbody key={appointment.id}>
+                      <tr>
+                        <td>{appointment.start}</td>
+                        <td>{appointment.end}</td>
+                        <td>{appointment.priceType}</td>
+                        <td>{appointment.price}</td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </>
   );
