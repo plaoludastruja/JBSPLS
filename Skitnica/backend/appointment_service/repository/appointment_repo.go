@@ -98,3 +98,9 @@ func decode(cursor *mongo.Cursor) (appointments []*domain.Appointment, err error
 	err = cursor.Err()
 	return
 }
+
+func (store *AppointmentRepo) GetByAccomodation(accomodationId string) ([]*domain.Appointment, error) {
+	//filter := bson.D{{}}
+	filter := bson.M{"accomodationId": accomodationId}
+	return store.filter(filter)
+}

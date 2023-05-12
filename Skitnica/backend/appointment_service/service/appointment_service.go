@@ -34,3 +34,7 @@ func (service *AppointmentService) Delete(id primitive.ObjectID) error {
 func (service *AppointmentService) Edit(appointment domain.Appointment) error {
 	return service.store.Edit(&appointment)
 }
+
+func (service *AppointmentService) GetByAccomodation(accomodationId string) ([]*domain.Appointment, error) {
+	return service.store.GetByAccomodation(accomodationId)
+}

@@ -34,6 +34,11 @@ service AppointmentService {
                 delete: "/appointment/{id}"
             };
         }
+        rpc GetByAccomodation(GetAccomodationRequest) returns(GetAccomodationResponse) {
+            option (google.api.http) = {
+                get: "/appointment/by-accomodation/{accomodationId}"
+            };
+        }
         
 }
 
@@ -73,6 +78,14 @@ message EditAppointmentRequest {
 
 message EditAppointmentResponse {
         Appointment appointment = 1;
+}
+
+message GetAccomodationRequest {
+        string accomodationId = 1;
+}
+
+message GetAccomodationResponse {
+        repeated Appointment appointments = 1;
 }
 
 message Appointment {

@@ -16,14 +16,16 @@ func mapReservation(reservation *domain.Reservation) *pb.Reservation {
 		StartDate:      reservation.StartDate.String(),
 		EndDate:        reservation.EndDate.String(),
 		GuestNumber:    reservation.GuestNumber,
+		Status:         reservation.Status,
 	}
 	return reservationPb
 }
 
 func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 	reservationPbId, _ := primitive.ObjectIDFromHex(reservationPb.Id)
-	startDate, _ := time.Parse("DD-MM-YYYY", reservationPb.StartDate)
-	endDate, _ := time.Parse("DD-MM-YYYY", reservationPb.EndDate)
+	const layout = "2006-01-02"
+	startDate, _ := time.Parse(layout, reservationPb.StartDate)
+	endDate, _ := time.Parse(layout, reservationPb.EndDate)
 	reservation := &domain.Reservation{
 		Id:             reservationPbId,
 		AccomodationId: reservationPb.AccomodationId,
@@ -31,6 +33,7 @@ func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 		StartDate:      startDate,
 		EndDate:        endDate,
 		GuestNumber:    reservationPb.GuestNumber,
+		Status:         reservationPb.Status,
 	}
 	return reservation
 }

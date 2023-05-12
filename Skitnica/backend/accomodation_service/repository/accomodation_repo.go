@@ -48,11 +48,12 @@ func (store *AccomodationRepo) Insert(accomodation *domain.Accomodation) error {
 func (store *AccomodationRepo) Edit(accomodation *domain.Accomodation) error {
 	filter := bson.M{"_id": accomodation.Id}
 	update := bson.M{"$set": bson.M{
-		"name":              accomodation.Name,
-		"location":          accomodation.Location,
-		"facilities":        accomodation.Facilities,
-		"minNumberOfGuests": accomodation.MinNumberOfGuests,
-		"maxNumberOfGuests": accomodation.MaxNumberOfGuests,
+		"name":                accomodation.Name,
+		"location":            accomodation.Location,
+		"facilities":          accomodation.Facilities,
+		"minNumberOfGuests":   accomodation.MinNumberOfGuests,
+		"maxNumberOfGuests":   accomodation.MaxNumberOfGuests,
+		"isAutomaticApproved": accomodation.IsAutomaticApproved,
 	}}
 	_, err := store.accomodations.UpdateOne(context.TODO(), filter, update)
 
@@ -102,3 +103,14 @@ func (store *AccomodationRepo) Search(location string, guestNumber int32) ([]*do
 	filter := bson.M{"location": location, "minNumberOfGuests": bson.M{"$lt": guestNumber}, "maxNumberOfGuests": bson.M{"$gte": guestNumber}}
 	return store.filter(filter)
 }
+
+/*
+func checkExisting(name string, where []domain.Accomodation) (idx int) {
+	for _, v := range where {
+		if v.Name == name {
+			return 0
+		}
+	}
+	return 1
+}
+*/

@@ -13,4 +13,6 @@ type Reservation struct {
 	StartDate      time.Time          `json:"startDate" bson:"startDate" binding:"required"`
 	EndDate        time.Time          `json:"endDate" bson:"endDate" binding:"required"`
 	GuestNumber    int32              `json:"guestNumber" bson:"guestNumber" binding:"required"`
+	//Status options: APPROVED, PENDING, REJECTED, CANCELED
+	Status string `json:"status" bson:"status" binding:"required"`
 }

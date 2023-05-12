@@ -96,4 +96,5 @@ message Accomodation {
         string facilities = 4;
         int32 minNumberOfGuests = 5;
         int32 maxNumberOfGuests = 6;
+        string isAutomaticApproved = 7;
 }
