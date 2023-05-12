@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/appointment_service/domain"
@@ -38,6 +39,23 @@ func mapAppointmentPb(appointmentPb *pb.Appointment) *domain.Appointment {
 		PriceType:      appointmentPb.PriceType,
 		Price:          appointmentPb.Price,
 		Status:         appointmentPb.Status,
+	}
+	if strings.Contains(appointmentPb.Start, "UTC") {
+		fmt.Println("udje ovde")
+		layout := "2006-01-02 15:04:05 -0700 MST"
+		start, _ := time.Parse(layout, appointmentPb.Start)
+		end, _ := time.Parse(layout, appointmentPb.End)
+		appointment := &domain.Appointment{
+
+			Id:             appointmentPbId,
+			AccomodationId: appointmentPb.AccomodationId,
+			Start:          start,
+			End:            end,
+			PriceType:      appointmentPb.PriceType,
+			Price:          appointmentPb.Price,
+			Status:         appointmentPb.Status,
+		}
+		return appointment
 	}
 	return appointment
 }
