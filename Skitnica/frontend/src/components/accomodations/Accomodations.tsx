@@ -32,7 +32,7 @@ function Accomodations() {
     accomodationService.getAccomodations().then((response) => {
       setAccomodations(response.data.accomodations);
     });
-  }, [accomodations]);
+  }, []);
 
   const getByAccomodation = (accomodationId: string) : void  => {
     var appointments : Appointment[] = [];

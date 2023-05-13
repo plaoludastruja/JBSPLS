@@ -10,7 +10,7 @@ function Reservations() {
     reservationService.getReservations().then((response) => {
       setReservations(response.data.reservations);
     });
-  }, [reservations]);
+  }, []);
 
   const handleOnClick = (reservation: Reservation) => {
     if (reservation.status === "APPROVED")
