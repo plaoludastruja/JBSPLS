@@ -31,6 +31,11 @@ func (store *UserRepo) Get(id primitive.ObjectID) (*domain.User, error) {
 	return store.filterOne(filter)
 }
 
+func (store *UserRepo) GetByUsername(username string) (*domain.User, error) {
+	filter := bson.M{"username": username}
+	return store.filterOne(filter)
+}
+
 func (store *UserRepo) GetAll() ([]*domain.User, error) {
 	filter := bson.D{{}}
 	return store.filter(filter)
