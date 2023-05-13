@@ -19,12 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AccomodationService_Get_FullMethodName                = "/accomodation.AccomodationService/Get"
-	AccomodationService_GetAll_FullMethodName             = "/accomodation.AccomodationService/GetAll"
-	AccomodationService_CreateAccomodation_FullMethodName = "/accomodation.AccomodationService/CreateAccomodation"
-	AccomodationService_EditAccomodation_FullMethodName   = "/accomodation.AccomodationService/EditAccomodation"
-	AccomodationService_DeleteAccomodation_FullMethodName = "/accomodation.AccomodationService/DeleteAccomodation"
-	AccomodationService_Search_FullMethodName             = "/accomodation.AccomodationService/Search"
+	AccomodationService_Get_FullMethodName                   = "/accomodation.AccomodationService/Get"
+	AccomodationService_GetAll_FullMethodName                = "/accomodation.AccomodationService/GetAll"
+	AccomodationService_CreateAccomodation_FullMethodName    = "/accomodation.AccomodationService/CreateAccomodation"
+	AccomodationService_EditAccomodation_FullMethodName      = "/accomodation.AccomodationService/EditAccomodation"
+	AccomodationService_DeleteAccomodation_FullMethodName    = "/accomodation.AccomodationService/DeleteAccomodation"
+	AccomodationService_Search_FullMethodName                = "/accomodation.AccomodationService/Search"
+	AccomodationService_GetByHostUsernameList_FullMethodName = "/accomodation.AccomodationService/GetByHostUsernameList"
 )
 
 // AccomodationServiceClient is the client API for AccomodationService service.
@@ -37,6 +38,7 @@ type AccomodationServiceClient interface {
 	EditAccomodation(ctx context.Context, in *EditAccomodationRequest, opts ...grpc.CallOption) (*EditAccomodationResponse, error)
 	DeleteAccomodation(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
+	GetByHostUsernameList(ctx context.Context, in *GetByHostUsernameRequest, opts ...grpc.CallOption) (*GetByHostUsernameResponse, error)
 }
 
 type accomodationServiceClient struct {
@@ -101,6 +103,15 @@ func (c *accomodationServiceClient) Search(ctx context.Context, in *SearchReques
 	return out, nil
 }
 
+func (c *accomodationServiceClient) GetByHostUsernameList(ctx context.Context, in *GetByHostUsernameRequest, opts ...grpc.CallOption) (*GetByHostUsernameResponse, error) {
+	out := new(GetByHostUsernameResponse)
+	err := c.cc.Invoke(ctx, AccomodationService_GetByHostUsernameList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccomodationServiceServer is the server API for AccomodationService service.
 // All implementations must embed UnimplementedAccomodationServiceServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type AccomodationServiceServer interface {
 	EditAccomodation(context.Context, *EditAccomodationRequest) (*EditAccomodationResponse, error)
 	DeleteAccomodation(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
+	GetByHostUsernameList(context.Context, *GetByHostUsernameRequest) (*GetByHostUsernameResponse, error)
 	mustEmbedUnimplementedAccomodationServiceServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedAccomodationServiceServer) DeleteAccomodation(context.Context
 }
 func (UnimplementedAccomodationServiceServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedAccomodationServiceServer) GetByHostUsernameList(context.Context, *GetByHostUsernameRequest) (*GetByHostUsernameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByHostUsernameList not implemented")
 }
 func (UnimplementedAccomodationServiceServer) mustEmbedUnimplementedAccomodationServiceServer() {}
 
@@ -257,6 +272,24 @@ func _AccomodationService_Search_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccomodationService_GetByHostUsernameList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetByHostUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccomodationServiceServer).GetByHostUsernameList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccomodationService_GetByHostUsernameList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccomodationServiceServer).GetByHostUsernameList(ctx, req.(*GetByHostUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccomodationService_ServiceDesc is the grpc.ServiceDesc for AccomodationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var AccomodationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _AccomodationService_Search_Handler,
+		},
+		{
+			MethodName: "GetByHostUsernameList",
+			Handler:    _AccomodationService_GetByHostUsernameList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

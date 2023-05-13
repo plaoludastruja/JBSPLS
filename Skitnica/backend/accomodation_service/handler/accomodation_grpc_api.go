@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service/service"
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -112,6 +113,41 @@ func (handler *AccomodationHandler) Search(ctx context.Context, request *pb.Sear
 		return nil, err
 	}
 	response := &pb.SearchResponse{
+		Accomodations: []*pb.Accomodation{},
+	}
+	for _, accomodation := range accomodations {
+		current := mapAccomodation(accomodation)
+		response.Accomodations = append(response.Accomodations, current)
+	}
+	return response, nil
+}
+
+func (handler *AccomodationHandler) GetByHostUsernameList(ctx context.Context, request *pb.GetByHostUsernameRequest) (*pb.GetByHostUsernameResponse, error) {
+	/*accomodations, err := handler.service.GetByHostUsername(request.HostUsername)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetByHostUsernameResponse{
+		Accomodations: []*pb.Accomodation{},
+	}
+	for _, accomodation := range accomodations {
+		current := mapAccomodation(accomodation)
+		response.Accomodations = append(response.Accomodations, current)
+	}
+	return response, nil*/
+	username := request.HostUsername
+	allAccomodations, err := handler.service.GetAll()
+	accomodations := make([]*domain.Accomodation, 0)
+	for _, res := range allAccomodations {
+		if res.HostUsername == username {
+			accomodations = append(accomodations, res)
+		}
+
+	}
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetByHostUsernameResponse{
 		Accomodations: []*pb.Accomodation{},
 	}
 	for _, accomodation := range accomodations {

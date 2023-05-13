@@ -14,6 +14,7 @@ import priceService from "../../services/price.service";
 import { response } from "express";
 import reservationService from "../../services/reservation.service";
 import DateRange from "../../model/DateRange";
+import decodeToken from "../../services/auth.service";
 
 function Accomodations() {
 
@@ -43,7 +44,7 @@ function Accomodations() {
   });
 
   useEffect(() => {
-    accomodationService.getAccomodations().then((response) => {
+    accomodationService.getAccomodationsByHostUsername(decodeToken()?.username).then((response) => {
       setAccomodations(response.data.accomodations);
     });
   }, []);
