@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/service"
@@ -42,26 +41,25 @@ func (handler *UserHandler) Get(ctx context.Context, request *pb.GetRequest) (*p
 }
 
 func (handler *UserHandler) GetByUsername(ctx context.Context, request *pb.GetRequestUsername) (*pb.GetResponse, error) {
-	user, err := handler.service.GetByUsername(request.Username)
-	if err != nil {
-		return nil, err
-	}
-
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, status.Error(codes.Internal, "failed to get metadata from context")
 	}
-
-	// Get the value of a specific header
 	myHeaderValues := md.Get("Authorization")
-	fmt.Println(len(myHeaderValues), "-------------------------------------")
 	if len(myHeaderValues) == 0 {
-		return nil, status.Error(codes.InvalidArgument, "my-header is required")
+		return nil, status.Error(codes.InvalidArgument, "Authorization is required")
 	}
-	fmt.Println(myHeaderValues, "-------------------------------------")
 	myHeaderValue := myHeaderValues[0]
+	username, err := token.ExtractTokenUsername(myHeaderValue)
+	if err != nil {
+		return nil, err
+	}
 
-	fmt.Println(myHeaderValue, "-------------------------------------")
+	user, err := handler.service.GetByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+
 	userPb := mapUser(user)
 	response := &pb.GetResponse{
 		User: userPb,
@@ -119,11 +117,13 @@ func (handler *UserHandler) DeleteUser(ctx context.Context, request *pb.DeleteRe
 }
 
 func (handler *UserHandler) LoginUser(ctx context.Context, request *pb.LoginDTO) (*pb.UserToken, error) {
-	user, err := handler.service.GetByUsername(request.LoginDTO.Username)
+
+	/*user, err := handler.service.GetByUsername(request.LoginDTO.Username)
 	if err != nil {
 		return nil, err
 	}
-	generatedToken, err := token.GenerateToken(user.Username, user.Role)
+	generatedToken, err := token.GenerateToken(user.Username, user.Role)*/
+	generatedToken, err := handler.service.Login(request.LoginDTO.Username, request.LoginDTO.Password)
 	if err != nil {
 		return nil, err
 	}

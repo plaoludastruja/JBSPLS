@@ -3,6 +3,7 @@ import {MDBContainer, MDBCol, MDBRow, MDBBtn, MDBIcon, MDBInput, MDBCheckbox } f
 import LoginDTO from '../../model/LoginDTO';
 import userService from '../../services/user.service';
 import { useNavigate } from 'react-router-dom';
+import { setToken } from '../../services/token.service';
 
 function Login() {
   const navigate = useNavigate()
@@ -12,10 +13,12 @@ function Login() {
   })
 
   const loginUser = () => {
-    userService.loginUser(user).then(() => {
-      navigate('/')
-    })
-  }
+    userService.loginUser(user).then((res) => {
+      if (res.data.token != "") {
+          setToken(res.data.token)
+          navigate('/')
+      }
+  })}
 
   return (
     <MDBContainer fluid className="p-3 my-5 h-custom">
