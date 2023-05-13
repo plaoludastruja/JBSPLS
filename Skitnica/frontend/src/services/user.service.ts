@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import LoginDTO from "../model/LoginDTO";
 import User from "../model/User";
 import { baseAxios } from "./api.service";

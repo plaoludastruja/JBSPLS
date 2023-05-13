@@ -11,4 +11,5 @@ type IAccomodationRepo interface {
 	Edit(accomodation *Accomodation) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	Search(location string, guestNumber int32) ([]*Accomodation, error)
 }

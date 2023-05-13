@@ -46,7 +46,6 @@ services:
     networks:
       - network
 
-
   reservation_service:
     image: reservation_service
     container_name: reservation_service
@@ -92,8 +91,6 @@ services:
     restart: on-failure
     networks:
       - network
-    ports:
-      - ${USER_DB_PORT}:${USER_DB_PORT}
 
   accomodation_db:
     image: mongo
@@ -103,7 +100,7 @@ services:
       - network
     ports:
       - 27018:${ACCOMODATION_DB_PORT} # test
-  
+
   appointment_db:
     image: mongo
     container_name: appointment_db
@@ -117,6 +114,8 @@ services:
     restart: on-failure
     networks:
       - network
+    ports:
+      - ${RESERVATION_DB_PORT}:${RESERVATION_DB_PORT}
 
 networks:
   network:

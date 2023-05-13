@@ -24,6 +24,7 @@ const (
 	AccomodationService_CreateAccomodation_FullMethodName = "/accomodation.AccomodationService/CreateAccomodation"
 	AccomodationService_EditAccomodation_FullMethodName   = "/accomodation.AccomodationService/EditAccomodation"
 	AccomodationService_DeleteAccomodation_FullMethodName = "/accomodation.AccomodationService/DeleteAccomodation"
+	AccomodationService_Search_FullMethodName             = "/accomodation.AccomodationService/Search"
 )
 
 // AccomodationServiceClient is the client API for AccomodationService service.
@@ -35,6 +36,7 @@ type AccomodationServiceClient interface {
 	CreateAccomodation(ctx context.Context, in *CreateAccomodationRequest, opts ...grpc.CallOption) (*CreateAccomodationResponse, error)
 	EditAccomodation(ctx context.Context, in *EditAccomodationRequest, opts ...grpc.CallOption) (*EditAccomodationResponse, error)
 	DeleteAccomodation(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 }
 
 type accomodationServiceClient struct {
@@ -90,6 +92,15 @@ func (c *accomodationServiceClient) DeleteAccomodation(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *accomodationServiceClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
+	err := c.cc.Invoke(ctx, AccomodationService_Search_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccomodationServiceServer is the server API for AccomodationService service.
 // All implementations must embed UnimplementedAccomodationServiceServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type AccomodationServiceServer interface {
 	CreateAccomodation(context.Context, *CreateAccomodationRequest) (*CreateAccomodationResponse, error)
 	EditAccomodation(context.Context, *EditAccomodationRequest) (*EditAccomodationResponse, error)
 	DeleteAccomodation(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	mustEmbedUnimplementedAccomodationServiceServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedAccomodationServiceServer) EditAccomodation(context.Context, 
 }
 func (UnimplementedAccomodationServiceServer) DeleteAccomodation(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccomodation not implemented")
+}
+func (UnimplementedAccomodationServiceServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedAccomodationServiceServer) mustEmbedUnimplementedAccomodationServiceServer() {}
 
@@ -224,6 +239,24 @@ func _AccomodationService_DeleteAccomodation_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccomodationService_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccomodationServiceServer).Search(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccomodationService_Search_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccomodationServiceServer).Search(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccomodationService_ServiceDesc is the grpc.ServiceDesc for AccomodationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -250,6 +283,10 @@ var AccomodationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteAccomodation",
 			Handler:    _AccomodationService_DeleteAccomodation_Handler,
+		},
+		{
+			MethodName: "Search",
+			Handler:    _AccomodationService_Search_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

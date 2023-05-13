@@ -8,6 +8,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	cors "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Cors"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/infrastructure/handler"
 
 	//token "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Token"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/startup/config"
@@ -39,7 +40,7 @@ func NewServer(config *config.Config) *Server {
 		),
 	}
 	server.initHandlers()
-	//server.initCustomHandlers()
+	server.initCustomHandlers()
 	return server
 }
 
@@ -72,13 +73,13 @@ func (server *Server) initHandlers() {
 
 }
 
-/*func (server *Server) initCustomHandlers() {
-	catalogueEmdpoint := fmt.Sprintf("%s:%s", server.config.CatalogueHost, server.config.CataloguePort)
-	orderingEmdpoint := fmt.Sprintf("%s:%s", server.config.OrderingHost, server.config.OrderingPort)
-	shippingEmdpoint := fmt.Sprintf("%s:%s", server.config.ShippingHost, server.config.ShippingPort)
-	orderingHandler := api.NewOrderingHandler(orderingEmdpoint, catalogueEmdpoint, shippingEmdpoint)
-	orderingHandler.Init(server.mux)
-}*/
+func (server *Server) initCustomHandlers() {
+	accomodationEmdpoint := fmt.Sprintf("%s:%s", server.config.AccomodationHost, server.config.AccomodationPort)
+	appointmentEmdpoint := fmt.Sprintf("%s:%s", server.config.AppointmentHost, server.config.AppointmentPort)
+	reservationEmdpoint := fmt.Sprintf("%s:%s", server.config.ReservationHost, server.config.ReservationPort)
+	searchHandler := handler.NewSearchHandler(accomodationEmdpoint, appointmentEmdpoint, reservationEmdpoint)
+	searchHandler.Init(server.mux)
+}
 
 func (server *Server) Start() {
 	corsHandler := cors.CORSMiddleware(server.mux)

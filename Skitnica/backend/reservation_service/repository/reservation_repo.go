@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
@@ -48,7 +49,10 @@ func (store *ReservationRepo) Insert(reservation *domain.Reservation) error {
 
 func (store *ReservationRepo) Edit(reservation *domain.Reservation) error {
 	filter := bson.M{"_id": reservation.Id}
-	if reservation.StartDate.Compare(time.Now().Add(time.Hour*24)) == -1 && reservation.Status == "APPROVED" {
+	fmt.Println(reservation.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservation.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+	if reservation.StartDate.Compare(time.Now().Add(time.Hour*24)) == 1 && reservation.Status == "APPROVED" {
 		update := bson.M{"$set": bson.M{
 			"accomodationId": reservation.AccomodationId,
 			"username":       reservation.Username,
@@ -105,4 +109,37 @@ func decode(cursor *mongo.Cursor) (reservations []*domain.Reservation, err error
 	}
 	err = cursor.Err()
 	return
+}
+
+func (store *ReservationRepo) Search(startDay string, startMonth string, startYear string, endDay string, endMonth string, endYear string) ([]*domain.Reservation, error) {
+
+	startYearInt, _ := strconv.Atoi(startYear)
+	startMonthInt, _ := strconv.Atoi(startMonth)
+	startDayInt, _ := strconv.Atoi(startDay)
+
+	endYearInt, _ := strconv.Atoi(endYear)
+	endMonthInt, _ := strconv.Atoi(endMonth)
+	endDayInt, _ := strconv.Atoi(endDay)
+
+	start := time.Date(startYearInt, time.Month(startMonthInt), startDayInt, 00, 00, 00, 999999999, time.UTC)
+	end := time.Date(endYearInt, time.Month(endMonthInt), endDayInt, 00, 00, 00, 999999999, time.UTC)
+	filter1 := bson.M{"startDate": bson.M{"$gte": start, "$lt": end}, "status": "APPROVED"}
+	res1, _ := store.filter(filter1)
+
+	filter2 := bson.M{"startDate": bson.M{"$lt": start}, "endDate": bson.M{"$gte": start}, "status": "APPROVED"}
+	res2, _ := store.filter(filter2)
+
+	res1 = append(res1, res2...)
+	return res1, nil
+}
+
+func (store *ReservationRepo) Check(dateRange *domain.DateRange) ([]*domain.Reservation, error) {
+	filter1 := bson.M{"startDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}}
+	res1, _ := store.filter(filter1)
+
+	filter2 := bson.M{"endDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}}
+	res2, _ := store.filter(filter2)
+
+	res1 = append(res1, res2...)
+	return res1, nil
 }

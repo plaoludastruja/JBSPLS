@@ -2,24 +2,32 @@ import { useEffect, useState } from "react";
 import "./Reservations.css";
 import reservationService from "../../services/reservation.service";
 import Reservation from "../../interfaces/Reservation";
+import decodeToken from "../../services/auth.service";
 
 function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   useEffect(() => {
-    reservationService.getReservations().then((response) => {
-      setReservations(response.data.reservations);
-    });
-  }, []);
+    reservationService
+      .getReservations(decodeToken()?.username)
+      .then((response) => {
+        setReservations(response.data.reservations);
+      });
+  }, [buttonClicked]);
 
   const handleOnClick = (reservation: Reservation) => {
-    if (reservation.status === "APPROVED")
+    if (reservation.status === "APPROVED") {
+      reservation.startDate = reservation.startDate.split(" ", 1)[0];
+      reservation.endDate = reservation.endDate.split(" ", 1)[0];
       reservationService.changeReservationStatus(reservation).then((res) => {
-        alert("Successfully cancelled");
+        alert("Successfully canceled");
+        setButtonClicked(!buttonClicked);
       });
-    else
+    } else
       reservationService.deleteReservation(reservation.id).then((res) => {
         alert("Successfully deleted");
+        setButtonClicked(!buttonClicked);
       });
   };
 
