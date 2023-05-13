@@ -86,6 +86,27 @@ func (handler *ReservationHandler) DeleteReservation(ctx context.Context, reques
 	return &pb.DeleteResponse{}, nil
 }
 
+func (handler *ReservationHandler) Search(ctx context.Context, request *pb.SearchRequest) (*pb.SearchResponse, error) {
+	startDay := request.StartDay
+	startMonth := request.StartMonth
+	startYear := request.StartYear
+	endDay := request.EndDay
+	endMonth := request.EndMonth
+	endYear := request.EndYear
+	reservations, err := handler.service.Search(startDay, startMonth, startYear, endDay, endMonth, endYear)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.SearchResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservation(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
 func (handler *ReservationHandler) Check(ctx context.Context, request *pb.DateRangeRequest) (*pb.DateRangeResponse, error) {
 	dateRange := mapDateRangePb(request.DateRange)
 	reservations, err := handler.service.Check(*dateRange)

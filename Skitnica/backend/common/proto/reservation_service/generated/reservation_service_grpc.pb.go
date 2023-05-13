@@ -24,6 +24,7 @@ const (
 	ReservationService_CreateReservation_FullMethodName = "/reservation.ReservationService/CreateReservation"
 	ReservationService_EditReservation_FullMethodName   = "/reservation.ReservationService/EditReservation"
 	ReservationService_DeleteReservation_FullMethodName = "/reservation.ReservationService/DeleteReservation"
+	ReservationService_Search_FullMethodName            = "/reservation.ReservationService/Search"
 	ReservationService_Check_FullMethodName             = "/reservation.ReservationService/check"
 )
 
@@ -36,6 +37,7 @@ type ReservationServiceClient interface {
 	CreateReservation(ctx context.Context, in *CreateReservationRequest, opts ...grpc.CallOption) (*CreateReservationResponse, error)
 	EditReservation(ctx context.Context, in *EditReservationRequest, opts ...grpc.CallOption) (*EditReservationResponse, error)
 	DeleteReservation(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 	Check(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (*DateRangeResponse, error)
 }
 
@@ -92,6 +94,15 @@ func (c *reservationServiceClient) DeleteReservation(ctx context.Context, in *De
 	return out, nil
 }
 
+func (c *reservationServiceClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
+	err := c.cc.Invoke(ctx, ReservationService_Search_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *reservationServiceClient) Check(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (*DateRangeResponse, error) {
 	out := new(DateRangeResponse)
 	err := c.cc.Invoke(ctx, ReservationService_Check_FullMethodName, in, out, opts...)
@@ -110,6 +121,7 @@ type ReservationServiceServer interface {
 	CreateReservation(context.Context, *CreateReservationRequest) (*CreateReservationResponse, error)
 	EditReservation(context.Context, *EditReservationRequest) (*EditReservationResponse, error)
 	DeleteReservation(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	Search(context.Context, *SearchRequest) (*SearchResponse, error)
 	Check(context.Context, *DateRangeRequest) (*DateRangeResponse, error)
 	mustEmbedUnimplementedReservationServiceServer()
 }
@@ -132,6 +144,9 @@ func (UnimplementedReservationServiceServer) EditReservation(context.Context, *E
 }
 func (UnimplementedReservationServiceServer) DeleteReservation(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteReservation not implemented")
+}
+func (UnimplementedReservationServiceServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
 }
 func (UnimplementedReservationServiceServer) Check(context.Context, *DateRangeRequest) (*DateRangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
@@ -239,6 +254,24 @@ func _ReservationService_DeleteReservation_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReservationService_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReservationServiceServer).Search(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReservationService_Search_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReservationServiceServer).Search(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ReservationService_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DateRangeRequest)
 	if err := dec(in); err != nil {
@@ -283,6 +316,10 @@ var ReservationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteReservation",
 			Handler:    _ReservationService_DeleteReservation_Handler,
+		},
+		{
+			MethodName: "Search",
+			Handler:    _ReservationService_Search_Handler,
 		},
 		{
 			MethodName: "check",
