@@ -49,7 +49,10 @@ func (store *ReservationRepo) Insert(reservation *domain.Reservation) error {
 
 func (store *ReservationRepo) Edit(reservation *domain.Reservation) error {
 	filter := bson.M{"_id": reservation.Id}
-	if reservation.StartDate.Compare(time.Now().Add(time.Hour*24)) == -1 && reservation.Status == "APPROVED" {
+	fmt.Println(reservation.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservation.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+	if reservation.StartDate.Compare(time.Now().Add(time.Hour*24)) == 1 && reservation.Status == "APPROVED" {
 		update := bson.M{"$set": bson.M{
 			"accomodationId": reservation.AccomodationId,
 			"username":       reservation.Username,

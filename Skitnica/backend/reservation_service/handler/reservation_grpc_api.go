@@ -2,9 +2,10 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
-	//"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -38,7 +39,16 @@ func (handler *ReservationHandler) Get(ctx context.Context, request *pb.GetReque
 }
 
 func (handler *ReservationHandler) GetAll(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
-	reservations, err := handler.service.GetAll()
+	fmt.Println(request.Username)
+	username := request.Username
+	allReservations, err := handler.service.GetAll()
+	reservations := make([]*domain.Reservation, 0)
+	for _, res := range allReservations {
+		if res.Username == username {
+			reservations = append(reservations, res)
+		}
+
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +64,7 @@ func (handler *ReservationHandler) GetAll(ctx context.Context, request *pb.GetAl
 
 func (handler *ReservationHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
 	reservation := mapReservationPb(request.Reservation)
+	fmt.Println(reservation)
 	err := handler.service.Insert(*reservation)
 	if err != nil {
 		return nil, err
@@ -65,6 +76,7 @@ func (handler *ReservationHandler) CreateReservation(ctx context.Context, reques
 
 func (handler *ReservationHandler) EditReservation(ctx context.Context, request *pb.EditReservationRequest) (*pb.EditReservationResponse, error) {
 	reservation := mapReservationPb(request.Reservation)
+	fmt.Println(request.Reservation)
 	err := handler.service.Edit(*reservation)
 	if err != nil {
 		return nil, err
