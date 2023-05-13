@@ -1,13 +1,16 @@
 import Accomodation from "../model/Accomodation";
 import AccomodationsResponse from "../model/AccomodationsResponse";
+import SearchParams from "../model/SearchParams";
+import SearchResult from "../model/SearchResult";
+import SearchResultResponse from "../model/SearchResultRespons";
 import { baseAxios } from "./api.service";
 
 const createAccomodation = (accomodation: Accomodation)  => baseAxios.post('/accomodation', accomodation)
 const getAccomodations = async()  => await baseAxios.get<AccomodationsResponse>('/accomodation')
-//const getAccomodationById = async(id : string)  => await baseAxios.get<Accomodation>('/accomodation' + id)
-
+const searchAccomodations = async(searchParams: SearchParams)  => await baseAxios.get<SearchResult[]>(`/accomodation/search/${searchParams.Location}/${searchParams.GuestNumber}/${searchParams.StartDate.split("-")[2]}/${searchParams.StartDate.split("-")[1]}/${searchParams.StartDate.split("-")[0]}/${searchParams.EndDate.split("-")[2]}/${searchParams.EndDate.split("-")[1]}/${searchParams.EndDate.split("-")[0]}`)
 
 export default {
     createAccomodation,
     getAccomodations,
+    searchAccomodations,
   }
