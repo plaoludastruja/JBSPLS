@@ -14,7 +14,7 @@ service ReservationService {
         }
         rpc GetAll(GetAllRequest) returns(GetAllResponse) {
             option (google.api.http) = {
-                get: "/reservation"
+                get: "/reservation/all/{username}"
             };
         }
         rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
@@ -57,6 +57,7 @@ message GetResponse {
 }
 
 message GetAllRequest {
+    string username = 1;
 }
 
 message GetAllResponse {
