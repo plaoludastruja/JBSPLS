@@ -87,23 +87,6 @@ func request_UserService_GetByUsername_0(ctx context.Context, marshaler runtime.
 	var protoReq GetRequestUsername
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["username"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "username")
-	}
-
-	protoReq.Username, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "username", err)
-	}
-
 	msg, err := client.GetByUsername(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
@@ -112,23 +95,6 @@ func request_UserService_GetByUsername_0(ctx context.Context, marshaler runtime.
 func local_request_UserService_GetByUsername_0(ctx context.Context, marshaler runtime.Marshaler, server UserServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetRequestUsername
 	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["username"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "username")
-	}
-
-	protoReq.Username, err = runtime.String(val)
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "username", err)
-	}
 
 	msg, err := server.GetByUsername(ctx, &protoReq)
 	return msg, metadata, err
@@ -346,7 +312,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.UserService/GetByUsername", runtime.WithHTTPPathPattern("/user/getByUsername/{username}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.UserService/GetByUsername", runtime.WithHTTPPathPattern("/user/getByUsername"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -557,7 +523,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.UserService/GetByUsername", runtime.WithHTTPPathPattern("/user/getByUsername/{username}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.UserService/GetByUsername", runtime.WithHTTPPathPattern("/user/getByUsername"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -689,7 +655,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 var (
 	pattern_UserService_Get_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"user", "id"}, ""))
 
-	pattern_UserService_GetByUsername_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"user", "getByUsername", "username"}, ""))
+	pattern_UserService_GetByUsername_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"user", "getByUsername"}, ""))
 
 	pattern_UserService_GetAll_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"user"}, ""))
 
