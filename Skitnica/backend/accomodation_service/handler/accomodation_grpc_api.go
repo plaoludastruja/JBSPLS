@@ -103,3 +103,20 @@ func (handler *AccomodationHandler) DeleteAccomodation(ctx context.Context, requ
 	}
 	return &pb.DeleteResponse{}, nil
 }
+
+func (handler *AccomodationHandler) Search(ctx context.Context, request *pb.SearchRequest) (*pb.SearchResponse, error) {
+	location := request.Location
+	guestNumber := request.GuestNumber
+	accomodations, err := handler.service.Search(location, guestNumber)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.SearchResponse{
+		Accomodations: []*pb.Accomodation{},
+	}
+	for _, accomodation := range accomodations {
+		current := mapAccomodation(accomodation)
+		response.Accomodations = append(response.Accomodations, current)
+	}
+	return response, nil
+}

@@ -41,3 +41,22 @@ func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 	}
 	return reservation
 }
+
+func mapDateRange(dateRange *domain.DateRange) *pb.DateRange {
+	dateRangePb := &pb.DateRange{
+		StartDate: dateRange.StartDate.String(),
+		EndDate:   dateRange.EndDate.String(),
+	}
+	return dateRangePb
+}
+
+func mapDateRangePb(dateRangePb *pb.DateRange) *domain.DateRange {
+	const layout = "2006-01-02"
+	startDate, _ := time.Parse(layout, dateRangePb.StartDate)
+	endDate, _ := time.Parse(layout, dateRangePb.EndDate)
+	dateRange := &domain.DateRange{
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+	return dateRange
+}

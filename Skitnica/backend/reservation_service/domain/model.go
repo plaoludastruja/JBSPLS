@@ -16,3 +16,8 @@ type Reservation struct {
 	//Status options: APPROVED, PENDING, REJECTED, CANCELED
 	Status string `json:"status" bson:"status" binding:"required"`
 }
+
+type DateRange struct {
+	StartDate time.Time `json:"startDate" bson:"startDate" binding:"required"`
+	EndDate   time.Time `json:"endDate" bson:"endDate" binding:"required"`
+}

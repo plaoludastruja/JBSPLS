@@ -34,7 +34,18 @@ service ReservationService {
                 delete: "/reservation/{id}"
             };
         }
+        rpc Search(SearchRequest) returns(SearchResponse) {
+            option (google.api.http) = {
+                get: "/reservation/search/{startDay}/{startMonth}/{startYear}/{endDay}/{endMonth}/{endYear}"
+            };
+        }
         
+        rpc check(DateRangeRequest) returns(DateRangeResponse) {
+            option (google.api.http) = {
+                post: "/reservation/check"
+                body: "dateRange"
+            };
+        }
 }
 
 message GetRequest {
@@ -76,6 +87,27 @@ message EditReservationResponse {
         Reservation reservation = 1;
 }
 
+message SearchRequest {
+        string startDay = 1;
+        string startMonth = 2;
+        string startYear = 3;
+        string endDay = 4;
+        string endMonth = 5;
+        string endYear = 6;
+}
+
+message SearchResponse {
+        repeated Reservation reservations = 1;
+}
+
+message DateRangeRequest {
+    DateRange dateRange = 1;
+}
+
+message DateRangeResponse {
+    repeated Reservation reservations = 1;
+}
+
 message Reservation {
         string id = 1;
         string accomodationId = 2;
@@ -84,4 +116,9 @@ message Reservation {
         string endDate = 5;
         int32 guestNumber = 6;
         string status = 7;
+}
+
+message DateRange {
+    string startDate = 1;
+    string endDate = 2;
 }

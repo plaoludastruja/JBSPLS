@@ -99,6 +99,11 @@ func decode(cursor *mongo.Cursor) (accomodations []*domain.Accomodation, err err
 	return
 }
 
+func (store *AccomodationRepo) Search(location string, guestNumber int32) ([]*domain.Accomodation, error) {
+	filter := bson.M{"location": location, "minNumberOfGuests": bson.M{"$lt": guestNumber}, "maxNumberOfGuests": bson.M{"$gte": guestNumber}}
+	return store.filter(filter)
+}
+
 /*
 func checkExisting(name string, where []domain.Accomodation) (idx int) {
 	for _, v := range where {
