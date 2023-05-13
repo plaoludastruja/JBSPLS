@@ -12,6 +12,8 @@ import accomodationService from "../../services/accomodation.service";
 import Appointment from "../../model/Appointment";
 import priceService from "../../services/price.service";
 import { response } from "express";
+import reservationService from "../../services/reservation.service";
+import DateRange from "../../model/DateRange";
 
 function Accomodations() {
 
@@ -19,6 +21,18 @@ function Accomodations() {
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [appointment, setAppointment] = useState<Appointment>({
+    id: "",
+    accomodationId: "",
+    start: "",
+    end: "",
+    priceType: "",
+    price: 0,
+    status: "Free",
+  });
+
+  const [appointmentsForCheck, setAppointmentsForCheck] = useState<Appointment[]>([]);
+  const [isShown, setIsShown] = useState(false);
+  const [appointmentForChange, setAppointmentForChange] = useState<Appointment>({
     id: "",
     accomodationId: "",
     start: "",
@@ -42,8 +56,26 @@ function Accomodations() {
     })
   }
 
+  const check = (appointmentChoosen: Appointment) : void => {
+    const dateRange : DateRange = {
+      startDate : appointmentChoosen.start,
+      endDate : appointmentChoosen.end
+    }
+    setAppointmentForChange(appointmentChoosen)
+    reservationService.check(dateRange).then((response) => {
+      //setAppointmentsForCheck(response.data.appointments);
+      if(response.data.reservations.length == 0){
+        setIsShown(true);
+      }else{
+        setIsShown(false);
+      }
+    })
+  }
+
   const editAppointment = (appointmentSent: Appointment) : void  => {
-    setAppointment((prevState) => ({
+    console.log(appointmentSent)
+    console.log(appointmentForChange)
+    /*setAppointment((prevState) => ({
       ...prevState,
       id: appointmentSent.id,
     }))
@@ -58,9 +90,11 @@ function Accomodations() {
     setAppointment((prevState) => ({
       ...prevState,
       status: appointmentSent.status,
-    }))
-    priceService.editAppointment(appointment).then((response) => {
-      console.log("bravo")
+    }))*/
+    priceService.editAppointment(appointmentForChange).then((response) => {
+      priceService.getByAccomodationId(appointmentForChange.accomodationId).then((response) => {
+        setAppointments(response.data.appointments);
+      })
     });
   }
 
@@ -117,7 +151,7 @@ function Accomodations() {
                         <td>{appointment.end.split(" ", 1)}</td>
                         <td>{appointment.priceType}</td>
                         <td>{appointment.price}</td>
-                        <td><MDBBtn onClick={() => editAppointment(appointment)}>Edit</MDBBtn></td>
+                        <td><MDBBtn onClick={() => check(appointment)}>Edit</MDBBtn></td>
                       </tr>
                     </tbody>
                   ))}
@@ -129,47 +163,51 @@ function Accomodations() {
       </div>
       </div>
       <div>
-      <div className="field">
-            <label>
-              Start:
-              <input
-                type="date"
-                name="name"
-                onChange={(e) =>
-                  setAppointment((prevState) => ({
-                    ...prevState,
-                    start: e.target.value,
-                  }))
-                }
-              />
-            </label>
-            <label>
-              End:
-              <input
-                type="date"
-                name="name"
-                onChange={(e) =>
-                  setAppointment((prevState) => ({
-                    ...prevState,
-                    end: e.target.value,
-                  }))
-                }
-              />
-            </label>
-            <label>
-              Price:
-              <input
-                type="number"
-                name="name"
-                onChange={(e) =>
-                  setAppointment((prevState) => ({
-                    ...prevState,
-                    price: parseInt(e.target.value),
-                  }))
-                }
-              />
-            </label>
-          </div>
+        {isShown &&
+          <div className="field">
+          <label>
+            Start:
+            <input
+              type="date"
+              name="name"
+              onChange={(e) =>
+                setAppointmentForChange((prevState) => ({
+                  ...prevState,
+                  start: e.target.value,
+                }))
+              }
+            />
+          </label>
+          <label>
+            End:
+            <input
+              type="date"
+              name="name"
+              onChange={(e) =>
+                setAppointmentForChange((prevState) => ({
+                  ...prevState,
+                  end: e.target.value,
+                }))
+              }
+            />
+          </label>
+          <label>
+            Price:
+            <input
+              type="number"
+              name="name"
+              onChange={(e) =>
+                setAppointmentForChange((prevState) => ({
+                  ...prevState,
+                  price: parseInt(e.target.value),
+                }))
+              }
+            />
+          </label>
+          <MDBBtn onClick={() => editAppointment(appointment)}>Edit</MDBBtn>
+        </div>
+        }
+      
       </div>
     </>
   );

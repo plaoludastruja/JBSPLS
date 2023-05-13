@@ -9,4 +9,5 @@ type IReservationRepo interface {
 	Edit(reservation *Reservation) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	Check(dateRange *DateRange) ([]*Reservation, error)
 }
