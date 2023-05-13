@@ -3,8 +3,14 @@ import "./NavBar.css";
 import { BsListStars, BsHouseCheck } from "react-icons/bs";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { CgLogIn as LoginIcon, CgLogOut as LogoutIcon } from "react-icons/cg";
+import { removeToken } from "../../services/token.service";
 
 function NavBar() {
+
+  const logout = () => {
+    removeToken()
+  }
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-custom shadow-5-strong gradient-custom"
@@ -47,7 +53,7 @@ function NavBar() {
           <li className="nav-item active">
             <a className="nav-link" href="/accomodations">
               <b>Accomodations</b>
-              <HomeIcon className="icon" size={25} color="#d88a3f" />
+              <LogoutIcon className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
           <li className="nav-item active">
@@ -63,7 +69,7 @@ function NavBar() {
             </a>
           </li>
           <li className="nav-item active">
-            <a className="nav-link" href="/login">
+            <a className="nav-link" href="/login" onClick={() => logout()}>
               <b>LOGOUT</b>
               <LogoutIcon className="icon" size={25} color="#d88a3f" />
             </a>

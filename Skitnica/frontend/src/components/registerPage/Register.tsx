@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -12,8 +12,28 @@ import {
   MDBCheckbox
 }
 from 'mdb-react-ui-kit';
+import userService from '../../services/user.service';
+import User from '../../model/User';
+import { useNavigate } from "react-router-dom"
 
 function Register() {
+  const navigate = useNavigate()
+  const [user, setUser] = useState<User>({
+    id : "",
+    username: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    role: "USER",
+  })
+
+  const registerUser = () => {
+    userService.registerUser(user).then(() => {
+      navigate('/login')
+    })
+  }
+
+
   return (
     <MDBContainer fluid>
 
@@ -26,29 +46,29 @@ function Register() {
 
               <div className="d-flex flex-row align-items-center mb-4 ">
                 <MDBIcon fas icon="user me-3" size='lg'/>
-                <MDBInput label='Your Name' id='form1' type='text' className='w-100'/>
+                <MDBInput label='Your Username' onChange={(e) => setUser(prevState => ({ ...prevState, username: e.target.value }))} type='text' className='w-100'/>
               </div>
 
               <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="envelope me-3" size='lg'/>
-                <MDBInput label='Your Email' id='form2' type='email'/>
+                <MDBInput label='Your First Name' onChange={(e) => setUser(prevState => ({ ...prevState, firstName: e.target.value }))} type='email'/>
+              </div>
+
+              <div className="d-flex flex-row align-items-center mb-4">
+                <MDBIcon fas icon="envelope me-3" size='lg'/>
+                <MDBInput label='Your Last Name' onChange={(e) => setUser(prevState => ({ ...prevState, lastName: e.target.value }))} type='email'/>
               </div>
 
               <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="lock me-3" size='lg'/>
-                <MDBInput label='Password' id='form3' type='password'/>
-              </div>
-
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="key me-3" size='lg'/>
-                <MDBInput label='Repeat your password' id='form4' type='password'/>
+                <MDBInput label='Password' onChange={(e) => setUser(prevState => ({ ...prevState, password: e.target.value }))} type='password'/>
               </div>
 
               <div className='mb-4'>
-                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
+                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I want to be a host' />
               </div>
 
-              <MDBBtn className='mb-4' size='lg'>Register</MDBBtn>
+              <MDBBtn className='mb-4' size='lg' onClick={() => registerUser()}>Register</MDBBtn>
 
             </MDBCol>
 

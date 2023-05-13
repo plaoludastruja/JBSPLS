@@ -12,6 +12,11 @@ service UserService {
                 get: "/user/{id}"
             };
         }
+        rpc GetByUsername(GetRequestUsername) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/user/getByUsername/{username}"
+            };
+        }
         rpc GetAll(GetAllRequest) returns(GetAllResponse) {
             option (google.api.http) = {
                 get: "/user"
@@ -34,11 +39,29 @@ service UserService {
                 delete: "/user/{id}"
             };
         }
+        rpc LoginUser(LoginDTO) returns(UserToken) {
+            option (google.api.http) = {
+                post: "/user/login"
+                body: "loginDTO"
+            };
+        }
         
+}
+
+message LoginDTO {
+        UserDTO loginDTO = 1;
+}
+
+message UserToken {
+        string token = 1;
 }
 
 message GetRequest {
         string id = 1;
+}
+
+message GetRequestUsername {
+        string username = 1;
 }
 
 message GetResponse {
@@ -82,4 +105,9 @@ message User {
         string firstName = 4;
         string lastName = 5;
         string role = 6;
+}
+
+message UserDTO {
+        string username = 1;
+        string password = 2;
 }
