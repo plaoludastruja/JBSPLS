@@ -7,10 +7,12 @@ const getReservations = (email: any)  => baseAxios.get<ReservationsResponse>('/r
 const changeReservationStatus = (reservation : Reservation)  => baseAxios.put('/reservation', reservation)
 const deleteReservation = (reservationId : string)  => baseAxios.delete('/reservation/' + reservationId)
 const check = (dateRange: DateRange)  => baseAxios.post<ReservationsResponse>('/reservation/check', dateRange)
+const createReservation = (reservation: Reservation)  => baseAxios.post('/reservation', reservation)
 
 export default {
     getReservations,
     changeReservationStatus,
     deleteReservation,
-    check
+    check,
+    createReservation
   }
