@@ -4,6 +4,7 @@ import (
 	"context"
 
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
+	//"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -97,6 +98,22 @@ func (handler *ReservationHandler) Search(ctx context.Context, request *pb.Searc
 		return nil, err
 	}
 	response := &pb.SearchResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range reservations {
+		current := mapReservation(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) Check(ctx context.Context, request *pb.DateRangeRequest) (*pb.DateRangeResponse, error) {
+	dateRange := mapDateRangePb(request.DateRange)
+	reservations, err := handler.service.Check(*dateRange)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.DateRangeResponse{
 		Reservations: []*pb.Reservation{},
 	}
 	for _, reservation := range reservations {

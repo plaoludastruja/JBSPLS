@@ -25,6 +25,7 @@ const (
 	ReservationService_EditReservation_FullMethodName   = "/reservation.ReservationService/EditReservation"
 	ReservationService_DeleteReservation_FullMethodName = "/reservation.ReservationService/DeleteReservation"
 	ReservationService_Search_FullMethodName            = "/reservation.ReservationService/Search"
+	ReservationService_Check_FullMethodName             = "/reservation.ReservationService/check"
 )
 
 // ReservationServiceClient is the client API for ReservationService service.
@@ -37,6 +38,7 @@ type ReservationServiceClient interface {
 	EditReservation(ctx context.Context, in *EditReservationRequest, opts ...grpc.CallOption) (*EditReservationResponse, error)
 	DeleteReservation(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
+	Check(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (*DateRangeResponse, error)
 }
 
 type reservationServiceClient struct {
@@ -101,6 +103,15 @@ func (c *reservationServiceClient) Search(ctx context.Context, in *SearchRequest
 	return out, nil
 }
 
+func (c *reservationServiceClient) Check(ctx context.Context, in *DateRangeRequest, opts ...grpc.CallOption) (*DateRangeResponse, error) {
+	out := new(DateRangeResponse)
+	err := c.cc.Invoke(ctx, ReservationService_Check_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReservationServiceServer is the server API for ReservationService service.
 // All implementations must embed UnimplementedReservationServiceServer
 // for forward compatibility
@@ -111,6 +122,7 @@ type ReservationServiceServer interface {
 	EditReservation(context.Context, *EditReservationRequest) (*EditReservationResponse, error)
 	DeleteReservation(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
+	Check(context.Context, *DateRangeRequest) (*DateRangeResponse, error)
 	mustEmbedUnimplementedReservationServiceServer()
 }
 
@@ -135,6 +147,9 @@ func (UnimplementedReservationServiceServer) DeleteReservation(context.Context, 
 }
 func (UnimplementedReservationServiceServer) Search(context.Context, *SearchRequest) (*SearchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
+func (UnimplementedReservationServiceServer) Check(context.Context, *DateRangeRequest) (*DateRangeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedReservationServiceServer) mustEmbedUnimplementedReservationServiceServer() {}
 
@@ -257,6 +272,24 @@ func _ReservationService_Search_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReservationService_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DateRangeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReservationServiceServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReservationService_Check_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReservationServiceServer).Check(ctx, req.(*DateRangeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReservationService_ServiceDesc is the grpc.ServiceDesc for ReservationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -287,6 +320,10 @@ var ReservationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Search",
 			Handler:    _ReservationService_Search_Handler,
+		},
+		{
+			MethodName: "check",
+			Handler:    _ReservationService_Check_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

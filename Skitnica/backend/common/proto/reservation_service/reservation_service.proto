@@ -40,6 +40,12 @@ service ReservationService {
             };
         }
         
+        rpc check(DateRangeRequest) returns(DateRangeResponse) {
+            option (google.api.http) = {
+                post: "/reservation/check"
+                body: "dateRange"
+            };
+        }
 }
 
 message GetRequest {
@@ -93,6 +99,14 @@ message SearchResponse {
         repeated Reservation reservations = 1;
 }
 
+message DateRangeRequest {
+    DateRange dateRange = 1;
+}
+
+message DateRangeResponse {
+    repeated Reservation reservations = 1;
+}
+
 message Reservation {
         string id = 1;
         string accomodationId = 2;
@@ -101,4 +115,9 @@ message Reservation {
         string endDate = 5;
         int32 guestNumber = 6;
         string status = 7;
+}
+
+message DateRange {
+    string startDate = 1;
+    string endDate = 2;
 }

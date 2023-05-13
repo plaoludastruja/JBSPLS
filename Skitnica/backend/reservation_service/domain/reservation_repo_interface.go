@@ -10,4 +10,5 @@ type IReservationRepo interface {
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
 	Search(startDay string, startMonth string, startYear string, endDay string, endMonth string, endYear string) ([]*Reservation, error)
+	Check(dateRange *DateRange) ([]*Reservation, error)
 }
