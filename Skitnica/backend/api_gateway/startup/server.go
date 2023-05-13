@@ -9,13 +9,17 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	cors "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Cors"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/infrastructure/handler"
+
+	//token "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Token"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/startup/config"
 	accomodationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
 	reservationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 	userGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 type Server struct {
@@ -26,7 +30,14 @@ type Server struct {
 func NewServer(config *config.Config) *Server {
 	server := &Server{
 		config: config,
-		mux:    runtime.NewServeMux(),
+		mux: runtime.NewServeMux(
+			runtime.WithMetadata(func(ctx context.Context, request *http.Request) metadata.MD {
+				header := request.Header.Get("Authorization")
+				// send all the headers received from the client
+				md := metadata.Pairs("auth", header)
+				return md
+			}),
+		),
 	}
 	server.initHandlers()
 	server.initCustomHandlers()

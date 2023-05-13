@@ -2,10 +2,15 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/service"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/token"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 type UserHandler struct {
@@ -29,6 +34,34 @@ func (handler *UserHandler) Get(ctx context.Context, request *pb.GetRequest) (*p
 	if err != nil {
 		return nil, err
 	}
+	userPb := mapUser(user)
+	response := &pb.GetResponse{
+		User: userPb,
+	}
+	return response, nil
+}
+
+func (handler *UserHandler) GetByUsername(ctx context.Context, request *pb.GetRequestUsername) (*pb.GetResponse, error) {
+	user, err := handler.service.GetByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Internal, "failed to get metadata from context")
+	}
+
+	// Get the value of a specific header
+	myHeaderValues := md.Get("Authorization")
+	fmt.Println(len(myHeaderValues), "-------------------------------------")
+	if len(myHeaderValues) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "my-header is required")
+	}
+	fmt.Println(myHeaderValues, "-------------------------------------")
+	myHeaderValue := myHeaderValues[0]
+
+	fmt.Println(myHeaderValue, "-------------------------------------")
 	userPb := mapUser(user)
 	response := &pb.GetResponse{
 		User: userPb,
@@ -83,4 +116,19 @@ func (handler *UserHandler) DeleteUser(ctx context.Context, request *pb.DeleteRe
 		return nil, err
 	}
 	return &pb.DeleteResponse{}, nil
+}
+
+func (handler *UserHandler) LoginUser(ctx context.Context, request *pb.LoginDTO) (*pb.UserToken, error) {
+	user, err := handler.service.GetByUsername(request.LoginDTO.Username)
+	if err != nil {
+		return nil, err
+	}
+	generatedToken, err := token.GenerateToken(user.Username, user.Role)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.UserToken{
+		Token: generatedToken,
+	}
+	return response, nil
 }

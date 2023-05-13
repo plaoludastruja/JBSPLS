@@ -5,6 +5,7 @@ go 1.20
 replace github.com/plaoludastruja/JBSPLS/Skitnica/backend/common => ../common
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/plaoludastruja/JBSPLS/Skitnica/backend/common v0.0.0-00010101000000-000000000000
 	go.mongodb.org/mongo-driver v1.11.4
 	google.golang.org/grpc v1.54.0

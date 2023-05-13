@@ -2,10 +2,14 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service/service"
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 type AccomodationHandler struct {
@@ -52,6 +56,21 @@ func (handler *AccomodationHandler) GetAll(ctx context.Context, request *pb.GetA
 }
 
 func (handler *AccomodationHandler) CreateAccomodation(ctx context.Context, request *pb.CreateAccomodationRequest) (*pb.CreateAccomodationResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Internal, "failed to get metadata from context")
+	}
+
+	// Get the value of a specific header
+	myHeaderValues := md.Get("Authorization")
+	fmt.Println(len(myHeaderValues), "-------------------------------------")
+	if len(myHeaderValues) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "my-header is required")
+	}
+	fmt.Println(myHeaderValues, "-------------------------------------")
+	myHeaderValue := myHeaderValues[0]
+
+	fmt.Println(myHeaderValue, "-------------------------------------")
 	accomodation := mapAccomodationPb(request.Accomodation)
 	err := handler.service.Insert(*accomodation)
 	if err != nil {
