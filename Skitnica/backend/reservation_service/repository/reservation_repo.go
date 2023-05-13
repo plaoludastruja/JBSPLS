@@ -120,10 +120,10 @@ func (store *ReservationRepo) Search(startDay string, startMonth string, startYe
 
 	start := time.Date(startYearInt, time.Month(startMonthInt), startDayInt, 00, 00, 00, 999999999, time.UTC)
 	end := time.Date(endYearInt, time.Month(endMonthInt), endDayInt, 00, 00, 00, 999999999, time.UTC)
-	filter1 := bson.M{"startDate": bson.M{"$gte": start, "$lt": end}}
+	filter1 := bson.M{"startDate": bson.M{"$gte": start, "$lt": end}, "status": "APPROVED"}
 	res1, _ := store.filter(filter1)
 
-	filter2 := bson.M{"startDate": bson.M{"$lt": start}, "endDate": bson.M{"$gte": start}}
+	filter2 := bson.M{"startDate": bson.M{"$lt": start}, "endDate": bson.M{"$gte": start}, "status": "APPROVED"}
 	res2, _ := store.filter(filter2)
 
 	res1 = append(res1, res2...)

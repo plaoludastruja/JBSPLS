@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/infrastructure/service"
 	accomodation "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointment "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
@@ -86,6 +87,7 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 	find := false
 
 	result := []accomodation.Accomodation{}
+	//result := make([]*domain.Accomodation, 0)
 	for _, accomodation := range accomodations.Accomodations {
 		for _, reservation := range reservations.Reservations {
 			fmt.Println("Usao u reservations for")
@@ -107,7 +109,7 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 	appointmentClient := service.NewAppointmentClient(handler.appointmentClientAddress)
 	appointments, _ := appointmentClient.GetAll(context.TODO(), &appointment.GetAllRequest{})
 
-	const layout = "2006-01-02"
+	const layout = "2006-01-02 15:04:05 -0700 MST"
 
 	startYearInt, _ := strconv.Atoi(startYearString)
 	startMonthInt, _ := strconv.Atoi(startMonthString)
@@ -120,32 +122,112 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 	start := time.Date(startYearInt, time.Month(startMonthInt), startDayInt, 00, 00, 00, 999999999, time.UTC)
 	end := time.Date(endYearInt, time.Month(endMonthInt), endDayInt, 00, 00, 00, 999999999, time.UTC)
 
-	result2 := []accomodation.Accomodation{}
+	duration := end.Sub(start)
+	days := int32(duration.Hours() / 24)
 
+	result2 := []accomodation.Accomodation{}
+	res := []domain.SearchResult{}
+
+	fmt.Println("pre fora sa app ", result)
 	for _, accomodation := range result {
 		for _, appointment := range appointments.Appointments {
 			if appointment.AccomodationId == accomodation.Id {
+				fmt.Println("Usao u appointment for")
 				appointmentStart, _ := time.Parse(layout, appointment.Start)
 				appointmentEnd, _ := time.Parse(layout, appointment.End)
+				fmt.Println("appointmentStart", appointmentStart)
+				fmt.Println("appointmentEnd", appointmentEnd)
 				if appointmentStart.Before(start) && appointmentEnd.After(end) {
+					fmt.Println("Usao u appointment if")
 					result2 = append(result2, accomodation)
+
+					fmt.Println("days", days)
+
+					sr := domain.SearchResult{AccomodationId: accomodation.Id,
+						Name:              accomodation.Name,
+						Location:          accomodation.Location,
+						Facilities:        accomodation.Facilities,
+						MinNumberOfGuests: accomodation.MinNumberOfGuests,
+						MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
+						TotalPrice:        appointment.Price * days}
+					found := false
+					for _, searchResult := range res {
+						if searchResult.AccomodationId == sr.AccomodationId {
+							found = true
+						}
+					}
+					if !found {
+						res = append(res, sr)
+					}
+					fmt.Println(result2)
 				} else if appointmentStart.Before(start) && appointmentEnd.Before(end) && appointmentEnd.After(start) {
+					fmt.Println("Usao u appointment else if 1")
 					for _, app := range appointments.Appointments {
 						if app.AccomodationId == accomodation.Id {
 							appStart, _ := time.Parse(layout, app.Start)
 							appEnd, _ := time.Parse(layout, app.End)
 							if appointmentEnd.Equal(appStart) && appEnd.After(end) {
 								result2 = append(result2, accomodation)
+								duration1 := appointmentEnd.Sub(start)
+								days1 := int32(duration1.Hours() / 24)
+								fmt.Println("days1", days1)
+
+								duration2 := end.Sub(appStart)
+								days2 := int32(duration2.Hours() / 24)
+								fmt.Println("days2", days2)
+								fmt.Println("appointment.Price", appointment.Price)
+								fmt.Println("app.Price", app.Price)
+
+								sr := domain.SearchResult{AccomodationId: accomodation.Id,
+									Name:              accomodation.Name,
+									Location:          accomodation.Location,
+									Facilities:        accomodation.Facilities,
+									MinNumberOfGuests: accomodation.MinNumberOfGuests,
+									MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
+									TotalPrice:        appointment.Price*(days1+1) + app.Price*days2}
+								found := false
+								for _, searchResult := range res {
+									if searchResult.AccomodationId == sr.AccomodationId {
+										found = true
+									}
+								}
+								if !found {
+									res = append(res, sr)
+								}
 							}
 						}
 					}
 				} else if appointmentStart.After(start) && appointmentStart.Before(end) && appointmentEnd.After(end) {
+					fmt.Println("Usao u appointment else if 2")
 					for _, app2 := range appointments.Appointments {
 						if appointment.AccomodationId == accomodation.Id {
 							app2Start, _ := time.Parse(layout, app2.Start)
 							app2End, _ := time.Parse(layout, app2.End)
 							if appointmentStart.Equal(app2End) && app2Start.Before(appointmentStart) {
 								result2 = append(result2, accomodation)
+
+								duration1 := end.Sub(appointmentStart)
+								days1 := int32(duration1.Hours() / 24)
+
+								duration2 := app2End.Sub(start)
+								days2 := int32(duration2.Hours() / 24)
+
+								sr := domain.SearchResult{AccomodationId: accomodation.Id,
+									Name:              accomodation.Name,
+									Location:          accomodation.Location,
+									Facilities:        accomodation.Facilities,
+									MinNumberOfGuests: accomodation.MinNumberOfGuests,
+									MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
+									TotalPrice:        appointment.Price*days1 + app2.Price*days2}
+								found := false
+								for _, searchResult := range res {
+									if searchResult.AccomodationId == sr.AccomodationId {
+										found = true
+									}
+								}
+								if !found {
+									res = append(res, sr)
+								}
 							}
 						}
 					}
@@ -154,7 +236,7 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 		}
 	}
 
-	response, err := json.Marshal(result2)
+	response, err := json.Marshal(res)
 	w.WriteHeader(http.StatusOK)
 	w.Write(response)
 

@@ -4,6 +4,7 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type SearchResult struct {
 	Id                primitive.ObjectID
+	AccomodationId    string
 	Name              string
 	Location          string
 	Facilities        string
