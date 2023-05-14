@@ -1,25 +1,19 @@
 import { useEffect, useState } from "react";
-import Accomodation from "../../model/Accomodation";
-import { baseAxios } from "./../../services/api.service";
 import {
-    MDBCard,
-    MDBCardBody,
-    MDBCardTitle,
-    MDBCardText,
-    MDBBtn
-  } from 'mdb-react-ui-kit';
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBBtn,
+} from "mdb-react-ui-kit";
 import accomodationService from "../../services/accomodation.service";
-import Appointment from "../../model/Appointment";
-import priceService from "../../services/price.service";
-import { response } from "express";
 import reservationService from "../../services/reservation.service";
-import DateRange from "../../model/DateRange";
 import SearchResult from "../../model/SearchResult";
 import SearchParams from "../../model/SearchParams";
+import Reservation from "../../model/Reservation";
+import decodeToken from "../../services/auth.service";
 
 function SearchAccomodations() {
-
-
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchParams, setAppointmentForChange] = useState<SearchParams>({
     Location: "",
@@ -28,111 +22,117 @@ function SearchAccomodations() {
     EndDate: "",
   });
 
+  useEffect(() => {}, [searchResults]);
 
-  useEffect(() => {
-    /*accomodationService.searchAccomodations().then((response) => {
-        setSearchResults(response.data.accomodations);
-    });*/
-  }, [searchResults]);
-
-  const search = () : void  => {
+  const search = (): void => {
     accomodationService.searchAccomodations(searchParams).then((response) => {
       setSearchResults(response.data);
       console.log(response.data);
-    })
-     
-  }
+    });
+  };
+
+  const book = (searchResult: SearchResult): void => {
+    console.log(searchResult.IsAutomaticApproved);
+    var reservation = new Reservation({
+      accomodationId: searchResult.AccomodationId,
+      username: decodeToken()?.username,
+      startDate: searchParams.StartDate,
+      endDate: searchParams.EndDate,
+      guestNumber: searchParams.GuestNumber,
+      status:
+        searchResult.IsAutomaticApproved === "true" ? "APPROVED" : "PENDING",
+    });
+    reservationService.createReservation(reservation).then((response) => {
+      alert("Reservation is succesfully created");
+    });
+  };
 
   return (
     <>
       Accomodations
       <div className="field">
-          <label>
-            Start:
-            <input
-              type="date"
-              name="name"
-              onChange={(e) =>
-                setAppointmentForChange((prevState) => ({
-                  ...prevState,
-                  StartDate: e.target.value,
-                }))
-              }
-            />
-          </label>
-          <label>
-            End:
-            <input
-              type="date"
-              name="name"
-              onChange={(e) =>
-                setAppointmentForChange((prevState) => ({
-                  ...prevState,
-                  EndDate: e.target.value,
-                }))
-              }
-            />
-          </label>
-          <label>
-            Guest number:
-            <input
-              type="number"
-              name="name"
-              onChange={(e) =>
-                setAppointmentForChange((prevState) => ({
-                  ...prevState,
-                  GuestNumber: parseInt(e.target.value),
-                }))
-              }
-            />
-          </label>
-          <label>
-            Location:
-            <input
-              type="text"
-              name="name"
-              onChange={(e) =>
-                setAppointmentForChange((prevState) => ({
-                  ...prevState,
-                  Location: e.target.value,
-                }))
-              }
-            />
-          </label>
-          <MDBBtn onClick={() => search()}>Search</MDBBtn>
-        </div>
+        <label>
+          Start:
+          <input
+            type="date"
+            name="name"
+            onChange={(e) =>
+              setAppointmentForChange((prevState) => ({
+                ...prevState,
+                StartDate: e.target.value,
+              }))
+            }
+          />
+        </label>
+        <label>
+          End:
+          <input
+            type="date"
+            name="name"
+            onChange={(e) =>
+              setAppointmentForChange((prevState) => ({
+                ...prevState,
+                EndDate: e.target.value,
+              }))
+            }
+          />
+        </label>
+        <label>
+          Guest number:
+          <input
+            type="number"
+            name="name"
+            onChange={(e) =>
+              setAppointmentForChange((prevState) => ({
+                ...prevState,
+                GuestNumber: parseInt(e.target.value),
+              }))
+            }
+          />
+        </label>
+        <label>
+          Location:
+          <input
+            type="text"
+            name="name"
+            onChange={(e) =>
+              setAppointmentForChange((prevState) => ({
+                ...prevState,
+                Location: e.target.value,
+              }))
+            }
+          />
+        </label>
+        <MDBBtn onClick={() => search()}>Search</MDBBtn>
+      </div>
       <div>
-      {searchResults.map((searchResult, index) => (
-        
-            <div key={index}>
-                <MDBCard>
-                <MDBCardBody>
+        {searchResults.map((searchResult, index) => (
+          <div key={index}>
+            <MDBCard>
+              <MDBCardBody>
                 <MDBCardTitle>{searchResult.Name}</MDBCardTitle>
                 <MDBCardText>
+                  <div>
+                    <div>{searchResult.Location}</div>
+                    <div>{searchResult.Facilities}</div>
                     <div>
-                        <div>
-                            {searchResult.Location}
-                        </div>
-                        <div>
-                            {searchResult.Facilities}
-                        </div>
-                        <div>
-                            min: {searchResult.MinNumberOfGuests}, max: {searchResult.MaxNumberOfGuests}
-                        </div>
-                        <div>
-                            {searchResult.TotalPrice}
-                        </div>
+                      min: {searchResult.MinNumberOfGuests}, max:{" "}
+                      {searchResult.MaxNumberOfGuests}
                     </div>
+                    <div>{searchResult.TotalPrice}</div>
+                    {decodeToken()?.role === "USER" && (
+                      <button onClick={() => book(searchResult)}>
+                        Book now
+                      </button>
+                    )}
+                  </div>
                 </MDBCardText>
-                </MDBCardBody>
-                </MDBCard>
-            </div>
-            
-      ))}
+              </MDBCardBody>
+            </MDBCard>
+          </div>
+        ))}
       </div>
-      <div>
-      
-      </div>
+      <div></div>
     </>
   );
 }

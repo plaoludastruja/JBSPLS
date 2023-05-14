@@ -144,12 +144,13 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 					fmt.Println("days", days)
 
 					sr := domain.SearchResult{AccomodationId: accomodation.Id,
-						Name:              accomodation.Name,
-						Location:          accomodation.Location,
-						Facilities:        accomodation.Facilities,
-						MinNumberOfGuests: accomodation.MinNumberOfGuests,
-						MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
-						TotalPrice:        appointment.Price * days}
+						Name:                accomodation.Name,
+						Location:            accomodation.Location,
+						Facilities:          accomodation.Facilities,
+						MinNumberOfGuests:   accomodation.MinNumberOfGuests,
+						MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
+						TotalPrice:          appointment.Price * days,
+						IsAutomaticApproved: accomodation.IsAutomaticApproved}
 					found := false
 					for _, searchResult := range res {
 						if searchResult.AccomodationId == sr.AccomodationId {
@@ -179,12 +180,13 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 								fmt.Println("app.Price", app.Price)
 
 								sr := domain.SearchResult{AccomodationId: accomodation.Id,
-									Name:              accomodation.Name,
-									Location:          accomodation.Location,
-									Facilities:        accomodation.Facilities,
-									MinNumberOfGuests: accomodation.MinNumberOfGuests,
-									MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
-									TotalPrice:        appointment.Price*(days1+1) + app.Price*days2}
+									Name:                accomodation.Name,
+									Location:            accomodation.Location,
+									Facilities:          accomodation.Facilities,
+									MinNumberOfGuests:   accomodation.MinNumberOfGuests,
+									MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
+									TotalPrice:          appointment.Price*(days1+1) + app.Price*days2,
+									IsAutomaticApproved: accomodation.IsAutomaticApproved}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {
@@ -213,12 +215,13 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 								days2 := int32(duration2.Hours() / 24)
 
 								sr := domain.SearchResult{AccomodationId: accomodation.Id,
-									Name:              accomodation.Name,
-									Location:          accomodation.Location,
-									Facilities:        accomodation.Facilities,
-									MinNumberOfGuests: accomodation.MinNumberOfGuests,
-									MaxNumberOfGuests: accomodation.MaxNumberOfGuests,
-									TotalPrice:        appointment.Price*days1 + app2.Price*days2}
+									Name:                accomodation.Name,
+									Location:            accomodation.Location,
+									Facilities:          accomodation.Facilities,
+									MinNumberOfGuests:   accomodation.MinNumberOfGuests,
+									MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
+									TotalPrice:          appointment.Price*days1 + app2.Price*days2,
+									IsAutomaticApproved: accomodation.IsAutomaticApproved}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {

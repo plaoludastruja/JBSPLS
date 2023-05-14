@@ -134,10 +134,10 @@ func (store *ReservationRepo) Search(startDay string, startMonth string, startYe
 }
 
 func (store *ReservationRepo) Check(dateRange *domain.DateRange) ([]*domain.Reservation, error) {
-	filter1 := bson.M{"startDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}}
+	filter1 := bson.M{"startDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}, "accomodationId": dateRange.AccomodationId, "status": "APPROVED"}
 	res1, _ := store.filter(filter1)
 
-	filter2 := bson.M{"endDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}}
+	filter2 := bson.M{"endDate": bson.M{"$gte": dateRange.StartDate, "$lte": dateRange.EndDate}, "accomodationId": dateRange.AccomodationId, "status": "APPROVED"}
 	res2, _ := store.filter(filter2)
 
 	res1 = append(res1, res2...)

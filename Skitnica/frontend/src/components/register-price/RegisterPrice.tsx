@@ -3,6 +3,7 @@ import Appointment from "../../model/Appointment";
 import Accomodation from "../../model/Accomodation";
 import accomodationService from "../../services/accomodation.service";
 import priceService from "../../services/price.service";
+import decodeToken from "../../services/auth.service";
 
 function RegisterPrice() {
   const [appointment, setAppointment] = useState<Appointment>({
@@ -10,42 +11,49 @@ function RegisterPrice() {
     accomodationId: "",
     start: "",
     end: "",
-    priceType: "",
+    priceType: "PerPerson",
     price: 0,
     status: "Free",
   });
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
-  const [ errorMessage, setErrorMessage ] = useState('')
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    accomodationService.getAccomodations().then((response) => {
-      setAccomodations(response.data.accomodations);
-    });
+    accomodationService
+      .getAccomodationsByHostUsername(decodeToken()?.username)
+      .then((response) => {
+        setAccomodations(response.data.accomodations);
+        setAppointment((prevState) => ({
+          ...prevState,
+          accomodationId: response.data.accomodations[0].id,
+        }));
+      });
   }, []);
   //console.log(accomodations);
 
-  
-
-  const checkDates = () : boolean => {
-    if (new Date(appointment.start) > new Date(appointment.end)){
-      console.log('udje ovde')
+  const checkDates = (): boolean => {
+    if (new Date(appointment.start) > new Date(appointment.end)) {
+      console.log("udje ovde");
       return false;
     }
     return true;
   }
   const createAppointment = () =>  {
-    console.log(appointment);
-    if(checkDates()){
+    if(appointment.start == "" || appointment.end == "" || appointment.price == 0){
+      setErrorMessage('Incorrect dates');
+    }else{
+      if(checkDates()){
       priceService.createAppointment(appointment).then(() => {
-        console.log('bravo');
+        setErrorMessage('Successful');
       })
     }else{
       setErrorMessage('Incorrect dates');
     }
-    
+    }
+    console.log(appointment);
+
   };
 
-  
   /*
         <select>
             {accomodations.map(accomodation => (
@@ -54,15 +62,14 @@ function RegisterPrice() {
         </select>
     */
 
-
   return (
     <>
       <div className="form">
         <h2 className="heading">New accomodation</h2>
         <div className="form-fields">
           <div className="field">
-            <label>Accomodationnnn:</label>
-            <select value={accomodations[0]?.id}
+            <label>Accomodation:</label>
+            <select 
               onChange={(e) =>
                 setAppointment((prevState) => ({
                   ...prevState,
@@ -147,7 +154,9 @@ function RegisterPrice() {
             >
               Create
             </button>
-            {errorMessage && <label className='error-message'>{errorMessage}</label>}
+            {errorMessage && (
+              <label className="error-message">{errorMessage}</label>
+            )}
           </div>
         </div>
       </div>

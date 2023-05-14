@@ -12,4 +12,5 @@ type IAccomodationRepo interface {
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
 	Search(location string, guestNumber int32) ([]*Accomodation, error)
+	GetByHostUsernameList(hostUsername string) ([]*Accomodation, error)
 }

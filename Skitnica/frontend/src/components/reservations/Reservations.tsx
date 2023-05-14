@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Reservations.css";
 import reservationService from "../../services/reservation.service";
-import Reservation from "../../interfaces/Reservation";
+import Reservation from "../../model/Reservation";
 import decodeToken from "../../services/auth.service";
 
 function Reservations() {

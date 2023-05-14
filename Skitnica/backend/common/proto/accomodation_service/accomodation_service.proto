@@ -39,7 +39,11 @@ service AccomodationService {
                 get: "/accomodation/search/{location}/{guestNumber}"
             };
         }
-        
+        rpc GetByHostUsernameList(GetByHostUsernameRequest) returns(GetByHostUsernameResponse) {
+            option (google.api.http) = {
+                get: "/accomodation/host/{hostUsername}"
+            };
+        }
 }
 
 message GetRequest {
@@ -89,6 +93,14 @@ message SearchResponse {
         repeated Accomodation accomodations = 1;
 }
 
+message GetByHostUsernameRequest {
+        string hostUsername = 1;
+}
+
+message GetByHostUsernameResponse {
+        repeated Accomodation accomodations = 1;
+}
+
 message Accomodation {
         string id = 1;
         string name = 2;
@@ -97,4 +109,5 @@ message Accomodation {
         int32 minNumberOfGuests = 5;
         int32 maxNumberOfGuests = 6;
         string isAutomaticApproved = 7;
+        string hostUsername = 8;
 }

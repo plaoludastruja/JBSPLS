@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './RegisterAccomodation.css';
 import Accomodation from '../../model/Accomodation';
 import accomodationService from '../../services/accomodation.service';
+import decodeToken from "../../services/auth.service";
 
 function RegisterAccomodation() {
 
-    const [accomodation, setAccomodation] = useState<Accomodation>({ id: '', name: 'Naziv', location : '', facilities : '', maxNumberOfGuests : 0, minNumberOfGuests : 0, isAutomaticApproved: 'true' })
+    const [accomodation, setAccomodation] = useState<Accomodation>({ id: '', name: 'Naziv', location : '', facilities : '', maxNumberOfGuests : 0, minNumberOfGuests : 0, isAutomaticApproved: 'true', hostUsername: '' })
     
     const createAccomodation = () => {
         console.log(accomodation)
@@ -13,6 +14,9 @@ function RegisterAccomodation() {
                 console.log('bravo');
         })
       }
+  useEffect(() => {
+    setAccomodation(prevState => ({ ...prevState, hostUsername: decodeToken()?.username }))
+  })
     
     return <>
         <div className="form">

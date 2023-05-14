@@ -166,6 +166,7 @@ message Reservation {
 message DateRange {
     string startDate = 1;
     string endDate = 2;
+    string accomodationId = 3;
 }
 
 message ReservationDto {

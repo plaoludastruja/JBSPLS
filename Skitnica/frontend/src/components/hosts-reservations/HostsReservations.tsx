@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import reservationService from "../../services/reservation.service";
-import Reservation from "../../interfaces/Reservation";
 import decodeToken from "../../services/auth.service";
 import ReservationDto from "../../model/ReservationDto";
 
 function HostsReservations() {
   const [reservations, setReservations] = useState<ReservationDto[]>([]);
   const [buttonClicked, setButtonClicked] = useState(false);
-  const [all, setAll] = useState<Reservation[]>([]);
 
   useEffect(() => {
     reservationService
