@@ -46,8 +46,9 @@ func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 
 func mapDateRange(dateRange *domain.DateRange) *pb.DateRange {
 	dateRangePb := &pb.DateRange{
-		StartDate: dateRange.StartDate.String(),
-		EndDate:   dateRange.EndDate.String(),
+		StartDate:      dateRange.StartDate.String(),
+		EndDate:        dateRange.EndDate.String(),
+		AccomodationId: dateRange.AccomodationId,
 	}
 	return dateRangePb
 }
@@ -57,8 +58,9 @@ func mapDateRangePb(dateRangePb *pb.DateRange) *domain.DateRange {
 	startDate, _ := time.Parse(layout, dateRangePb.StartDate)
 	endDate, _ := time.Parse(layout, dateRangePb.EndDate)
 	dateRange := &domain.DateRange{
-		StartDate: startDate,
-		EndDate:   endDate,
+		StartDate:      startDate,
+		EndDate:        endDate,
+		AccomodationId: dateRangePb.AccomodationId,
 	}
 	return dateRange
 }

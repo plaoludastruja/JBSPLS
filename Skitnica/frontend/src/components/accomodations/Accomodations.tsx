@@ -63,8 +63,8 @@ function Accomodations() {
 
   const check = (appointmentChoosen: Appointment): void => {
     const dateRange: DateRange = {
-      startDate: appointmentChoosen.start,
-      endDate: appointmentChoosen.end,
+      startDate: appointmentChoosen.start.split(" ", 1)[0],
+      endDate: appointmentChoosen.end.split(" ", 1)[0],
       accomodationId: appointmentChoosen.accomodationId,
     };
     setAppointmentForChange(appointmentChoosen);

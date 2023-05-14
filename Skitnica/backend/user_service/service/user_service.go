@@ -52,6 +52,10 @@ func (service *UserService) Login(username string, password string) (string, err
 		return "", err
 	}
 
+	if password != user.Password {
+		return "", bcrypt.ErrMismatchedHashAndPassword
+	}
+
 	/*errr := checkPasswordHash(password, user.Password)
 	if errr == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
