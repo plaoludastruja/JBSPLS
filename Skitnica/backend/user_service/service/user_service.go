@@ -2,7 +2,9 @@ package service
 
 import (
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/domain"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/token"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -28,6 +30,7 @@ func (service *UserService) GetAll() ([]*domain.User, error) {
 }
 
 func (service *UserService) Insert(user domain.User) error {
+	hashPassword(&user)
 	return service.store.Insert(&user)
 }
 
@@ -37,4 +40,32 @@ func (service *UserService) Delete(id primitive.ObjectID) error {
 
 func (service *UserService) Edit(user domain.User) error {
 	return service.store.Edit(&user)
+}
+
+func (service *UserService) Login(username string, password string) (string, error) {
+	user, err := service.GetByUsername(username)
+	if err != nil {
+		return "", err
+	}
+
+	errr := checkPasswordHash(password, user.Password)
+	if errr == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
+
+	token, err := token.GenerateToken(user.Username, user.Role)
+	if err != nil {
+		return "", err
+	}
+	return token, nil
+}
+
+func hashPassword(u *domain.User) {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
+	u.Password = string(bytes)
+}
+
+func checkPasswordHash(password, hash string) error {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err
 }

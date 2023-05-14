@@ -67,7 +67,7 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodation:</label>
-            <select
+            <select value={accomodations[0]?.id}
               onChange={(e) =>
                 setAppointment((prevState) => ({
                   ...prevState,

@@ -57,6 +57,12 @@ function NavBar() {
             </a>
           </li>
           <li className="nav-item active">
+            <a className="nav-link" href="/search">
+              <b>Search</b>
+              <LogoutIcon className="icon" size={25} color="#d88a3f" />
+            </a>
+          </li>
+          <li className="nav-item active">
             <a className="nav-link" href="/login">
               <b>Login</b>
               <LoginIcon className="icon" size={25} color="#d88a3f" />
@@ -65,6 +71,12 @@ function NavBar() {
           <li className="nav-item active">
             <a className="nav-link" href="/register">
               <b>Register</b>
+              <RegisterIcon className="icon" size={25} color="#d88a3f" />
+            </a>
+          </li>
+          <li className="nav-item active">
+            <a className="nav-link" href="/profile">
+              <b>My profile</b>
               <RegisterIcon className="icon" size={25} color="#d88a3f" />
             </a>
           </li>
