@@ -3,6 +3,7 @@ import "./Reservations.css";
 import reservationService from "../../services/reservation.service";
 import Reservation from "../../model/Reservation";
 import decodeToken from "../../services/auth.service";
+import { MDBBtn } from "mdb-react-ui-kit";
 
 function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -61,11 +62,11 @@ function Reservations() {
                           reservation.status === "CANCELED" ? (
                             ""
                           ) : (
-                            <button onClick={() => handleOnClick(reservation)}>
+                            <MDBBtn onClick={() => handleOnClick(reservation)}>
                               {reservation.status === "PENDING"
                                 ? "DELETE"
                                 : "CANCEL"}
-                            </button>
+                            </MDBBtn>
                           )}
                         </td>
                       </tr>
