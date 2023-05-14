@@ -37,30 +37,25 @@ function RegisterPrice() {
       return false;
     }
     return true;
-  }
-  const createAppointment = () =>  {
-    if(appointment.start == "" || appointment.end == "" || appointment.price == 0){
-      setErrorMessage('Incorrect dates');
-    }else{
-      if(checkDates()){
-      priceService.createAppointment(appointment).then(() => {
-        setErrorMessage('Successful');
-      })
-    }else{
-      setErrorMessage('Incorrect dates');
-    }
+  };
+  const createAppointment = () => {
+    if (
+      appointment.start == "" ||
+      appointment.end == "" ||
+      appointment.price == 0
+    ) {
+      setErrorMessage("Incorrect dates");
+    } else {
+      if (checkDates()) {
+        priceService.createAppointment(appointment).then(() => {
+          setErrorMessage("Successful");
+        });
+      } else {
+        setErrorMessage("Incorrect dates");
+      }
     }
     console.log(appointment);
-
   };
-
-  /*
-        <select>
-            {accomodations.map(accomodation => (
-                <option value={accomodation.id}>{accomodation.name}</option>
-            ))}
-        </select>
-    */
 
   return (
     <>
@@ -69,7 +64,7 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodation:</label>
-            <select 
+            <select
               onChange={(e) =>
                 setAppointment((prevState) => ({
                   ...prevState,

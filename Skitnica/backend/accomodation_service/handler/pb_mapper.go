@@ -18,6 +18,7 @@ func mapAccomodation(accomodation *domain.Accomodation) *pb.Accomodation {
 		MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
 		IsAutomaticApproved: strconv.FormatBool(accomodation.IsAutomaticApproved),
 		HostUsername:        accomodation.HostUsername,
+		Image:               []byte(accomodation.Image),
 	}
 	return accomodationPb
 }
@@ -34,6 +35,7 @@ func mapAccomodationPb(accomodationPb *pb.Accomodation) *domain.Accomodation {
 		MaxNumberOfGuests:   accomodationPb.MaxNumberOfGuests,
 		IsAutomaticApproved: isAutomaticApprovedBool,
 		HostUsername:        accomodationPb.HostUsername,
+		Image:               accomodationPb.Image,
 	}
 	return accomodation
 }

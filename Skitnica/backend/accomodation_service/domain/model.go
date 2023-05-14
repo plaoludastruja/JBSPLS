@@ -11,4 +11,5 @@ type Accomodation struct {
 	MaxNumberOfGuests   int32              `json:"maxNumberOfGuests" bson:"maxNumberOfGuests" binding:"required"`
 	IsAutomaticApproved bool               `json:"isAutomaticApproved" bson:"isAutomaticApproved" binding:"required"`
 	HostUsername        string             `json:"hostUsername" bson:"hostUsername" binding:"required"`
+	Image               []byte             `json:"image" bson:"image"`
 }
