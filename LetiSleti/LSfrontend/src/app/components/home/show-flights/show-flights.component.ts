@@ -66,7 +66,6 @@ export class ShowFlightsComponent implements OnInit{
   }
 
   deleteFlight(flight: IFlight){
-    //const deleteId: DeleteDto = {id:id}
     this.flightService.delete(flight.id).subscribe(() => {
       console.log('super');
       this.toastr.success('Flight deleted successfully', '', { closeButton: true, timeOut : 1500  });

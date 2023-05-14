@@ -1,0 +1,25 @@
+.form{
+    display: center;
+    padding-top: 5%;
+}
+
+.field{
+    display: flex;
+    padding-bottom: 2%;
+}
+
+.form-fields{
+    display: center;
+    width: 150px;
+    margin-left: 35%;
+}
+
+.heading{
+    display: center;
+    width: 250px;
+    margin-left: 35%;
+}
+
+.input-field{
+    float: right;
+}

@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/reservation";
+
+package reservation;
+
+import "google/api/annotations.proto";
+
+service ReservationService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/reservation/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/reservation/all/{username}"
+            };
+        }
+        rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
+            option (google.api.http) = {
+                post: "/reservation"
+                body: "reservation"
+            };
+        }
+        rpc EditReservation(EditReservationRequest) returns(EditReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation"
+                body: "reservation"
+            };
+        }
+        rpc DeleteReservation(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/reservation/{id}"
+            };
+        }
+        rpc Search(SearchRequest) returns(SearchResponse) {
+            option (google.api.http) = {
+                get: "/reservation/search/{startDay}/{startMonth}/{startYear}/{endDay}/{endMonth}/{endYear}"
+            };
+        }
+        
+        rpc check(DateRangeRequest) returns(DateRangeResponse) {
+            option (google.api.http) = {
+                post: "/reservation/check"
+                body: "dateRange"
+            };
+        }
+
+        rpc GetAllPending(GetAllPendingRequest) returns(GetAllPendingResponse) {
+            option (google.api.http) = {
+                get: "/reservation/allPending/{hostUsername}"
+            };
+        }
+
+        rpc ApproveReservation(ApproveReservationRequest) returns(ApproveReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation/approve"
+                body: "reservationDto"
+            };
+        }
+
+        rpc RejectReservation(RejectReservationRequest) returns(RejectReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation/reject"
+                body: "reservationDto"
+            };
+        }
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        Reservation reservation = 1;
+}
+
+message GetAllRequest {
+    string username = 1;
+}
+
+message GetAllResponse {
+        repeated Reservation reservations = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateReservationRequest {
+        Reservation reservation = 1;
+}
+
+message CreateReservationResponse {
+        Reservation reservation = 1;
+}
+
+message EditReservationRequest {
+        Reservation reservation = 1;
+}
+
+message EditReservationResponse {
+        Reservation reservation = 1;
+}
+
+message SearchRequest {
+        string startDay = 1;
+        string startMonth = 2;
+        string startYear = 3;
+        string endDay = 4;
+        string endMonth = 5;
+        string endYear = 6;
+}
+
+message SearchResponse {
+        repeated Reservation reservations = 1;
+}
+
+message DateRangeRequest {
+    DateRange dateRange = 1;
+}
+
+message DateRangeResponse {
+    repeated Reservation reservations = 1;
+}
+
+message GetAllPendingRequest {
+    string hostUsername = 1;
+}
+
+message GetAllPendingResponse {
+        repeated ReservationDto reservationDtos = 1;
+}
+
+message ApproveReservationRequest {
+        ReservationDto reservationDto = 1;
+}
+
+message ApproveReservationResponse {
+        ReservationDto reservationDto = 1;
+}
+
+message RejectReservationRequest {
+        ReservationDto reservationDto = 1;
+}
+
+message RejectReservationResponse {
+        ReservationDto reservationDto = 1;
+}
+
+message Reservation {
+        string id = 1;
+        string accomodationId = 2;
+        string username = 3;
+        string startDate = 4;
+        string endDate = 5;
+        int32 guestNumber = 6;
+        string status = 7;
+        string hostUsername = 8;
+}
+
+message DateRange {
+    string startDate = 1;
+    string endDate = 2;
+    string accomodationId = 3;
+}
+
+message ReservationDto {
+        string id = 1;
+        string accomodationId = 2;
+        string username = 3;
+        string startDate = 4;
+        string endDate = 5;
+        int32 guestNumber = 6;
+        int32 cancellationNum = 7;
+}

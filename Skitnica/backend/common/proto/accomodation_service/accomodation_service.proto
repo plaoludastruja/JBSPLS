@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/accomodation";
+
+package accomodation;
+
+import "google/api/annotations.proto";
+
+service AccomodationService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/accomodation/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation"
+            };
+        }
+        rpc CreateAccomodation(CreateAccomodationRequest) returns(CreateAccomodationResponse) {
+            option (google.api.http) = {
+                post: "/accomodation"
+                body: "accomodation"
+            };
+        }
+        rpc EditAccomodation(EditAccomodationRequest) returns(EditAccomodationResponse) {
+            option (google.api.http) = {
+                put: "/accomodation"
+                body: "accomodation"
+            };
+        }
+        rpc DeleteAccomodation(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/accomodation/{id}"
+            };
+        }
+        rpc Search(SearchRequest) returns(SearchResponse) {
+            option (google.api.http) = {
+                get: "/accomodation/search/{location}/{guestNumber}"
+            };
+        }
+        rpc GetByHostUsernameList(GetByHostUsernameRequest) returns(GetByHostUsernameResponse) {
+            option (google.api.http) = {
+                get: "/accomodation/host/{hostUsername}"
+            };
+        }
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        Accomodation accomodation = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated Accomodation accomodations = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateAccomodationRequest {
+        Accomodation accomodation = 1;
+}
+
+message CreateAccomodationResponse {
+        Accomodation accomodation = 1;
+}
+
+message EditAccomodationRequest {
+        Accomodation accomodation = 1;
+}
+
+message EditAccomodationResponse {
+        Accomodation accomodation = 1;
+}
+
+message SearchRequest {
+        string location = 1;
+        int32 guestNumber = 2;
+}
+
+message SearchResponse {
+        repeated Accomodation accomodations = 1;
+}
+
+message GetByHostUsernameRequest {
+        string hostUsername = 1;
+}
+
+message GetByHostUsernameResponse {
+        repeated Accomodation accomodations = 1;
+}
+
+message Accomodation {
+        string id = 1;
+        string name = 2;
+        string location = 3;
+        string facilities = 4;
+        int32 minNumberOfGuests = 5;
+        int32 maxNumberOfGuests = 6;
+        string isAutomaticApproved = 7;
+        string hostUsername = 8;
+        bytes image = 9;
+
+}
