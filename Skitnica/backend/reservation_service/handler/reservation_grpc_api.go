@@ -61,6 +61,20 @@ func (handler *ReservationHandler) GetAll(ctx context.Context, request *pb.GetAl
 	}
 	return response, nil
 }
+func (handler *ReservationHandler) GetAllRes(ctx context.Context, request *pb.GetAllReq) (*pb.GetAllResponse, error) {
+	accomodations, err := handler.service.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range accomodations {
+		current := mapReservation(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
 
 func (handler *ReservationHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
 	reservation := mapReservationPb(request.Reservation)

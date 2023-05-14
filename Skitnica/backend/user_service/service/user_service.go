@@ -72,7 +72,7 @@ func (service *UserService) deleteUser(user *domain.User) error {
 	fmt.Println("5")
 	reservationClient := reservationProto.NewReservationServiceClient(conn)
 	fmt.Println("6")
-	reservations, err := reservationClient.GetAll(context.TODO(), &reservationProto.GetAllRequest{})
+	reservations, err := reservationClient.GetAllRes(context.TODO(), &reservationProto.GetAllReq{})
 	fmt.Println("7")
 	fmt.Println(len(reservations.Reservations))
 	for _, reservation := range reservations.Reservations {
@@ -93,7 +93,7 @@ func (service *UserService) deleteHost(user *domain.User) error {
 		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
 	}
 	reservationClient := reservationProto.NewReservationServiceClient(conn)
-	reservations, err := reservationClient.GetAll(context.TODO(), &reservationProto.GetAllRequest{})
+	reservations, err := reservationClient.GetAllRes(context.TODO(), &reservationProto.GetAllReq{})
 
 	for _, reservation := range reservations.Reservations {
 		if reservation.HostUsername == user.Username {

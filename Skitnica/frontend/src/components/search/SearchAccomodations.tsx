@@ -25,15 +25,19 @@ function SearchAccomodations() {
   useEffect(() => {}, [searchResults]);
 
   const search = (): void => {
-    if(searchParams.Location === "" || searchParams.EndDate === "" || searchParams.StartDate === "" || searchParams.GuestNumber === 0){
-      alert("Please enter all parameters")
-    } else{
+    if (
+      searchParams.Location === "" ||
+      searchParams.EndDate === "" ||
+      searchParams.StartDate === "" ||
+      searchParams.GuestNumber === 0
+    ) {
+      alert("Please enter all parameters");
+    } else {
       accomodationService.searchAccomodations(searchParams).then((response) => {
         setSearchResults(response.data);
         console.log(response.data);
       });
     }
-    
   };
 
   const book = (searchResult: SearchResult): void => {
@@ -119,6 +123,9 @@ function SearchAccomodations() {
                 <MDBCardTitle>{searchResult.Name}</MDBCardTitle>
                 <MDBCardText>
                   <div>
+                    <img
+                      src={`data:image/jpeg;base64,${searchResult.Image}`}
+                    ></img>
                     <div>Location: {searchResult.Location}</div>
                     <div>Facilities: {searchResult.Facilities}</div>
                     <div>
@@ -133,9 +140,9 @@ function SearchAccomodations() {
                       <div key={it}>Price type: {pt}</div>
                     ))}
                     {decodeToken()?.role === "USER" && (
-                      <button onClick={() => book(searchResult)}>
+                      <MDBBtn onClick={() => book(searchResult)}>
                         Book now
-                      </button>
+                      </MDBBtn>
                     )}
                   </div>
                 </MDBCardText>

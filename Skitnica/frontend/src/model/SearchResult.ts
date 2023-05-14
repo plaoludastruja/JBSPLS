@@ -11,4 +11,5 @@ export default interface SearchResult{
     Prices: number[];
     PriceType: string[];
     HostUsername: string;
+    Image: string
 }
