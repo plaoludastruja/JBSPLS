@@ -1,5 +1,5 @@
-import Reservation from "../interfaces/Reservation";
-import ReservationsResponse from "../interfaces/ReservationsResponse";
+import Reservation from "../model/Reservation";
+import ReservationsResponse from "../model/ReservationsResponse";
 import DateRange from "../model/DateRange";
 import { baseAxios } from "./api.service";
 

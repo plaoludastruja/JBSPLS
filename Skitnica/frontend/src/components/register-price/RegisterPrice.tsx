@@ -16,41 +16,39 @@ function RegisterPrice() {
     status: "Free",
   });
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
-  const [ errorMessage, setErrorMessage ] = useState('')
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    accomodationService.getAccomodationsByHostUsername(decodeToken()?.username).then((response) => {
-      setAccomodations(response.data.accomodations);
-      setAppointment((prevState) => ({
-        ...prevState,
-        accomodationId: response.data.accomodations[0].id,
-      }))
-    });
+    accomodationService
+      .getAccomodationsByHostUsername(decodeToken()?.username)
+      .then((response) => {
+        setAccomodations(response.data.accomodations);
+        setAppointment((prevState) => ({
+          ...prevState,
+          accomodationId: response.data.accomodations[0].id,
+        }));
+      });
   }, []);
   //console.log(accomodations);
 
-  
-
-  const checkDates = () : boolean => {
-    if (new Date(appointment.start) > new Date(appointment.end)){
-      console.log('udje ovde')
+  const checkDates = (): boolean => {
+    if (new Date(appointment.start) > new Date(appointment.end)) {
+      console.log("udje ovde");
       return false;
     }
     return true;
-  }
-  const createAppointment = () =>  {
+  };
+  const createAppointment = () => {
     console.log(appointment);
-    if(checkDates()){
+    if (checkDates()) {
       priceService.createAppointment(appointment).then(() => {
-        console.log('bravo');
-      })
-    }else{
-      setErrorMessage('Incorrect dates');
+        console.log("bravo");
+      });
+    } else {
+      setErrorMessage("Incorrect dates");
     }
-    
   };
 
-  
   /*
         <select>
             {accomodations.map(accomodation => (
@@ -59,7 +57,6 @@ function RegisterPrice() {
         </select>
     */
 
-
   return (
     <>
       <div className="form">
@@ -67,7 +64,7 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodation:</label>
-            <select value={accomodations[0]?.id}
+            <select
               onChange={(e) =>
                 setAppointment((prevState) => ({
                   ...prevState,
@@ -152,7 +149,9 @@ function RegisterPrice() {
             >
               Create
             </button>
-            {errorMessage && <label className='error-message'>{errorMessage}</label>}
+            {errorMessage && (
+              <label className="error-message">{errorMessage}</label>
+            )}
           </div>
         </div>
       </div>
