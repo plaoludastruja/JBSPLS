@@ -104,6 +104,11 @@ func (store *AccomodationRepo) Search(location string, guestNumber int32) ([]*do
 	return store.filter(filter)
 }
 
+func (store *AccomodationRepo) GetByHostUsernameList(hostUsername string) ([]*domain.Accomodation, error) {
+	filter := bson.M{"hostUsername": hostUsername}
+	return store.filter(filter)
+}
+
 /*
 func checkExisting(name string, where []domain.Accomodation) (idx int) {
 	for _, v := range where {

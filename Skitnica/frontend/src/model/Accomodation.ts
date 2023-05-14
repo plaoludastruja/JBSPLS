@@ -6,4 +6,5 @@ export default interface Accomodation{
     minNumberOfGuests: number;
     maxNumberOfGuests: number;
     isAutomaticApproved: string;
+    hostUsername: string | undefined;
 }

@@ -38,3 +38,7 @@ func (service *AccomodationService) Edit(accomodation domain.Accomodation) error
 func (service *AccomodationService) Search(location string, guestNumber int32) ([]*domain.Accomodation, error) {
 	return service.store.Search(location, guestNumber)
 }
+
+func (service *AccomodationService) GetByHostUsername(hostUsername string) ([]*domain.Accomodation, error) {
+	return service.store.GetByHostUsernameList(hostUsername)
+}
