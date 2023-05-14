@@ -750,7 +750,7 @@ func RegisterReservationServiceHandlerServer(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/reservation.ReservationService/GetAllPending", runtime.WithHTTPPathPattern("/reservation/all/{hostUsername}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/reservation.ReservationService/GetAllPending", runtime.WithHTTPPathPattern("/reservation/allPending/{hostUsername}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1018,7 +1018,7 @@ func RegisterReservationServiceHandlerClient(ctx context.Context, mux *runtime.S
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/reservation.ReservationService/GetAllPending", runtime.WithHTTPPathPattern("/reservation/all/{hostUsername}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/reservation.ReservationService/GetAllPending", runtime.WithHTTPPathPattern("/reservation/allPending/{hostUsername}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1096,7 +1096,7 @@ var (
 
 	pattern_ReservationService_Check_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"reservation", "check"}, ""))
 
-	pattern_ReservationService_GetAllPending_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"reservation", "all", "hostUsername"}, ""))
+	pattern_ReservationService_GetAllPending_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"reservation", "allPending", "hostUsername"}, ""))
 
 	pattern_ReservationService_ApproveReservation_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"reservation", "approve"}, ""))
 

@@ -7,5 +7,8 @@ export default interface SearchResult{
     MinNumberOfGuests: number;
     MaxNumberOfGuests: number;
     TotalPrice: number;
-    IsAutomaticApproved: string
+    IsAutomaticApproved: string;
+    Prices: number[];
+    PriceType: string[];
+    HostUsername: string;
 }

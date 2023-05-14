@@ -49,7 +49,7 @@ service ReservationService {
 
         rpc GetAllPending(GetAllPendingRequest) returns(GetAllPendingResponse) {
             option (google.api.http) = {
-                get: "/reservation/all/{hostUsername}"
+                get: "/reservation/allPending/{hostUsername}"
             };
         }
 
