@@ -21,4 +21,5 @@ type User struct {
 	FirstName string             `json:"firstName" bson:"first_name" binding:"required"`
 	LastName  string             `json:"lastName" bson:"last_name" binding:"required"`
 	Role      string             `json:"role" bson:"role" binding:"required"`
+	Address   string             `json:"address" bson:"address" binding:"required"`
 }
