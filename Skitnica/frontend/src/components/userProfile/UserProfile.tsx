@@ -39,6 +39,7 @@ export default function UserProfile() {
     firstName: "",
     lastName: "",
     role: "",
+    address: "",
   })
 
   const [userEdit, setUserEdit] = useState<User>({
@@ -48,6 +49,7 @@ export default function UserProfile() {
     firstName: "",
     lastName: "",
     role: "",
+    address: "",
   })
   
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function UserProfile() {
     setBasicModal(!basicModal)
     setUserEdit(user)
   }
+
   const toggleShowDelete = () => {
     setDeleteModal(!deleteModal)
   }
@@ -84,7 +87,6 @@ export default function UserProfile() {
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
-
         <MDBRow>
           <MDBCol lg="4">
             <MDBCard className="mb-4">
@@ -108,32 +110,7 @@ export default function UserProfile() {
               </MDBCardBody>
             </MDBCard>
 
-            <MDBCard className="mb-4 mb-lg-0">
-              <MDBCardBody className="p-0">
-                <MDBListGroup flush className="rounded-3">
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fas icon="globe fa-lg text-warning" />
-                    <MDBCardText>https://mdbootstrap.com</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fab icon="github fa-lg" style={{ color: '#333333' }} />
-                    <MDBCardText>mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fab icon="twitter fa-lg" style={{ color: '#55acee' }} />
-                    <MDBCardText>@mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fab icon="instagram fa-lg" style={{ color: '#ac2bac' }} />
-                    <MDBCardText>mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                  <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                    <MDBIcon fab icon="facebook fa-lg" style={{ color: '#3b5998' }} />
-                    <MDBCardText>mdbootstrap</MDBCardText>
-                  </MDBListGroupItem>
-                </MDBListGroup>
-              </MDBCardBody>
-            </MDBCard>
+            
           </MDBCol>
 
           <MDBCol lg="8">
@@ -171,77 +148,11 @@ export default function UserProfile() {
                     <MDBCardText>Address</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{} USER ADDRES TODO</MDBCardText>
+                    <MDBCardText className="text-muted">{user.address}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
-
-            <MDBRow>
-              <MDBCol md="6">
-                <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBCardText className="mb-4"><span className="text-primary font-italic me-1">assigment</span> Project Status</MDBCardText>
-                    <MDBCardText className="mb-1" style={{ fontSize: '.77rem' }}>Web Design</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={80} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Website Markup</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={72} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>One Page</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={89} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Mobile Template</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={55} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Backend API</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={66} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-
-              <MDBCol md="6">
-                <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBCardText className="mb-4"><span className="text-primary font-italic me-1">assigment</span> Project Status</MDBCardText>
-                    <MDBCardText className="mb-1" style={{ fontSize: '.77rem' }}>Web Design</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={80} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Website Markup</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={72} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>One Page</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={89} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Mobile Template</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={55} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-
-                    <MDBCardText className="mt-4 mb-1" style={{ fontSize: '.77rem' }}>Backend API</MDBCardText>
-                    <MDBProgress className="rounded">
-                      <MDBProgressBar width={66} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-            </MDBRow>
           </MDBCol>
         </MDBRow>
       </MDBContainer>
@@ -260,10 +171,7 @@ export default function UserProfile() {
             </MDBModalHeader>
             <MDBModalBody>
             <MDBRow>
-              <div className="align-items-center mb-4 ">
-                <MDBInput label='Your Username' onChange={(e) => setUserEdit(prevState => ({ ...prevState, username: e.target.value }))} type='text' className='w-100' value={userEdit.username}/>
-              </div>
-
+              
               <div className="align-items-center mb-4">
                 <MDBInput label='Your First Name' onChange={(e) => setUserEdit(prevState => ({ ...prevState, firstName: e.target.value }))} type='text' value={userEdit.firstName}/>
               </div>
@@ -272,12 +180,16 @@ export default function UserProfile() {
                 <MDBInput label='Your Last Name' onChange={(e) => setUserEdit(prevState => ({ ...prevState, lastName: e.target.value }))} type='text' value={userEdit.lastName}/>
               </div>
 
-              <div className="align-items-center mb-4">
-                <MDBInput label='Password' onChange={(e) => setUserEdit(prevState => ({ ...prevState, password: e.target.value }))} type='password' value={userEdit.password} />
+              <div className="align-items-center mb-4 ">
+                <MDBInput label='Your Address' onChange={(e) => setUserEdit(prevState => ({ ...prevState, address: e.target.value }))} type='text' className='w-100' value={userEdit.address}/>
               </div>
 
-              <div className='mb-4'>
-                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I want to be a host' />
+              <div className="align-items-center mb-4 ">
+                <MDBInput label='Your Username' onChange={(e) => setUserEdit(prevState => ({ ...prevState, username: e.target.value }))} type='text' className='w-100' value={userEdit.username}/>
+              </div>
+              
+              <div className="align-items-center mb-4">
+                <MDBInput label='Password' onChange={(e) => setUserEdit(prevState => ({ ...prevState, password: e.target.value }))} type='password' value={userEdit.password} />
               </div>
               </MDBRow>
             </MDBModalBody>

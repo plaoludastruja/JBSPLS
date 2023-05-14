@@ -25,6 +25,7 @@ function Register() {
     firstName: "",
     lastName: "",
     role: "USER",
+    address: "",
   })
 
   const registerUser = () => {
@@ -32,6 +33,16 @@ function Register() {
       navigate('/login')
     })
   }
+
+
+  const handleChangeRole = () => {
+    if (user.role == "USER") {
+      setUser(prevState => ({ ...prevState, role: "HOST" }))
+    } else {
+      setUser(prevState => ({ ...prevState, role: "USER" }))
+    }
+  }
+  
 
 
   return (
@@ -44,19 +55,25 @@ function Register() {
 
               <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-              <div className="d-flex flex-row align-items-center mb-4 ">
+              
+              <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="user me-3" size='lg'/>
+                <MDBInput label='Your First Name' onChange={(e) => setUser(prevState => ({ ...prevState, firstName: e.target.value }))} type='text'/>
+              </div>
+
+              <div className="d-flex flex-row align-items-center mb-4">
+                <MDBIcon fas icon="user me-3" size='lg'/>
+                <MDBInput label='Your Last Name' onChange={(e) => setUser(prevState => ({ ...prevState, lastName: e.target.value }))} type='text'/>
+              </div>
+
+              <div className="d-flex flex-row align-items-center mb-4 ">
+                <MDBIcon fas icon="map-marked-alt me-3" size='lg'/>
+                <MDBInput label='Your Address' onChange={(e) => setUser(prevState => ({ ...prevState, address: e.target.value }))} type='text' className='w-100'/>
+              </div>
+
+              <div className="d-flex flex-row align-items-center mb-4 ">
+                <MDBIcon far icon="user me-3" size='lg'/>
                 <MDBInput label='Your Username' onChange={(e) => setUser(prevState => ({ ...prevState, username: e.target.value }))} type='text' className='w-100'/>
-              </div>
-
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="envelope me-3" size='lg'/>
-                <MDBInput label='Your First Name' onChange={(e) => setUser(prevState => ({ ...prevState, firstName: e.target.value }))} type='email'/>
-              </div>
-
-              <div className="d-flex flex-row align-items-center mb-4">
-                <MDBIcon fas icon="envelope me-3" size='lg'/>
-                <MDBInput label='Your Last Name' onChange={(e) => setUser(prevState => ({ ...prevState, lastName: e.target.value }))} type='email'/>
               </div>
 
               <div className="d-flex flex-row align-items-center mb-4">
@@ -65,10 +82,10 @@ function Register() {
               </div>
 
               <div className='mb-4'>
-                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I want to be a host' />
+                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='I want to be a host' onChange={handleChangeRole}/>
               </div>
 
-              <MDBBtn className='mb-4' size='lg' onClick={() => registerUser()}>Register</MDBBtn>
+              <MDBBtn className='mb-4' size='lg' onClick={registerUser}>Register</MDBBtn>
 
             </MDBCol>
 
