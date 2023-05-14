@@ -134,3 +134,52 @@ func (handler *ReservationHandler) Check(ctx context.Context, request *pb.DateRa
 	}
 	return response, nil
 }
+
+func (handler *ReservationHandler) GetAllPending(ctx context.Context, request *pb.GetAllPendingRequest) (*pb.GetAllPendingResponse, error) {
+	fmt.Println(request.HostUsername)
+	hostUsername := request.HostUsername
+	allPendingReservations, err := handler.service.GetAllPending(hostUsername)
+
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllPendingResponse{
+		ReservationDtos: []*pb.ReservationDto{},
+	}
+	cancelationNum := int32(0)
+	for _, reservation := range allPendingReservations {
+		cancelationNum, _ = handler.service.GetCanceledForUser(reservation.Username)
+		reservationDto := &domain.ReservationDto{
+			Id:              reservation.Id,
+			AccomodationId:  reservation.AccomodationId,
+			Username:        reservation.Username,
+			StartDate:       reservation.StartDate,
+			EndDate:         reservation.EndDate,
+			GuestNumber:     reservation.GuestNumber,
+			CancellationNum: cancelationNum,
+		}
+		current := mapReservationDto(reservationDto)
+		response.ReservationDtos = append(response.ReservationDtos, current)
+	}
+	return response, nil
+}
+
+func (handler *ReservationHandler) ApproveReservation(ctx context.Context, request *pb.ApproveReservationRequest) (*pb.ApproveReservationResponse, error) {
+	reservation := mapReservationDtoPb(request.ReservationDto)
+
+	handler.service.ApproveReservation(*reservation)
+
+	return &pb.ApproveReservationResponse{
+		ReservationDto: mapReservationDto(reservation),
+	}, nil
+}
+
+func (handler *ReservationHandler) RejectReservation(ctx context.Context, request *pb.RejectReservationRequest) (*pb.RejectReservationResponse, error) {
+	reservation := mapReservationDtoPb(request.ReservationDto)
+
+	handler.service.RejectReservation(*reservation)
+
+	return &pb.RejectReservationResponse{
+		ReservationDto: mapReservationDto(reservation),
+	}, nil
+}
