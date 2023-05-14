@@ -10,7 +10,7 @@ import accomodationService from "../../services/accomodation.service";
 import reservationService from "../../services/reservation.service";
 import SearchResult from "../../model/SearchResult";
 import SearchParams from "../../model/SearchParams";
-import Reservation from "../../interfaces/Reservation";
+import Reservation from "../../model/Reservation";
 import decodeToken from "../../services/auth.service";
 
 function SearchAccomodations() {
@@ -120,7 +120,11 @@ function SearchAccomodations() {
                       {searchResult.MaxNumberOfGuests}
                     </div>
                     <div>{searchResult.TotalPrice}</div>
-                    <button onClick={() => book(searchResult)}>Book now</button>
+                    {decodeToken()?.role === "USER" && (
+                      <button onClick={() => book(searchResult)}>
+                        Book now
+                      </button>
+                    )}
                   </div>
                 </MDBCardText>
               </MDBCardBody>

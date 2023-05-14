@@ -16,24 +16,24 @@ function RegisterPrice() {
     status: "Free",
   });
   const [accomodations, setAccomodations] = useState<Accomodation[]>([]);
-  const [ errorMessage, setErrorMessage ] = useState('')
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    accomodationService.getAccomodationsByHostUsername(decodeToken()?.username).then((response) => {
-      setAccomodations(response.data.accomodations);
-      setAppointment((prevState) => ({
-        ...prevState,
-        accomodationId: response.data.accomodations[0].id,
-      }))
-    });
+    accomodationService
+      .getAccomodationsByHostUsername(decodeToken()?.username)
+      .then((response) => {
+        setAccomodations(response.data.accomodations);
+        setAppointment((prevState) => ({
+          ...prevState,
+          accomodationId: response.data.accomodations[0].id,
+        }));
+      });
   }, []);
   //console.log(accomodations);
 
-  
-
-  const checkDates = () : boolean => {
-    if (new Date(appointment.start) > new Date(appointment.end)){
-      console.log('udje ovde')
+  const checkDates = (): boolean => {
+    if (new Date(appointment.start) > new Date(appointment.end)) {
+      console.log("udje ovde");
       return false;
     }
     return true;
@@ -51,9 +51,9 @@ function RegisterPrice() {
     }
     }
     console.log(appointment);
+
   };
 
-  
   /*
         <select>
             {accomodations.map(accomodation => (
@@ -61,7 +61,6 @@ function RegisterPrice() {
             ))}
         </select>
     */
-
 
   return (
     <>
@@ -155,7 +154,9 @@ function RegisterPrice() {
             >
               Create
             </button>
-            {errorMessage && <label className='error-message'>{errorMessage}</label>}
+            {errorMessage && (
+              <label className="error-message">{errorMessage}</label>
+            )}
           </div>
         </div>
       </div>

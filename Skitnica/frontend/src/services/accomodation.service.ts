@@ -2,7 +2,6 @@ import Accomodation from "../model/Accomodation";
 import AccomodationsResponse from "../model/AccomodationsResponse";
 import SearchParams from "../model/SearchParams";
 import SearchResult from "../model/SearchResult";
-import SearchResultResponse from "../model/SearchResultRespons";
 import { baseAxios } from "./api.service";
 
 const createAccomodation = (accomodation: Accomodation)  => baseAxios.post('/accomodation', accomodation)
