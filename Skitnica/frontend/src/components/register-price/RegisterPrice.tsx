@@ -39,15 +39,18 @@ function RegisterPrice() {
     return true;
   }
   const createAppointment = () =>  {
-    console.log(appointment);
-    if(checkDates()){
+    if(appointment.start == "" || appointment.end == "" || appointment.price == 0){
+      setErrorMessage('Incorrect dates');
+    }else{
+      if(checkDates()){
       priceService.createAppointment(appointment).then(() => {
-        console.log('bravo');
+        setErrorMessage('Successful');
       })
     }else{
       setErrorMessage('Incorrect dates');
     }
-    
+    }
+    console.log(appointment);
   };
 
   
@@ -67,7 +70,7 @@ function RegisterPrice() {
         <div className="form-fields">
           <div className="field">
             <label>Accomodation:</label>
-            <select value={accomodations[0]?.id}
+            <select 
               onChange={(e) =>
                 setAppointment((prevState) => ({
                   ...prevState,

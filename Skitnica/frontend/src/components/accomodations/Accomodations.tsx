@@ -55,14 +55,17 @@ function Accomodations() {
       setAppointments(response.data.appointments);
       console.log(accomodationId)
     })
+    setIsShown(false);
   }
 
   const check = (appointmentChoosen: Appointment) : void => {
     const dateRange : DateRange = {
       startDate : appointmentChoosen.start,
-      endDate : appointmentChoosen.end
+      endDate : appointmentChoosen.end,
+      accomodationId: appointmentChoosen.accomodationId
     }
     setAppointmentForChange(appointmentChoosen)
+    console.log(dateRange)
     reservationService.check(dateRange).then((response) => {
       //setAppointmentsForCheck(response.data.appointments);
       if(response.data.reservations.length == 0){
