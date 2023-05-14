@@ -25,10 +25,15 @@ function SearchAccomodations() {
   useEffect(() => {}, [searchResults]);
 
   const search = (): void => {
-    accomodationService.searchAccomodations(searchParams).then((response) => {
-      setSearchResults(response.data);
-      console.log(response.data);
-    });
+    if(searchParams.Location === "" || searchParams.EndDate === "" || searchParams.StartDate === "" || searchParams.GuestNumber === 0){
+      alert("Please enter all parameters")
+    } else{
+      accomodationService.searchAccomodations(searchParams).then((response) => {
+        setSearchResults(response.data);
+        console.log(response.data);
+      });
+    }
+    
   };
 
   const book = (searchResult: SearchResult): void => {
@@ -41,6 +46,7 @@ function SearchAccomodations() {
       guestNumber: searchParams.GuestNumber,
       status:
         searchResult.IsAutomaticApproved === "true" ? "APPROVED" : "PENDING",
+      hostUsername: searchResult.HostUsername,
     });
     reservationService.createReservation(reservation).then((response) => {
       alert("Reservation is succesfully created");
@@ -113,13 +119,19 @@ function SearchAccomodations() {
                 <MDBCardTitle>{searchResult.Name}</MDBCardTitle>
                 <MDBCardText>
                   <div>
-                    <div>{searchResult.Location}</div>
-                    <div>{searchResult.Facilities}</div>
+                    <div>Location: {searchResult.Location}</div>
+                    <div>Facilities: {searchResult.Facilities}</div>
                     <div>
                       min: {searchResult.MinNumberOfGuests}, max:{" "}
                       {searchResult.MaxNumberOfGuests}
                     </div>
-                    <div>{searchResult.TotalPrice}</div>
+                    <div>Total price: {searchResult.TotalPrice}</div>
+                    {searchResult.Prices.map((p, i) => (
+                      <div key={i}>Unit price: {p}</div>
+                    ))}
+                    {searchResult.PriceType.map((pt, it) => (
+                      <div key={it}>Price type: {pt}</div>
+                    ))}
                     {decodeToken()?.role === "USER" && (
                       <button onClick={() => book(searchResult)}>
                         Book now

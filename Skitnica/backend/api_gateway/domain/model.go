@@ -12,4 +12,7 @@ type SearchResult struct {
 	MaxNumberOfGuests   int32
 	TotalPrice          int32
 	IsAutomaticApproved string
+	Prices              []int32
+	PriceType           []string
+	HostUsername        string
 }

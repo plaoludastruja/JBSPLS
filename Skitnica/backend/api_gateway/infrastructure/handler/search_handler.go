@@ -143,14 +143,25 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 
 					fmt.Println("days", days)
 
+					gn := int32(1)
+					if appointment.PriceType == "PerPerson" {
+						gn = num2
+					}
+
+					prices := []int32{appointment.Price}
+					priceTypes := []string{appointment.PriceType}
+
 					sr := domain.SearchResult{AccomodationId: accomodation.Id,
 						Name:                accomodation.Name,
 						Location:            accomodation.Location,
 						Facilities:          accomodation.Facilities,
 						MinNumberOfGuests:   accomodation.MinNumberOfGuests,
 						MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
-						TotalPrice:          appointment.Price * days,
-						IsAutomaticApproved: accomodation.IsAutomaticApproved}
+						TotalPrice:          appointment.Price * days * gn,
+						IsAutomaticApproved: accomodation.IsAutomaticApproved,
+						Prices:              prices,
+						PriceType:           priceTypes,
+						HostUsername:        accomodation.HostUsername}
 					found := false
 					for _, searchResult := range res {
 						if searchResult.AccomodationId == sr.AccomodationId {
@@ -179,14 +190,29 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 								fmt.Println("appointment.Price", appointment.Price)
 								fmt.Println("app.Price", app.Price)
 
+								gn1 := int32(1)
+								gn2 := int32(1)
+								if appointment.PriceType == "PerPerson" {
+									gn1 = num2
+								}
+
+								if app.PriceType == "PerPerson" {
+									gn2 = num2
+								}
+
+								prices := []int32{appointment.Price, app.Price}
+								priceTypes := []string{appointment.PriceType, app.PriceType}
 								sr := domain.SearchResult{AccomodationId: accomodation.Id,
 									Name:                accomodation.Name,
 									Location:            accomodation.Location,
 									Facilities:          accomodation.Facilities,
 									MinNumberOfGuests:   accomodation.MinNumberOfGuests,
 									MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
-									TotalPrice:          appointment.Price*(days1+1) + app.Price*days2,
-									IsAutomaticApproved: accomodation.IsAutomaticApproved}
+									TotalPrice:          appointment.Price*(days1+1)*gn1 + app.Price*days2*gn2,
+									IsAutomaticApproved: accomodation.IsAutomaticApproved,
+									Prices:              prices,
+									PriceType:           priceTypes,
+									HostUsername:        accomodation.HostUsername}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {
@@ -214,14 +240,29 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 								duration2 := app2End.Sub(start)
 								days2 := int32(duration2.Hours() / 24)
 
+								gn1 := int32(1)
+								gn2 := int32(1)
+								if appointment.PriceType == "PerPerson" {
+									gn1 = num2
+								}
+
+								if app2.PriceType == "PerPerson" {
+									gn2 = num2
+								}
+
+								prices := []int32{appointment.Price, app2.Price}
+								priceTypes := []string{appointment.PriceType, app2.PriceType}
 								sr := domain.SearchResult{AccomodationId: accomodation.Id,
 									Name:                accomodation.Name,
 									Location:            accomodation.Location,
 									Facilities:          accomodation.Facilities,
 									MinNumberOfGuests:   accomodation.MinNumberOfGuests,
 									MaxNumberOfGuests:   accomodation.MaxNumberOfGuests,
-									TotalPrice:          appointment.Price*days1 + app2.Price*days2,
-									IsAutomaticApproved: accomodation.IsAutomaticApproved}
+									TotalPrice:          appointment.Price*days1*gn1 + app2.Price*days2*gn2,
+									IsAutomaticApproved: accomodation.IsAutomaticApproved,
+									Prices:              prices,
+									PriceType:           priceTypes,
+									HostUsername:        accomodation.HostUsername}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {

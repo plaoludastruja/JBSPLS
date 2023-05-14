@@ -6,6 +6,7 @@ export default class Reservation{
     endDate: string = "";
     guestNumber: number = 0;
     status: string = "";
+    hostUsername: string = ""
     public constructor(obj?: any) {
         if (obj) {
             this.id = obj.id;
@@ -15,6 +16,7 @@ export default class Reservation{
             this.endDate = obj.endDate;
             this.guestNumber = obj.guestNumber;
             this.status = obj.status;
+            this.hostUsername = obj.hostUsername;
         }
     }
 }

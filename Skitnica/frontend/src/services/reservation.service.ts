@@ -9,7 +9,7 @@ const getReservations = (email: any)  => baseAxios.get<ReservationsResponse>('/r
 const changeReservationStatus = (reservation : Reservation)  => baseAxios.put('/reservation', reservation)
 const deleteReservation = (reservationId : string)  => baseAxios.delete('/reservation/' + reservationId)
 const check = (dateRange: DateRange)  => baseAxios.post<ReservationsResponse>('/reservation/check', dateRange)
-const getPendingReservations = (hostUsername: any)  => baseAxios.get<ReservationDtosResponse>('/reservation/all/' + hostUsername)
+const getPendingReservations = (hostUsername: any)  => baseAxios.get<ReservationDtosResponse>('/reservation/allPending/' + hostUsername)
 const approve = (reservationDto : ReservationDto)  => baseAxios.put('/reservation/approve', reservationDto)
 const reject = (reservationDto : ReservationDto)  => baseAxios.put('/reservation/reject', reservationDto)
 const createReservation = (reservation: Reservation)  => baseAxios.post('/reservation', reservation)
