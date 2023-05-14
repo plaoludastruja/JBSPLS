@@ -3,6 +3,7 @@ import Appointment from "../../model/Appointment";
 import Accomodation from "../../model/Accomodation";
 import accomodationService from "../../services/accomodation.service";
 import priceService from "../../services/price.service";
+import decodeToken from "../../services/auth.service";
 
 function RegisterPrice() {
   const [appointment, setAppointment] = useState<Appointment>({
@@ -10,7 +11,7 @@ function RegisterPrice() {
     accomodationId: "",
     start: "",
     end: "",
-    priceType: "",
+    priceType: "PerPerson",
     price: 0,
     status: "Free",
   });
@@ -18,8 +19,12 @@ function RegisterPrice() {
   const [ errorMessage, setErrorMessage ] = useState('')
 
   useEffect(() => {
-    accomodationService.getAccomodations().then((response) => {
+    accomodationService.getAccomodationsByHostUsername(decodeToken()?.username).then((response) => {
       setAccomodations(response.data.accomodations);
+      setAppointment((prevState) => ({
+        ...prevState,
+        accomodationId: response.data.accomodations[0].id,
+      }))
     });
   }, []);
   //console.log(accomodations);
@@ -61,7 +66,7 @@ function RegisterPrice() {
         <h2 className="heading">New accomodation</h2>
         <div className="form-fields">
           <div className="field">
-            <label>Accomodationnnn:</label>
+            <label>Accomodation:</label>
             <select
               onChange={(e) =>
                 setAppointment((prevState) => ({
