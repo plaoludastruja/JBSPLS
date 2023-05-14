@@ -30,7 +30,11 @@ func (service *UserService) GetAll() ([]*domain.User, error) {
 }
 
 func (service *UserService) Insert(user domain.User) error {
-	hashPassword(&user)
+	//hashPassword(&user)
+	_, err := service.GetByUsername(user.Username)
+	if err == nil {
+		return err
+	}
 	return service.store.Insert(&user)
 }
 
@@ -48,10 +52,10 @@ func (service *UserService) Login(username string, password string) (string, err
 		return "", err
 	}
 
-	errr := checkPasswordHash(password, user.Password)
+	/*errr := checkPasswordHash(password, user.Password)
 	if errr == bcrypt.ErrMismatchedHashAndPassword {
 		return "", err
-	}
+	}*/
 
 	token, err := token.GenerateToken(user.Username, user.Role)
 	if err != nil {

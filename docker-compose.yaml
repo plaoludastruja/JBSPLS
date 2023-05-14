@@ -8,11 +8,11 @@ services:
       dockerfile: ./Skitnica/backend/user_service/Dockerfile
     restart: on-failure
     environment:
-      USER_DB_HOST: ${USER_DB_HOST}
-      USER_DB_PORT: ${USER_DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
     depends_on:
-      - user_db
+      - db_host
     networks:
       - network
   accomodation_service:
@@ -23,11 +23,11 @@ services:
       dockerfile: ./Skitnica/backend/accomodation_service/Dockerfile
     restart: on-failure
     environment:
-      ACCOMODATION_DB_HOST: ${ACCOMODATION_DB_HOST}
-      ACCOMODATION_DB_PORT: ${ACCOMODATION_DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_SERVICE_PORT}
     depends_on:
-      - accomodation_db
+      - db_host
     networks:
       - network
   appointment_service:
@@ -38,11 +38,11 @@ services:
       dockerfile: ./Skitnica/backend/appointment_service/Dockerfile
     restart: on-failure
     environment:
-      APPOINTMENT_DB_HOST: ${APPOINTMENT_DB_HOST}
-      APPOINTMENT_DB_PORT: ${APPOINTMENT_DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       APPOINTMENT_SERVICE_PORT: ${APPOINTMENT_SERVICE_PORT}
     depends_on:
-      - appointment_db
+      - db_host
     networks:
       - network
 
@@ -54,11 +54,11 @@ services:
       dockerfile: ./Skitnica/backend/reservation_service/Dockerfile
     restart: on-failure
     environment:
-      RESERVATION_DB_HOST: ${RESERVATION_DB_HOST}
-      RESERVATION_DB_PORT: ${RESERVATION_DB_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
     depends_on:
-      - reservation_db
+      - db_host
     networks:
       - network
 
@@ -85,37 +85,39 @@ services:
     networks:
       - network
 
-  user_db:
+  db_host:
     image: mongo
-    container_name: user_db
-    restart: on-failure
-    networks:
-      - network
-
-  accomodation_db:
-    image: mongo
-    container_name: accomodation_db
+    container_name: db_host
     restart: on-failure
     networks:
       - network
     ports:
-      - 27018:${ACCOMODATION_DB_PORT} # test
+      - ${DB_PORT}:${DB_PORT}
+  
+  # accomodation_db:
+  #   image: mongo
+  #   container_name: accomodation_db
+  #   restart: on-failure
+  #   networks:
+  #     - network
+  #   ports:
+  #     - 27018:${ACCOMODATION_DB_PORT} # test
 
-  appointment_db:
-    image: mongo
-    container_name: appointment_db
-    restart: on-failure
-    networks:
-      - network
+  # appointment_db:
+  #   image: mongo
+  #   container_name: appointment_db
+  #   restart: on-failure
+  #   networks:
+  #     - network
 
-  reservation_db:
-    image: mongo
-    container_name: reservation_db
-    restart: on-failure
-    networks:
-      - network
-    ports:
-      - ${RESERVATION_DB_PORT}:${RESERVATION_DB_PORT}
+  # reservation_db:
+  #   image: mongo
+  #   container_name: reservation_db
+  #   restart: on-failure
+  #   networks:
+  #     - network
+  #   ports:
+  #     - ${RESERVATION_DB_PORT}:${RESERVATION_DB_PORT}
 
 networks:
   network:

@@ -110,4 +110,6 @@ message Accomodation {
         int32 maxNumberOfGuests = 6;
         string isAutomaticApproved = 7;
         string hostUsername = 8;
+        bytes image = 9;
+
 }
