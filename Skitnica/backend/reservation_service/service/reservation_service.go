@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -40,4 +42,27 @@ func (service *ReservationService) Search(startDay string, startMonth string, st
 }
 func (service *ReservationService) Check(dateRange domain.DateRange) ([]*domain.Reservation, error) {
 	return service.store.Check(&dateRange)
+}
+
+func (service *ReservationService) GetAllPending(hostUsername string) ([]*domain.Reservation, error) {
+	return service.store.GetAllPending(hostUsername)
+}
+
+func (service *ReservationService) GetCanceledForUser(username string) (int32, error) {
+	list, _ := service.store.GetCanceledForUser(username)
+	num := 0
+	for _, reservation := range list {
+		fmt.Println(reservation.Username)
+		num = num + 1
+	}
+	return int32(num), nil
+}
+
+func (service *ReservationService) ApproveReservation(reservationDto domain.ReservationDto) {
+	service.store.ApproveReservation(&reservationDto)
+	service.store.RejectOverlapsed(&reservationDto)
+}
+
+func (service *ReservationService) RejectReservation(reservationDto domain.ReservationDto) {
+	service.store.RejectReservation(&reservationDto)
 }

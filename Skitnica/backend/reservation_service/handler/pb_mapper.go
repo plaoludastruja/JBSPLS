@@ -18,6 +18,7 @@ func mapReservation(reservation *domain.Reservation) *pb.Reservation {
 		EndDate:        reservation.EndDate.String(),
 		GuestNumber:    reservation.GuestNumber,
 		Status:         reservation.Status,
+		HostUsername:   reservation.HostUsername,
 	}
 	return reservationPb
 }
@@ -38,6 +39,7 @@ func mapReservationPb(reservationPb *pb.Reservation) *domain.Reservation {
 		EndDate:        endDate,
 		GuestNumber:    reservationPb.GuestNumber,
 		Status:         reservationPb.Status,
+		HostUsername:   reservationPb.HostUsername,
 	}
 	return reservation
 }
@@ -59,4 +61,37 @@ func mapDateRangePb(dateRangePb *pb.DateRange) *domain.DateRange {
 		EndDate:   endDate,
 	}
 	return dateRange
+}
+
+func mapReservationDto(reservationDto *domain.ReservationDto) *pb.ReservationDto {
+	reservationDtoPb := &pb.ReservationDto{
+		Id:              reservationDto.Id.Hex(),
+		AccomodationId:  reservationDto.AccomodationId,
+		Username:        reservationDto.Username,
+		StartDate:       reservationDto.StartDate.String(),
+		EndDate:         reservationDto.EndDate.String(),
+		GuestNumber:     reservationDto.GuestNumber,
+		CancellationNum: reservationDto.CancellationNum,
+	}
+	return reservationDtoPb
+}
+
+func mapReservationDtoPb(reservationDtoPb *pb.ReservationDto) *domain.ReservationDto {
+	reservationDtoPbId, _ := primitive.ObjectIDFromHex(reservationDtoPb.Id)
+	const layout = "2006-01-02"
+	fmt.Println("From mapper:")
+	fmt.Println(reservationDtoPb.StartDate)
+	startDate, _ := time.Parse(layout, reservationDtoPb.StartDate)
+	fmt.Println(startDate)
+	endDate, _ := time.Parse(layout, reservationDtoPb.EndDate)
+	reservationDto := &domain.ReservationDto{
+		Id:              reservationDtoPbId,
+		AccomodationId:  reservationDtoPb.AccomodationId,
+		Username:        reservationDtoPb.Username,
+		StartDate:       startDate,
+		EndDate:         endDate,
+		GuestNumber:     reservationDtoPb.GuestNumber,
+		CancellationNum: reservationDtoPb.CancellationNum,
+	}
+	return reservationDto
 }

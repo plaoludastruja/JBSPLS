@@ -74,7 +74,7 @@ func (store *ReservationRepo) DeleteAll() {
 
 func (store *ReservationRepo) Delete(id primitive.ObjectID) error {
 	reservation, _ := store.Get(id)
-	if reservation.Status == "PENDING" || (reservation.StartDate.Compare(time.Now().Add(time.Hour*48)) == -1 && reservation.Status == "APPROVED") {
+	if reservation.Status == "PENDING" {
 		res, err := store.reservations.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: id}})
 		fmt.Printf("deleted %v documents\n", res.DeletedCount)
 		return err
@@ -142,4 +142,74 @@ func (store *ReservationRepo) Check(dateRange *domain.DateRange) ([]*domain.Rese
 
 	res1 = append(res1, res2...)
 	return res1, nil
+}
+
+func (store *ReservationRepo) GetAllPending(hostUsername string) ([]*domain.Reservation, error) {
+	filter := bson.M{"hostUsername": hostUsername, "status": "PENDING"}
+	return store.filter(filter)
+}
+
+func (store *ReservationRepo) ApproveReservation(reservationDto *domain.ReservationDto) error {
+	filter := bson.M{"_id": reservationDto.Id}
+	fmt.Println(reservationDto.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservationDto.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+
+	update := bson.M{"$set": bson.M{
+		"status": "APPROVED",
+	}}
+	_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+
+	return err
+}
+
+func (store *ReservationRepo) RejectReservation(reservationDto *domain.ReservationDto) error {
+	filter := bson.M{"_id": reservationDto.Id}
+	fmt.Println(reservationDto.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservationDto.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+	if reservationDto.StartDate.Compare(time.Now().Add(time.Hour*24)) == 1 {
+		update := bson.M{"$set": bson.M{
+			"status": "REJECTED",
+		}}
+		_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+
+		return err
+	}
+	return nil
+}
+
+func (store *ReservationRepo) GetCanceledForUser(username string) ([]*domain.Reservation, error) {
+	filter := bson.M{"username": username, "status": "CANCELED"}
+	return store.filter(filter)
+}
+
+func (store *ReservationRepo) RejectOverlapsed(reservationDto *domain.ReservationDto) error {
+
+	update := bson.M{"$set": bson.M{
+		"status": "REJECTED",
+	}}
+
+	filter1 := bson.M{"accomodationId": reservationDto.AccomodationId, "startDate": bson.M{"$lte": reservationDto.StartDate}, "endDate": bson.M{"$gte": reservationDto.StartDate}, "username": bson.M{"$ne": reservationDto.Username}}
+	_, err := store.reservations.UpdateMany(context.TODO(), filter1, update)
+
+	if err != nil {
+		return err
+	}
+
+	filter2 := bson.M{"accomodationId": reservationDto.AccomodationId, "startDate": bson.M{"$lte": reservationDto.EndDate}, "endDate": bson.M{"$gte": reservationDto.EndDate}, "username": bson.M{"$ne": reservationDto.Username}}
+	_, err2 := store.reservations.UpdateMany(context.TODO(), filter2, update)
+
+	if err2 != nil {
+		return err
+	}
+
+	filter3 := bson.M{"accomodationId": reservationDto.AccomodationId, "startDate": bson.M{"$gte": reservationDto.StartDate}, "endDate": bson.M{"$lte": reservationDto.EndDate}, "username": bson.M{"$ne": reservationDto.Username}}
+	_, err3 := store.reservations.UpdateMany(context.TODO(), filter3, update)
+
+	if err3 != nil {
+		return err
+	}
+
+	return nil
 }

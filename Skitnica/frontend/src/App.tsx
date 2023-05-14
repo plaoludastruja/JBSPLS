@@ -10,6 +10,7 @@ import RegisterPrice from "./components/register-price/RegisterPrice";
 import Accomodations from "./components/accomodations/Accomodations";
 import UserProfile from "./components/userProfile/UserProfile";
 import SearchAccomodations from "./components/search/SearchAccomodations";
+import HostsReservations from "./components/hosts-reservations/HostsReservations";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/accomodations" element={<Accomodations />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/search" element={<SearchAccomodations />} />
+            <Route path="/hostsReservations" element={<HostsReservations />} />
           </Routes>
         </div>
       </div>
