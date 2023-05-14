@@ -15,4 +15,5 @@ type IReservationRepo interface {
 	ApproveReservation(reservationDto *ReservationDto) error
 	RejectReservation(reservationDto *ReservationDto) error
 	GetCanceledForUser(username string) ([]*Reservation, error)
+	RejectOverlapsed(reservationDto *ReservationDto) error
 }

@@ -60,6 +60,7 @@ func (service *ReservationService) GetCanceledForUser(username string) (int32, e
 
 func (service *ReservationService) ApproveReservation(reservationDto domain.ReservationDto) {
 	service.store.ApproveReservation(&reservationDto)
+	service.store.RejectOverlapsed(&reservationDto)
 }
 
 func (service *ReservationService) RejectReservation(reservationDto domain.ReservationDto) {

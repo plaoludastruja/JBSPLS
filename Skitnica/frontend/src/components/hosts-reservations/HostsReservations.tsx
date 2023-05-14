@@ -33,11 +33,6 @@ function HostsReservations() {
     reservationService.reject(reservation).then((res) => {
         alert("Successfully rejected");
         setButtonClicked(!buttonClicked);
-        reservationService.getReservations("jelena@gmail.com").then((res) => {
-            alert("Successfully rejected");
-            setAll(res.data.reservations);
-            console.log(all)
-        });
     });
   };
 
