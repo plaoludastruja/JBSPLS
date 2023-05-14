@@ -11,4 +11,8 @@ type IReservationRepo interface {
 	Delete(id primitive.ObjectID) error
 	Search(startDay string, startMonth string, startYear string, endDay string, endMonth string, endYear string) ([]*Reservation, error)
 	Check(dateRange *DateRange) ([]*Reservation, error)
+	GetAllPending(hostUsername string) ([]*Reservation, error)
+	ApproveReservation(reservationDto *ReservationDto) error
+	RejectReservation(reservationDto *ReservationDto) error
+	GetCanceledForUser(username string) ([]*Reservation, error)
 }

@@ -74,7 +74,7 @@ func (store *ReservationRepo) DeleteAll() {
 
 func (store *ReservationRepo) Delete(id primitive.ObjectID) error {
 	reservation, _ := store.Get(id)
-	if reservation.Status == "PENDING" || (reservation.StartDate.Compare(time.Now().Add(time.Hour*48)) == -1 && reservation.Status == "APPROVED") {
+	if reservation.Status == "PENDING" {
 		res, err := store.reservations.DeleteOne(context.TODO(), bson.D{{Key: "_id", Value: id}})
 		fmt.Printf("deleted %v documents\n", res.DeletedCount)
 		return err
@@ -142,4 +142,44 @@ func (store *ReservationRepo) Check(dateRange *domain.DateRange) ([]*domain.Rese
 
 	res1 = append(res1, res2...)
 	return res1, nil
+}
+
+func (store *ReservationRepo) GetAllPending(hostUsername string) ([]*domain.Reservation, error) {
+	filter := bson.M{"hostUsername": hostUsername, "status": "PENDING"}
+	return store.filter(filter)
+}
+
+func (store *ReservationRepo) ApproveReservation(reservationDto *domain.ReservationDto) error {
+	filter := bson.M{"_id": reservationDto.Id}
+	fmt.Println(reservationDto.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservationDto.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+
+	update := bson.M{"$set": bson.M{
+		"status": "APPROVED",
+	}}
+	_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+
+	return err
+}
+
+func (store *ReservationRepo) RejectReservation(reservationDto *domain.ReservationDto) error {
+	filter := bson.M{"_id": reservationDto.Id}
+	fmt.Println(reservationDto.StartDate.Compare(time.Now().Add(time.Hour * 24)))
+	fmt.Println(reservationDto.StartDate)
+	fmt.Println(time.Now().Add(time.Hour * 24))
+	if reservationDto.StartDate.Compare(time.Now().Add(time.Hour*24)) == 1 {
+		update := bson.M{"$set": bson.M{
+			"status": "REJECTED",
+		}}
+		_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
+
+		return err
+	}
+	return nil
+}
+
+func (store *ReservationRepo) GetCanceledForUser(username string) ([]*domain.Reservation, error) {
+	filter := bson.M{"username": username, "status": "CANCELED"}
+	return store.filter(filter)
 }

@@ -46,6 +46,26 @@ service ReservationService {
                 body: "dateRange"
             };
         }
+
+        rpc GetAllPending(GetAllPendingRequest) returns(GetAllPendingResponse) {
+            option (google.api.http) = {
+                get: "/reservation/all/{hostUsername}"
+            };
+        }
+
+        rpc ApproveReservation(ApproveReservationRequest) returns(ApproveReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation/approve"
+                body: "reservationDto"
+            };
+        }
+
+        rpc RejectReservation(RejectReservationRequest) returns(RejectReservationResponse) {
+            option (google.api.http) = {
+                put: "/reservation/reject"
+                body: "reservationDto"
+            };
+        }
 }
 
 message GetRequest {
@@ -108,6 +128,30 @@ message DateRangeResponse {
     repeated Reservation reservations = 1;
 }
 
+message GetAllPendingRequest {
+    string hostUsername = 1;
+}
+
+message GetAllPendingResponse {
+        repeated ReservationDto reservationDtos = 1;
+}
+
+message ApproveReservationRequest {
+        ReservationDto reservationDto = 1;
+}
+
+message ApproveReservationResponse {
+        ReservationDto reservationDto = 1;
+}
+
+message RejectReservationRequest {
+        ReservationDto reservationDto = 1;
+}
+
+message RejectReservationResponse {
+        ReservationDto reservationDto = 1;
+}
+
 message Reservation {
         string id = 1;
         string accomodationId = 2;
@@ -116,9 +160,20 @@ message Reservation {
         string endDate = 5;
         int32 guestNumber = 6;
         string status = 7;
+        string hostUsername = 8;
 }
 
 message DateRange {
     string startDate = 1;
     string endDate = 2;
+}
+
+message ReservationDto {
+        string id = 1;
+        string accomodationId = 2;
+        string username = 3;
+        string startDate = 4;
+        string endDate = 5;
+        int32 guestNumber = 6;
+        int32 cancellationNum = 7;
 }
