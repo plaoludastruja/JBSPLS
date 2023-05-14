@@ -162,6 +162,12 @@ function NavBar() {
                   <RegisterIcon className="icon" size={25} color="#d88a3f" />
                 </a>
               </li>
+              <li className="nav-item active">
+                  <a className="nav-link" href="/search">
+                    <b>Search</b>
+                      <BiSearchAlt className="icon" size={25} color="#d88a3f" />
+                  </a>
+              </li>
             </>
           )}
         </ul>

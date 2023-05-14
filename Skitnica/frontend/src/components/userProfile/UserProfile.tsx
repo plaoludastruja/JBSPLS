@@ -74,6 +74,8 @@ export default function UserProfile() {
     userService.editUser(userEdit).then(() => {
       setUser(userEdit)
       setBasicModal(!basicModal)
+      removeToken()
+      navigate('/login')
     })
   }
   const navigate = useNavigate()
