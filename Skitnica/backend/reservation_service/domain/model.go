@@ -18,6 +18,7 @@ type Reservation struct {
 }
 
 type DateRange struct {
-	StartDate time.Time `json:"startDate" bson:"startDate" binding:"required"`
-	EndDate   time.Time `json:"endDate" bson:"endDate" binding:"required"`
+	StartDate      time.Time `json:"startDate" bson:"startDate" binding:"required"`
+	EndDate        time.Time `json:"endDate" bson:"endDate" binding:"required"`
+	AccomodationId string    `json:"accomodationId" bson:"accomodationId,omitempty"`
 }

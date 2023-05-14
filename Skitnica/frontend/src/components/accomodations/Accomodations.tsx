@@ -57,16 +57,19 @@ function Accomodations() {
     var appointments: Appointment[] = [];
     priceService.getByAccomodationId(accomodationId).then((response) => {
       setAppointments(response.data.appointments);
-      console.log(accomodationId);
-    });
-  };
+      console.log(accomodationId)
+    })
+    setIsShown(false);
+  }
 
-  const check = (appointmentChoosen: Appointment): void => {
-    const dateRange: DateRange = {
-      startDate: appointmentChoosen.start,
-      endDate: appointmentChoosen.end,
-    };
-    setAppointmentForChange(appointmentChoosen);
+  const check = (appointmentChoosen: Appointment) : void => {
+    const dateRange : DateRange = {
+      startDate : appointmentChoosen.start,
+      endDate : appointmentChoosen.end,
+      accomodationId: appointmentChoosen.accomodationId
+    }
+    setAppointmentForChange(appointmentChoosen)
+    console.log(dateRange)
     reservationService.check(dateRange).then((response) => {
       console.log(response.data.reservations.length);
       if (response.data.reservations.length == 0) {
