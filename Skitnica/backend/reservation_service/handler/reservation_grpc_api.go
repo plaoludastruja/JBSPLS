@@ -197,3 +197,13 @@ func (handler *ReservationHandler) RejectReservation(ctx context.Context, reques
 		ReservationDto: mapReservationDto(reservation),
 	}, nil
 }
+
+func (handler *ReservationHandler) GetForGuest(ctx context.Context, request *pb.GetGuestRequest) (*pb.GetGuestResponse, error) {
+	usernamesR := handler.service.GetForGuest(request.Username)
+
+	response := &pb.GetGuestResponse{
+		Usernames: usernamesR,
+	}
+	return response, nil
+
+}

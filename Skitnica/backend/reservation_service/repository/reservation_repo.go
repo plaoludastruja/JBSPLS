@@ -213,3 +213,25 @@ func (store *ReservationRepo) RejectOverlapsed(reservationDto *domain.Reservatio
 
 	return nil
 }
+
+func (store *ReservationRepo) GetForGuest(username string) []string {
+	filter := bson.M{"username": username, "status": "APPROVED", "endDate": bson.M{"$lte": time.Now()}}
+	reservations, _ := store.filter(filter)
+	usernames := []string{}
+	for i := 0; i < len(reservations); i++ {
+		if !contains(usernames, reservations[i].HostUsername) {
+			usernames = append(usernames, reservations[i].HostUsername)
+		}
+	}
+	return usernames
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}

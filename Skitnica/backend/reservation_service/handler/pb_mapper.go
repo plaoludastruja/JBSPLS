@@ -97,3 +97,24 @@ func mapReservationDtoPb(reservationDtoPb *pb.ReservationDto) *domain.Reservatio
 	}
 	return reservationDto
 }
+
+func mapMark(mark *domain.Mark) *pb.Mark {
+	markPb := &pb.Mark{
+		Id:           mark.Id.Hex(),
+		Username:     mark.Username,
+		Grade:        mark.Grade,
+		HostUsername: mark.HostUsername,
+	}
+	return markPb
+}
+
+func mapMarkPb(markPb *pb.Mark) *domain.Mark {
+	markPbId, _ := primitive.ObjectIDFromHex(markPb.Id)
+	mark := &domain.Mark{
+		Id:           markPbId,
+		Username:     markPb.Username,
+		Grade:        markPb.Grade,
+		HostUsername: markPb.HostUsername,
+	}
+	return mark
+}

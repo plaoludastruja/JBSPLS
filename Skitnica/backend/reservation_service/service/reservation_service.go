@@ -66,3 +66,7 @@ func (service *ReservationService) ApproveReservation(reservationDto domain.Rese
 func (service *ReservationService) RejectReservation(reservationDto domain.ReservationDto) {
 	service.store.RejectReservation(&reservationDto)
 }
+
+func (service *ReservationService) GetForGuest(username string) []string {
+	return service.store.GetForGuest(username)
+}

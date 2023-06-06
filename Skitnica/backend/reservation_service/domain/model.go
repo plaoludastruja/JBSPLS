@@ -33,3 +33,10 @@ type ReservationDto struct {
 	GuestNumber     int32              `json:"guestNumber" bson:"guestNumber" binding:"required"`
 	CancellationNum int32              `json:"cancellationNum" bson:"cancellationNum" binding:"required"`
 }
+
+type Mark struct {
+	Id           primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Username     string             `json:"username" bson:"username,omitempty"`
+	Grade        int32              `json:"grade" bson:"grade" binding:"required"`
+	HostUsername string             `json:"hostUsername" bson:"hostUsername,omitempty"`
+}
