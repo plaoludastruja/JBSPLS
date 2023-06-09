@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 
-	hostMarkPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostMark_service/generated"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/handler"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/repository"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/service"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/startup/config"
+	hostMarkPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/handler"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/repository"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/service"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/startup/config"
 )
 
 type Server struct {

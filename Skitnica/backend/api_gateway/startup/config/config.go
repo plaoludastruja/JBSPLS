@@ -12,6 +12,7 @@ type Config struct {
 	AppointmentPort  string
 	ReservationHost  string
 	ReservationPort  string
+	HostMarkHost     string
 	HostMarkPort     string
 }
 
@@ -26,6 +27,7 @@ func NewConfig() *Config {
 		AppointmentPort:  os.Getenv("APPOINTMENT_SERVICE_PORT"),
 		ReservationHost:  os.Getenv("RESERVATION_SERVICE_HOST"),
 		ReservationPort:  os.Getenv("RESERVATION_SERVICE_PORT"),
+		HostMarkHost:     os.Getenv("HOSTMARK_SERVICE_HOST"),
 		HostMarkPort:     os.Getenv("HOSTMARK_SERVICE_PORT"),
 	}
 }

@@ -1,4 +1,4 @@
-module github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service
+module github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service
 
 go 1.20
 

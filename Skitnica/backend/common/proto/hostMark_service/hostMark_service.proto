@@ -34,10 +34,20 @@ service HostMarkService {
                 delete: "/hostmark/{id}"
             };
         }
+        rpc GetByUsername(GetByUsernameAndHostRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/{username}/{hostUsername}"
+            };
+        }
 }
 
 message GetRequest {
         string id = 1;
+}
+
+message GetByUsernameAndHostRequest {
+        string username = 1;
+        string hostUsername = 2;
 }
 
 message GetResponse {

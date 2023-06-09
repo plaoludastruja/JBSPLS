@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostMark_service/generated"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/service"
+	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/service"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -86,4 +86,18 @@ func (handler *HostMarkHandler) DeleteHostMark(ctx context.Context, request *pb.
 		return nil, err
 	}
 	return &pb.DeleteResponse{}, nil
+}
+
+func (handler *HostMarkHandler) GetByUsername(ctx context.Context, request *pb.GetByUsernameAndHostRequest) (*pb.GetResponse, error) {
+	username := request.Username
+	hostUsername := request.HostUsername
+	hostMark, err := handler.service.GetByUsername(username, hostUsername)
+	if err != nil {
+		return nil, err
+	}
+	hostMarkPb := mapHostMark(hostMark)
+	response := &pb.GetResponse{
+		Hostmark: hostMarkPb,
+	}
+	return response, nil
 }

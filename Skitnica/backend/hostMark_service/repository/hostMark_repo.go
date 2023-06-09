@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/domain"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -94,4 +94,9 @@ func decode(cursor *mongo.Cursor) (hostMarks []*domain.HostMark, err error) {
 	}
 	err = cursor.Err()
 	return
+}
+
+func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
+	filter := bson.M{"username": username, "hostUsername": hostUsername}
+	return store.filterOne(filter)
 }

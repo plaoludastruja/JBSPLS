@@ -1,8 +1,8 @@
 package handler
 
 import (
-	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostMark_service/generated"
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/domain"
+	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

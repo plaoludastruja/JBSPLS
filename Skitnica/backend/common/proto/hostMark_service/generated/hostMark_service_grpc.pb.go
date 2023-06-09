@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.23.0--rc2
-// source: hostMark_service.proto
+// source: hostmark_service.proto
 
 package hostMark
 
@@ -24,6 +24,7 @@ const (
 	HostMarkService_CreateHostMark_FullMethodName = "/hostMark.HostMarkService/CreateHostMark"
 	HostMarkService_EditHostMark_FullMethodName   = "/hostMark.HostMarkService/EditHostMark"
 	HostMarkService_DeleteHostMark_FullMethodName = "/hostMark.HostMarkService/DeleteHostMark"
+	HostMarkService_GetByUsername_FullMethodName  = "/hostMark.HostMarkService/GetByUsername"
 )
 
 // HostMarkServiceClient is the client API for HostMarkService service.
@@ -35,6 +36,7 @@ type HostMarkServiceClient interface {
 	CreateHostMark(ctx context.Context, in *CreateHostMarkRequest, opts ...grpc.CallOption) (*CreateHostMarkResponse, error)
 	EditHostMark(ctx context.Context, in *EditHostMarkRequest, opts ...grpc.CallOption) (*EditHostMarkResponse, error)
 	DeleteHostMark(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	GetByUsername(ctx context.Context, in *GetByUsernameAndHostRequest, opts ...grpc.CallOption) (*GetResponse, error)
 }
 
 type hostMarkServiceClient struct {
@@ -90,6 +92,15 @@ func (c *hostMarkServiceClient) DeleteHostMark(ctx context.Context, in *DeleteRe
 	return out, nil
 }
 
+func (c *hostMarkServiceClient) GetByUsername(ctx context.Context, in *GetByUsernameAndHostRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, HostMarkService_GetByUsername_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HostMarkServiceServer is the server API for HostMarkService service.
 // All implementations must embed UnimplementedHostMarkServiceServer
 // for forward compatibility
@@ -99,6 +110,7 @@ type HostMarkServiceServer interface {
 	CreateHostMark(context.Context, *CreateHostMarkRequest) (*CreateHostMarkResponse, error)
 	EditHostMark(context.Context, *EditHostMarkRequest) (*EditHostMarkResponse, error)
 	DeleteHostMark(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	GetByUsername(context.Context, *GetByUsernameAndHostRequest) (*GetResponse, error)
 	mustEmbedUnimplementedHostMarkServiceServer()
 }
 
@@ -120,6 +132,9 @@ func (UnimplementedHostMarkServiceServer) EditHostMark(context.Context, *EditHos
 }
 func (UnimplementedHostMarkServiceServer) DeleteHostMark(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteHostMark not implemented")
+}
+func (UnimplementedHostMarkServiceServer) GetByUsername(context.Context, *GetByUsernameAndHostRequest) (*GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByUsername not implemented")
 }
 func (UnimplementedHostMarkServiceServer) mustEmbedUnimplementedHostMarkServiceServer() {}
 
@@ -224,6 +239,24 @@ func _HostMarkService_DeleteHostMark_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HostMarkService_GetByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetByUsernameAndHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HostMarkServiceServer).GetByUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HostMarkService_GetByUsername_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HostMarkServiceServer).GetByUsername(ctx, req.(*GetByUsernameAndHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HostMarkService_ServiceDesc is the grpc.ServiceDesc for HostMarkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -251,7 +284,11 @@ var HostMarkService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "DeleteHostMark",
 			Handler:    _HostMarkService_DeleteHostMark_Handler,
 		},
+		{
+			MethodName: "GetByUsername",
+			Handler:    _HostMarkService_GetByUsername_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "hostMark_service.proto",
+	Metadata: "hostmark_service.proto",
 }

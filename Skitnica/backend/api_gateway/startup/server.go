@@ -14,6 +14,7 @@ import (
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/startup/config"
 	accomodationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
+	hostmarkGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
 	reservationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 	userGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 
@@ -69,6 +70,12 @@ func (server *Server) initHandlers() {
 	errAppointment := appointmentGw.RegisterAppointmentServiceHandlerFromEndpoint(context.TODO(), server.mux, appointmentEndpoint, opts)
 	if errAppointment != nil {
 		panic(errAppointment)
+	}
+
+	hostmarkEndpoint := fmt.Sprintf("%s:%s", server.config.HostMarkHost, server.config.HostMarkPort)
+	errHostMark := hostmarkGw.RegisterHostMarkServiceHandlerFromEndpoint(context.TODO(), server.mux, hostmarkEndpoint, opts)
+	if errAppointment != nil {
+		panic(errHostMark)
 	}
 
 }

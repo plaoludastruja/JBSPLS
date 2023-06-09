@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostMark_service/domain"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -33,4 +33,8 @@ func (service *HostMarkService) Delete(id primitive.ObjectID) error {
 
 func (service *HostMarkService) Edit(hostMark domain.HostMark) error {
 	return service.store.Edit(&hostMark)
+}
+
+func (service *HostMarkService) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
+	return service.store.GetByUsername(username, hostUsername)
 }

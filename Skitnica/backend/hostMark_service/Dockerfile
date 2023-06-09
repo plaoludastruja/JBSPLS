@@ -5,7 +5,7 @@ FROM golang:latest as builder
 WORKDIR /app
 
 # Copy go mod and sum files
-COPY ./Skitnica/backend/hostMark_service/go.mod ./Skitnica/backend/hostMark_service/go.sum ./
+COPY ./Skitnica/backend/hostmark_service/go.mod ./Skitnica/backend/hostmark_service/go.sum ./
 
 # Copy the local dependency
 COPY Skitnica/backend/common ../common
@@ -14,7 +14,7 @@ COPY Skitnica/backend/common ../common
 RUN go mod download
 
 # Copy everything from the current directory to the Working Directory inside the container
-COPY ./Skitnica/backend/hostMark_service/ .
+COPY ./Skitnica/backend/hostmark_service/ .
 
 # Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
