@@ -61,6 +61,22 @@ services:
       - db_host
     networks:
       - network
+  
+  hostMark_service:
+    image: hostmark_service
+    container_name: hostmark_service
+    build:
+      context: .
+      dockerfile: ./Skitnica/backend/hostMark_service/Dockerfile
+    restart: on-failure
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      RESERVATION_SERVICE_PORT: ${HOSTMARK_SERVICE_PORT}
+    depends_on:
+      - db_host
+    networks:
+      - network
 
   api_gateway:
     image: api_gateway
