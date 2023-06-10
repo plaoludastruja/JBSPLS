@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/hostMark";
+
+package hostMark;
+
+import "google/api/annotations.proto";
+
+service HostMarkService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/all"
+            };
+        }
+        rpc CreateHostMark(CreateHostMarkRequest) returns(CreateHostMarkResponse) {
+            option (google.api.http) = {
+                post: "/hostmark"
+                body: "hostMark"
+            };
+        }
+        rpc EditHostMark(EditHostMarkRequest) returns(EditHostMarkResponse) {
+            option (google.api.http) = {
+                put: "/hostmark"
+                body: "hostMark"
+            };
+        }
+        rpc DeleteHostMark(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/hostmark/{id}"
+            };
+        }
+        rpc GetByUsername(GetByUsernameAndHostRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/{username}/{hostUsername}"
+            };
+        }
+        rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
+            option (google.api.http) = {
+                get: "/isBestHost/{hostUsername}"
+            };
+        }
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetByUsernameAndHostRequest {
+        string username = 1;
+        string hostUsername = 2;
+}
+
+message GetResponse {
+        HostMark hostmark = 1;
+}
+
+message GetAllRequest {
+    
+}
+
+
+message GetAllResponse {
+        repeated HostMark hostMark = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateHostMarkRequest {
+        HostMark hostMark = 1;
+}
+
+message CreateHostMarkResponse {
+        HostMark hostMark = 1;
+}
+
+message EditHostMarkRequest {
+        HostMark hostMark = 1;
+}
+
+message EditHostMarkResponse {
+        HostMark hostMark = 1;
+}
+
+message SearchRequest {
+        string startDay = 1;
+        string startMonth = 2;
+        string startYear = 3;
+        string endDay = 4;
+        string endMonth = 5;
+        string endYear = 6;
+}
+
+message HostMark {
+        string id = 1;
+        string username = 2;
+        int32 grade = 3;
+        string hostUsername = 4;
+}
+
+message IsHostBestHostRequest {
+    string hostUsername = 1;
+}
+
+message IsHostBestHostResposne {
+    bool isBestHost = 1;
+}

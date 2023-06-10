@@ -5,6 +5,7 @@ import (
 
 	accomodationGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
+	hostmarkGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
 	reservationGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -32,6 +33,14 @@ func NewReservationClient(address string) reservationGW.ReservationServiceClient
 		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
 	}
 	return reservationGW.NewReservationServiceClient(conn)
+}
+
+func NewHostMarkClient(address string) hostmarkGW.HostMarkServiceClient {
+	conn, err := getConnection(address)
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	return hostmarkGW.NewHostMarkServiceClient(conn)
 }
 
 func getConnection(address string) (*grpc.ClientConn, error) {

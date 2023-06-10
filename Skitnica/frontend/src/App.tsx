@@ -11,6 +11,8 @@ import Accomodations from "./components/accomodations/Accomodations";
 import UserProfile from "./components/userProfile/UserProfile";
 import SearchAccomodations from "./components/search/SearchAccomodations";
 import HostsReservations from "./components/hosts-reservations/HostsReservations";
+import GradeManagement from "./components/gradeManagement/GradeManagement";
+
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/search" element={<SearchAccomodations />} />
             <Route path="/hostsReservations" element={<HostsReservations />} />
+            <Route path="/addHostGrade" element={<GradeManagement />} />
           </Routes>
         </div>
       </div>

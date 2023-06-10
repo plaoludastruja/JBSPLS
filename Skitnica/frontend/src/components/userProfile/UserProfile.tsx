@@ -23,7 +23,8 @@ import {
   MDBModalHeader,
   MDBModalTitle,
   MDBInput,
-  MDBCheckbox
+  MDBCheckbox,
+  MDBBadge 
 } from 'mdb-react-ui-kit';
 import User from '../../model/User';
 import userService from '../../services/user.service';
@@ -55,7 +56,16 @@ export default function UserProfile() {
   useEffect(() => {
     userService.getUserByUsername().then((response) => {
       setUser(response.data.user);
+      console.log(response.data.user)
+      userService.isBestHost(response.data.user.username).then((res) => {
+        if (res.data == "true"){
+          setIsBestHost(true);
+        }else {
+          setIsBestHost(false);
+        }
+      });
     });
+    
   }, []);
 
   const [basicModal, setBasicModal] = useState(false);
@@ -86,6 +96,8 @@ export default function UserProfile() {
     })
   }
 
+  const [isBestHost, setIsBestHost] = useState(false);
+
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -93,6 +105,13 @@ export default function UserProfile() {
           <MDBCol lg="4">
             <MDBCard className="mb-4">
               <MDBCardBody className="text-center">
+            
+            {isBestHost ? <MDBBadge className='position-absolute top-0 start-100 translate-middle p-3 bg-danger border border-light rounded-circle'>
+                <i className="fas fa-star"></i>
+              </MDBBadge> : <div></div>}
+              
+              
+
                 <MDBCardImage
                   src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
                   alt="avatar"
