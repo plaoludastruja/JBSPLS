@@ -30,6 +30,21 @@ services:
       - db_host
     networks:
       - network
+  accomodation_rating_service:
+    image: accomodation_rating_service
+    container_name: accomodation_rating_service
+    build:
+      context: .
+      dockerfile: ./Skitnica/backend/accomodation_rating_service/Dockerfile
+    restart: on-failure
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
+    depends_on:
+      - db_host
+    networks:
+      - network
   appointment_service:
     image: appointment_service
     container_name: appointment_service
@@ -45,7 +60,6 @@ services:
       - db_host
     networks:
       - network
-
   reservation_service:
     image: reservation_service
     container_name: reservation_service
@@ -61,7 +75,6 @@ services:
       - db_host
     networks:
       - network
-
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -93,7 +106,7 @@ services:
       - network
     ports:
       - ${DB_PORT}:${DB_PORT}
-  
+
   # accomodation_db:
   #   image: mongo
   #   container_name: accomodation_db
@@ -118,7 +131,6 @@ services:
   #     - network
   #   ports:
   #     - ${RESERVATION_DB_PORT}:${RESERVATION_DB_PORT}
-
 networks:
   network:
     driver: bridge

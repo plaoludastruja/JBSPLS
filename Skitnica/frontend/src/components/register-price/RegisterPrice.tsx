@@ -60,7 +60,7 @@ function RegisterPrice() {
   return (
     <>
       <div className="form">
-        <h2 className="heading">New accomodation</h2>
+        <h2 className="heading">New price</h2>
         <div className="form-fields">
           <div className="field">
             <label>Accomodation:</label>

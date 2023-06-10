@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/accomodation_rating";
+
+package accomodation_rating;
+
+import "google/api/annotations.proto";
+
+service AccomodationRatingService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating"
+            };
+        }
+        rpc CreateAccomodationRating(CreateAccomodationRatingRequest) returns(CreateAccomodationRatingResponse) {
+            option (google.api.http) = {
+                post: "/accomodation-rating"
+                body: "accomodationRating"
+            };
+        }
+        rpc EditAccomodationRating(EditAccomodationRatingRequest) returns(EditAccomodationRatingResponse) {
+            option (google.api.http) = {
+                put: "/accomodation-rating"
+                body: "accomodationRating"
+            };
+        }
+        rpc DeleteAccomodationRating(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/accomodation-rating/{id}"
+            };
+        }
+}
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        AccomodationRating accomodationRating = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated AccomodationRating accomodationRatings = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message CreateAccomodationRatingRequest {
+        AccomodationRating accomodationRating = 1;
+}
+
+message CreateAccomodationRatingResponse {
+        AccomodationRating accomodationRating = 1;
+}
+
+message EditAccomodationRatingRequest {
+        AccomodationRating accomodationRating = 1;
+}
+
+message EditAccomodationRatingResponse {
+        AccomodationRating accomodationRating = 1;
+}
+
+message AccomodationRating {
+        string id = 1;
+        string email = 2;
+        string accomodationId = 3;
+        int32 rating = 4;
+}
