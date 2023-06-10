@@ -10,8 +10,8 @@ import (
 	cors "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Cors"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/infrastructure/handler"
 
-	//token "github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/Helper/Token"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/api_gateway/startup/config"
+	accomodationRatingGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_rating_service/generated"
 	accomodationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
 	reservationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
@@ -69,6 +69,12 @@ func (server *Server) initHandlers() {
 	errAppointment := appointmentGw.RegisterAppointmentServiceHandlerFromEndpoint(context.TODO(), server.mux, appointmentEndpoint, opts)
 	if errAppointment != nil {
 		panic(errAppointment)
+	}
+
+	accomodationRatingEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationRatingHost, server.config.AppointmentPort)
+	errAccomodationRating := accomodationRatingGw.RegisterAccomodationRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, accomodationRatingEndpoint, opts)
+	if errAccomodationRating != nil {
+		panic(errAccomodationRating)
 	}
 
 }
