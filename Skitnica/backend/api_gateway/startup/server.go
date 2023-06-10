@@ -81,11 +81,17 @@ func (server *Server) initHandlers() {
 }
 
 func (server *Server) initCustomHandlers() {
-	accomodationEmdpoint := fmt.Sprintf("%s:%s", server.config.AccomodationHost, server.config.AccomodationPort)
-	appointmentEmdpoint := fmt.Sprintf("%s:%s", server.config.AppointmentHost, server.config.AppointmentPort)
-	reservationEmdpoint := fmt.Sprintf("%s:%s", server.config.ReservationHost, server.config.ReservationPort)
-	searchHandler := handler.NewSearchHandler(accomodationEmdpoint, appointmentEmdpoint, reservationEmdpoint)
+	//userEndpoint := fmt.Sprintf("%s:%s", server.config.UserHost, server.config.UserPort)
+	accomodationEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationHost, server.config.AccomodationPort)
+	appointmentEndpoint := fmt.Sprintf("%s:%s", server.config.AppointmentHost, server.config.AppointmentPort)
+	reservationEndpoint := fmt.Sprintf("%s:%s", server.config.ReservationHost, server.config.ReservationPort)
+	hostmarkEndpoint := fmt.Sprintf("%s:%s", server.config.HostMarkHost, server.config.HostMarkPort)
+
+	searchHandler := handler.NewSearchHandler(accomodationEndpoint, appointmentEndpoint, reservationEndpoint)
 	searchHandler.Init(server.mux)
+
+	bestHostHandler := handler.NewBestHosthHandler(reservationEndpoint, hostmarkEndpoint)
+	bestHostHandler.Init(server.mux)
 }
 
 func (server *Server) Start() {

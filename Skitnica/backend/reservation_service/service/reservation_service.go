@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -69,4 +70,42 @@ func (service *ReservationService) RejectReservation(reservationDto domain.Reser
 
 func (service *ReservationService) GetForGuest(username string) []string {
 	return service.store.GetForGuest(username)
+}
+
+func (service *ReservationService) IsBestHostCheck(hostUsername string) bool {
+	reservations, _ := service.GetAllByHostUsername(hostUsername)
+	numOfReservations := len(reservations)
+	fmt.Println("num", numOfReservations)
+	if numOfReservations < 5 {
+		return false
+	}
+
+	canceledReservations, _ := service.GetAllCanceledByHostUsername(hostUsername)
+	numOfCanceledReservations := len(canceledReservations)
+	fmt.Println("canceled", numOfCanceledReservations)
+	if float64(numOfCanceledReservations)/float64(numOfReservations) > 0.05 {
+		return false
+	}
+
+	daysSum := 0
+	for _, reservation := range reservations {
+		duration := reservation.EndDate.Sub(reservation.StartDate)
+		days := duration / (24 * time.Hour)
+		daysSum = daysSum + int(days)
+		fmt.Println("", days)
+	}
+	fmt.Println("sum", daysSum)
+	if daysSum < 50 {
+		return false
+	}
+
+	return true
+}
+
+func (service *ReservationService) GetAllByHostUsername(hostUsername string) ([]*domain.Reservation, error) {
+	return service.store.GetAllByHostUsername(hostUsername)
+}
+
+func (service *ReservationService) GetAllCanceledByHostUsername(hostUsername string) ([]*domain.Reservation, error) {
+	return service.store.GetAllCanceledByHostUsername(hostUsername)
 }

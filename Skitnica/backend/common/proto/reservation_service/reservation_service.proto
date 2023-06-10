@@ -76,6 +76,11 @@ service ReservationService {
                 get: "/reservation/by-guest/{username}"
             };
         }
+        rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
+            option (google.api.http) = {
+                get: "/isBestHost/{hostUsername}"
+            };
+        }
 }
 
 message GetRequest {
@@ -88,6 +93,14 @@ message GetResponse {
 
 message GetAllRequest {
     string username = 1;
+}
+
+message IsHostBestHostRequest {
+    string hostUsername = 1;
+}
+
+message IsHostBestHostResposne {
+    bool isBestHost = 1;
 }
 
 message GetAllReq {

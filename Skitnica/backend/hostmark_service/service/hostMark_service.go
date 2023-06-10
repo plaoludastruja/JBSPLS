@@ -38,3 +38,23 @@ func (service *HostMarkService) Edit(hostMark domain.HostMark) error {
 func (service *HostMarkService) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
 	return service.store.GetByUsername(username, hostUsername)
 }
+
+func (service *HostMarkService) IsBestHostCheck(hostUsername string) bool {
+	marks, _ := service.store.GetAllByHostUsername(hostUsername)
+	numOfMarks := len(marks)
+	if numOfMarks == 0 {
+		numOfMarks = 1
+	}
+
+	marksSum := 0
+	for _, mark := range marks {
+		marksSum += int(mark.Grade)
+	}
+
+	marksAverage := float64(marksSum) / float64(numOfMarks)
+	if marksAverage < 4 {
+		return false
+	}
+
+	return true
+}

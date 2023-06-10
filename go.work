@@ -6,7 +6,7 @@ use (
 	./Skitnica/backend/api_gateway
 	./Skitnica/backend/appointment_service
 	./Skitnica/backend/common
+	./Skitnica/backend/hostmark_service
 	./Skitnica/backend/reservation_service
 	./Skitnica/backend/user_service
-	./Skitnica/backend/hostmark_service
 )

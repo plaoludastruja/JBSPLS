@@ -62,12 +62,12 @@ services:
     networks:
       - network
   
-  hostMark_service:
+  hostmark_service:
     image: hostmark_service
     container_name: hostmark_service
     build:
       context: .
-      dockerfile: ./Skitnica/backend/hostMark_service/Dockerfile
+      dockerfile: ./Skitnica/backend/hostmark_service/Dockerfile
     restart: on-failure
     environment:
       DB_HOST: ${DB_HOST}

@@ -293,6 +293,58 @@ func local_request_HostMarkService_GetByUsername_0(ctx context.Context, marshale
 
 }
 
+func request_HostMarkService_IsHostBestHost_0(ctx context.Context, marshaler runtime.Marshaler, client HostMarkServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq IsHostBestHostRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["hostUsername"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "hostUsername")
+	}
+
+	protoReq.HostUsername, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "hostUsername", err)
+	}
+
+	msg, err := client.IsHostBestHost(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_HostMarkService_IsHostBestHost_0(ctx context.Context, marshaler runtime.Marshaler, server HostMarkServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq IsHostBestHostRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["hostUsername"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "hostUsername")
+	}
+
+	protoReq.HostUsername, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "hostUsername", err)
+	}
+
+	msg, err := server.IsHostBestHost(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterHostMarkServiceHandlerServer registers the http handlers for service HostMarkService to "mux".
 // UnaryRPC     :call HostMarkServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -446,6 +498,31 @@ func RegisterHostMarkServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		}
 
 		forward_HostMarkService_GetByUsername_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_HostMarkService_IsHostBestHost_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/hostMark.HostMarkService/IsHostBestHost", runtime.WithHTTPPathPattern("/isBestHost/{hostUsername}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_HostMarkService_IsHostBestHost_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_HostMarkService_IsHostBestHost_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -622,6 +699,28 @@ func RegisterHostMarkServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 
 	})
 
+	mux.Handle("GET", pattern_HostMarkService_IsHostBestHost_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		var err error
+		var annotatedContext context.Context
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/hostMark.HostMarkService/IsHostBestHost", runtime.WithHTTPPathPattern("/isBestHost/{hostUsername}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_HostMarkService_IsHostBestHost_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_HostMarkService_IsHostBestHost_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
@@ -637,6 +736,8 @@ var (
 	pattern_HostMarkService_DeleteHostMark_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"hostmark", "id"}, ""))
 
 	pattern_HostMarkService_GetByUsername_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1, 1, 0, 4, 1, 5, 2}, []string{"hostmark", "username", "hostUsername"}, ""))
+
+	pattern_HostMarkService_IsHostBestHost_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"isBestHost", "hostUsername"}, ""))
 )
 
 var (
@@ -651,4 +752,6 @@ var (
 	forward_HostMarkService_DeleteHostMark_0 = runtime.ForwardResponseMessage
 
 	forward_HostMarkService_GetByUsername_0 = runtime.ForwardResponseMessage
+
+	forward_HostMarkService_IsHostBestHost_0 = runtime.ForwardResponseMessage
 )

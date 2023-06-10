@@ -207,3 +207,11 @@ func (handler *ReservationHandler) GetForGuest(ctx context.Context, request *pb.
 	return response, nil
 
 }
+
+func (handler *ReservationHandler) IsHostBestHost(ctx context.Context, request *pb.IsHostBestHostRequest) (*pb.IsHostBestHostResposne, error) {
+	isBestHost := handler.service.IsBestHostCheck(request.HostUsername)
+	response := &pb.IsHostBestHostResposne{
+		IsBestHost: isBestHost,
+	}
+	return response, nil
+}

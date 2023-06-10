@@ -235,3 +235,13 @@ func contains(s []string, str string) bool {
 
 	return false
 }
+
+func (store *ReservationRepo) GetAllByHostUsername(hostUsername string) ([]*domain.Reservation, error) {
+	filter := bson.M{"hostUsername": hostUsername}
+	return store.filter(filter)
+}
+
+func (store *ReservationRepo) GetAllCanceledByHostUsername(hostUsername string) ([]*domain.Reservation, error) {
+	filter := bson.M{"hostUsername": hostUsername, "status": "CANCELED"}
+	return store.filter(filter)
+}

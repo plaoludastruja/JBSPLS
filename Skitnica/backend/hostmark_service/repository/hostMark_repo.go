@@ -100,3 +100,8 @@ func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) (
 	filter := bson.M{"username": username, "hostUsername": hostUsername}
 	return store.filterOne(filter)
 }
+
+func (store *HostMarkRepo) GetAllByHostUsername(hostUsername string) ([]*domain.HostMark, error) {
+	filter := bson.M{"hostUsername": hostUsername}
+	return store.filter(filter)
+}
