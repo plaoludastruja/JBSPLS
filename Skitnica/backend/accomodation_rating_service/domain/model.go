@@ -7,4 +7,5 @@ type AccomodationRating struct {
 	Email          string             `json:"email" bson:"email" binding:"required"`
 	AccomodationId string             `json:"accomodationId" bson:"accomodationId" binding:"required"`
 	Rating         int32              `json:"rating" bson:"rating" binding:"required"`
+	Date           string             `json:"date" bson:"date" binding:"required"`
 }

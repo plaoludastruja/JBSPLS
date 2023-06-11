@@ -76,9 +76,9 @@ func (server *Server) initHandlers() {
 	errHostMark := hostmarkGw.RegisterHostMarkServiceHandlerFromEndpoint(context.TODO(), server.mux, hostmarkEndpoint, opts)
 	if errAppointment != nil {
 		panic(errHostMark)
-  }
-  
-	accomodationRatingEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationRatingHost, server.config.AppointmentPort)
+	}
+
+	accomodationRatingEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationRatingHost, server.config.AccomodationRatingPort)
 	errAccomodationRating := accomodationRatingGw.RegisterAccomodationRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, accomodationRatingEndpoint, opts)
 	if errAccomodationRating != nil {
 		panic(errAccomodationRating)
