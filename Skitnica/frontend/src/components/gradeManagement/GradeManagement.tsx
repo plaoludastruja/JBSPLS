@@ -43,19 +43,25 @@ function GradeManagement() {
       hostMarkService.getByHostAndUsername(decodeToken()?.username, hostUsername).then(
         (response) => {
           console.log(response.data.hostMark)
+          setHostMarks(response.data.hostMark)
           if(response.data.hostMark.length != 0){
             setAddGrade(false)
             setEditGrade(true)
-            console.log("nema ocenu")
+            setGrade((prevState) => ({
+              ...prevState,
+              id: response.data.hostMark[0].id,
+              grade: response.data.hostMark[0].grade
+            }))
+            console.log("ima ocenu")
           }else{
             setAddGrade(true)
             setEditGrade(false)
-            console.log("ima ocenu")
+            console.log("nema ocenu")
           }
           
         }
       )
-      sleep(20000)
+      
       console.log(addGrade)
       console.log(editGrade)
       return ret
@@ -76,11 +82,25 @@ function GradeManagement() {
       grade: rating
     }))*/
     console.log(grade)
-    /*hostMarkService.createHostGrade(grade).then(() => {
+    hostMarkService.createHostGrade(grade).then(() => {
       alert("Successfully added grade!");
-    });*/
+    });
 }
 
+const editGradeForHost = () => {
+  console.log(rating)
+  
+  /*setGrade((prevState) => ({
+      ...prevState,
+      grade: rating
+    }))*/
+  console.log(grade)
+  console.log(rating)
+  hostMarkService.editHostGrade(grade).then(() => {
+    alert("Successfully changed grade!");
+  });
+  console.log(hostMarks[0].id)
+}
 
   return (
     <>
@@ -137,10 +157,48 @@ onMouseLeave={() => setHover(rating)}
       </div>
       )}
       {editGrade && (
-        <p>izmeni</p>
+        <div>
+          <p>Old grade: {grade.grade}</p>
+
+<div>
+      <div className="star-rating">
+{[...Array(5)].map((star, index) => {
+index += 1;
+return (
+<button
+type="button"
+key={index}
+className={index <= (hover || rating) ? "on" : "off"}
+onClick={function(event){
+  setGrade((prevState) => ({
+    ...prevState,
+    username: username,
+    hostUsername: hostUsername,
+    grade: index
+  }))
+  setRating(index)
+}
+}
+  
+  
+onMouseEnter={() => setHover(index)}
+onMouseLeave={() => setHover(rating)}
+>
+<span className="star">&#9733;</span>
+</button>
+
+);
+})}
+<button onClick={() => editGradeForHost()}>Set grade</button>
+</div>
+      </div>
+        </div>
+        
+
+        
     )}
 
-    
+
     
     </>
   );
