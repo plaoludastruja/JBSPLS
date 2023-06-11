@@ -9,6 +9,7 @@ import hostMarkService from "../../services/hostMark.service";
 function HostsAndGrades() {
     const [hosts, setHosts] = useState<User[]>([]);
     const [hostMarks, setHostMarks] = useState<HostMark[]>([]);
+    const [averageGrade, setAverageGrade] = useState<number>(0);
 
     const [show, setShow] = useState(false);
 
@@ -26,8 +27,21 @@ function HostsAndGrades() {
         setShow(true);
         hostMarkService.getByHost(username).then((response) => {
             setHostMarks(response.data.hostMark)
+            var sum = 0;
+            var count = 0;
+            for (var hostMark of response.data.hostMark) {
+                sum += hostMark.grade;
+                count++;
+            }
+            if(count == 0){
+                setAverageGrade(0);
+            }else{
+                setAverageGrade(sum/count);
+            }
+            
         }
         )
+        
         //console.log(username);
       };
 
@@ -97,6 +111,7 @@ function HostsAndGrades() {
           </div>
         </div>
       </div>
+      <div> Average grade: {averageGrade}</div>
         </div>
         
       )}
