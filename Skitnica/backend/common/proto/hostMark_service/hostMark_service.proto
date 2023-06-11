@@ -34,14 +34,14 @@ service HostMarkService {
                 delete: "/hostmark/{id}"
             };
         }
-        rpc GetByUsername(GetByUsernameAndHostRequest) returns(GetResponse) {
-            option (google.api.http) = {
-                get: "/hostmark/{username}/{hostUsername}"
-            };
-        }
         rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
             option (google.api.http) = {
                 get: "/isBestHost/{hostUsername}"
+            };
+        }
+        rpc GetByHostAndUser(GetByUsernameAndHostRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/{username}/{hostUsername}"
             };
         }
 }

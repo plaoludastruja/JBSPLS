@@ -31,11 +31,17 @@ function GradeManagement() {
   }, []);
 
   const something = (hostUsername: string) => {
-    hostMarkService.getByHostAndUsername(decodeToken()?.username, hostUsername).then(
-      (response) => {
-        setGradeExists(true);
-      }
-    )
+    try{
+      hostMarkService.getByHostAndUsername(decodeToken()?.username, hostUsername).then(
+        (response) => {
+          console.log(response.data)
+          //setGradeExists(true);
+        }
+      )
+    }catch(error){
+      console.log("greska")
+    }
+    
   }
   return (
     <>

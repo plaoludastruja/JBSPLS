@@ -35,7 +35,7 @@ func (service *HostMarkService) Edit(hostMark domain.HostMark) error {
 	return service.store.Edit(&hostMark)
 }
 
-func (service *HostMarkService) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
+func (service *HostMarkService) GetByHostAndUser(username string, hostUsername string) ([]*domain.HostMark, error) {
 	return service.store.GetByUsername(username, hostUsername)
 }
 

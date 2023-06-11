@@ -96,9 +96,9 @@ func decode(cursor *mongo.Cursor) (hostMarks []*domain.HostMark, err error) {
 	return
 }
 
-func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
+func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) ([]*domain.HostMark, error) {
 	filter := bson.M{"username": username, "hostUsername": hostUsername}
-	return store.filterOne(filter)
+	return store.filter(filter)
 }
 
 func (store *HostMarkRepo) GetAllByHostUsername(hostUsername string) ([]*domain.HostMark, error) {
