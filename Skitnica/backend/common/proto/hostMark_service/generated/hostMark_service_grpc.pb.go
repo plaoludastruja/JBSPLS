@@ -26,6 +26,7 @@ const (
 	HostMarkService_DeleteHostMark_FullMethodName   = "/hostMark.HostMarkService/DeleteHostMark"
 	HostMarkService_IsHostBestHost_FullMethodName   = "/hostMark.HostMarkService/IsHostBestHost"
 	HostMarkService_GetByHostAndUser_FullMethodName = "/hostMark.HostMarkService/GetByHostAndUser"
+	HostMarkService_GetByHost_FullMethodName        = "/hostMark.HostMarkService/GetByHost"
 )
 
 // HostMarkServiceClient is the client API for HostMarkService service.
@@ -39,6 +40,7 @@ type HostMarkServiceClient interface {
 	DeleteHostMark(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	IsHostBestHost(ctx context.Context, in *IsHostBestHostRequest, opts ...grpc.CallOption) (*IsHostBestHostResposne, error)
 	GetByHostAndUser(ctx context.Context, in *GetByUsernameAndHostRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
+	GetByHost(ctx context.Context, in *GetByHostRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
 }
 
 type hostMarkServiceClient struct {
@@ -112,6 +114,15 @@ func (c *hostMarkServiceClient) GetByHostAndUser(ctx context.Context, in *GetByU
 	return out, nil
 }
 
+func (c *hostMarkServiceClient) GetByHost(ctx context.Context, in *GetByHostRequest, opts ...grpc.CallOption) (*GetAllResponse, error) {
+	out := new(GetAllResponse)
+	err := c.cc.Invoke(ctx, HostMarkService_GetByHost_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HostMarkServiceServer is the server API for HostMarkService service.
 // All implementations must embed UnimplementedHostMarkServiceServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type HostMarkServiceServer interface {
 	DeleteHostMark(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	IsHostBestHost(context.Context, *IsHostBestHostRequest) (*IsHostBestHostResposne, error)
 	GetByHostAndUser(context.Context, *GetByUsernameAndHostRequest) (*GetAllResponse, error)
+	GetByHost(context.Context, *GetByHostRequest) (*GetAllResponse, error)
 	mustEmbedUnimplementedHostMarkServiceServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedHostMarkServiceServer) IsHostBestHost(context.Context, *IsHos
 }
 func (UnimplementedHostMarkServiceServer) GetByHostAndUser(context.Context, *GetByUsernameAndHostRequest) (*GetAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByHostAndUser not implemented")
+}
+func (UnimplementedHostMarkServiceServer) GetByHost(context.Context, *GetByHostRequest) (*GetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByHost not implemented")
 }
 func (UnimplementedHostMarkServiceServer) mustEmbedUnimplementedHostMarkServiceServer() {}
 
@@ -290,6 +305,24 @@ func _HostMarkService_GetByHostAndUser_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HostMarkService_GetByHost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetByHostRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HostMarkServiceServer).GetByHost(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HostMarkService_GetByHost_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HostMarkServiceServer).GetByHost(ctx, req.(*GetByHostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HostMarkService_ServiceDesc is the grpc.ServiceDesc for HostMarkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var HostMarkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetByHostAndUser",
 			Handler:    _HostMarkService_GetByHostAndUser_Handler,
+		},
+		{
+			MethodName: "GetByHost",
+			Handler:    _HostMarkService_GetByHost_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

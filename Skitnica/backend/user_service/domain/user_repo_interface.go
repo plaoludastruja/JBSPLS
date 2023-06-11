@@ -12,4 +12,5 @@ type IUserRepo interface {
 	Edit(user *User) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	GetHosts() ([]*User, error)
 }

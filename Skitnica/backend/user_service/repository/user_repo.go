@@ -102,3 +102,8 @@ func decode(cursor *mongo.Cursor) (users []*domain.User, err error) {
 	err = cursor.Err()
 	return
 }
+
+func (store *UserRepo) GetHosts() ([]*domain.User, error) {
+	filter := bson.M{"role": "HOST"}
+	return store.filter(filter)
+}

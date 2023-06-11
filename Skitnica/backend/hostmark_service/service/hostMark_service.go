@@ -58,3 +58,7 @@ func (service *HostMarkService) IsBestHostCheck(hostUsername string) bool {
 
 	return true
 }
+
+func (service *HostMarkService) GetByHost(hostUsername string) ([]*domain.HostMark, error) {
+	return service.store.GetByHost(hostUsername)
+}

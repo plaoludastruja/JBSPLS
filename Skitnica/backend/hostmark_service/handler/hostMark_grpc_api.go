@@ -113,3 +113,20 @@ func (handler *HostMarkHandler) IsHostBestHost(ctx context.Context, request *pb.
 	}
 	return response, nil
 }
+
+func (handler *HostMarkHandler) GetByHost(ctx context.Context, request *pb.GetByHostRequest) (*pb.GetAllResponse, error) {
+	hostUsername := request.HostUsername
+	hostMarks, err := handler.service.GetByHost(hostUsername)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		HostMark: []*pb.HostMark{},
+	}
+	for _, hostMark := range hostMarks {
+		current := mapHostMark(hostMark)
+		response.HostMark = append(response.HostMark, current)
+	}
+	
+	return response, nil
+}

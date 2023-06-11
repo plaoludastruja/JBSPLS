@@ -44,6 +44,11 @@ service HostMarkService {
                 get: "/hostmark/{username}/{hostUsername}"
             };
         }
+        rpc GetByHost(GetByHostRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/hostmark/host/{hostUsername}"
+            };
+        }
 }
 
 message GetRequest {
@@ -53,6 +58,10 @@ message GetRequest {
 message GetByUsernameAndHostRequest {
         string username = 1;
         string hostUsername = 2;
+}
+
+message GetByHostRequest {
+        string hostUsername = 1;
 }
 
 message GetResponse {
