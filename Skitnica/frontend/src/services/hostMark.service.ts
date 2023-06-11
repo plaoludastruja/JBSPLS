@@ -7,11 +7,13 @@ const getByHostAndUsername =  async(username: string|undefined, hostUsername: st
 const createHostGrade = (hostMark: HostMark)  => baseAxios.post('/hostmark', hostMark)
 const editHostGrade = (hostMark: HostMark)  => baseAxios.put('/hostmark', hostMark)
 const deleteHostGrade = (id: string)  => baseAxios.delete(`/hostmark/${id}`)
+const getByHost =  async(username: string)  => await baseAxios.get<HostMarksResponse>(`/hostmark/host/${username}`)
 
 export default {
     getHostMarks,
     getByHostAndUsername,
     createHostGrade,
     editHostGrade,
-    deleteHostGrade
+    deleteHostGrade,
+    getByHost
   }

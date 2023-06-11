@@ -4,10 +4,13 @@ import User from "../../model/User";
 import userService from "../../services/user.service";
 import { baseAxios } from "./../../services/api.service";
 import { useEffect, useState } from "react";
+import hostMarkService from "../../services/hostMark.service";
 
 function HostsAndGrades() {
     const [hosts, setHosts] = useState<User[]>([]);
     const [hostMarks, setHostMarks] = useState<HostMark[]>([]);
+
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         userService
@@ -20,14 +23,19 @@ function HostsAndGrades() {
       }, []);
     
       const showGrades = (username: string) => {
-        console.log(username)
+        setShow(true);
+        hostMarkService.getByHost(username).then((response) => {
+            setHostMarks(response.data.hostMark)
+        }
+        )
+        //console.log(username);
       };
 
   return <>Hosts grades
     <div className="row">
         <div className="col-xl-8">
           <div className="card mb-4 mt-4">
-            <div className="card-header">All reservations</div>
+            <div className="card-header">All hosts</div>
             <div className="card-body">
               <div className="table-responsive">
                 <table className="table">
@@ -57,6 +65,41 @@ function HostsAndGrades() {
           </div>
         </div>
       </div>
+      {show && (
+        <div>
+            <div className="row">
+        <div className="col-xl-8">
+          <div className="card mb-4 mt-4">
+            <div className="card-header">Grades</div>
+            <div className="card-body">
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Username</th>
+                      <th>Grade</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  {hostMarks.map((grade) => (
+                    <tbody key={grade.id}>
+                      <tr>
+                        <td>{grade.username}</td>
+                        <td>{grade.grade}</td>
+                        <td>vreme</td>
+                        
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+        
+      )}
   </>;
 }
 export default HostsAndGrades;
