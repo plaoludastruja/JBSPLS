@@ -88,17 +88,21 @@ func (handler *HostMarkHandler) DeleteHostMark(ctx context.Context, request *pb.
 	return &pb.DeleteResponse{}, nil
 }
 
-func (handler *HostMarkHandler) GetByUsername(ctx context.Context, request *pb.GetByUsernameAndHostRequest) (*pb.GetResponse, error) {
+func (handler *HostMarkHandler) GetByHostAndUser(ctx context.Context, request *pb.GetByUsernameAndHostRequest) (*pb.GetAllResponse, error) {
 	username := request.Username
 	hostUsername := request.HostUsername
-	hostMark, err := handler.service.GetByUsername(username, hostUsername)
+	hostMarks, err := handler.service.GetByHostAndUser(username, hostUsername)
 	if err != nil {
 		return nil, err
 	}
-	hostMarkPb := mapHostMark(hostMark)
-	response := &pb.GetResponse{
-		Hostmark: hostMarkPb,
+	response := &pb.GetAllResponse{
+		HostMark: []*pb.HostMark{},
 	}
+	for _, hostMark := range hostMarks {
+		current := mapHostMark(hostMark)
+		response.HostMark = append(response.HostMark, current)
+	}
+	
 	return response, nil
 }
 
@@ -107,5 +111,22 @@ func (handler *HostMarkHandler) IsHostBestHost(ctx context.Context, request *pb.
 	response := &pb.IsHostBestHostResposne{
 		IsBestHost: isBestHost,
 	}
+	return response, nil
+}
+
+func (handler *HostMarkHandler) GetByHost(ctx context.Context, request *pb.GetByHostRequest) (*pb.GetAllResponse, error) {
+	hostUsername := request.HostUsername
+	hostMarks, err := handler.service.GetByHost(hostUsername)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		HostMark: []*pb.HostMark{},
+	}
+	for _, hostMark := range hostMarks {
+		current := mapHostMark(hostMark)
+		response.HostMark = append(response.HostMark, current)
+	}
+	
 	return response, nil
 }

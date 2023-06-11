@@ -11,6 +11,7 @@ type IHostMarkRepo interface {
 	Edit(user *HostMark) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
-	GetByUsername(username string, hostUsername string) (*HostMark, error)
+	GetByUsername(username string, hostUsername string) ([]*HostMark, error)
 	GetAllByHostUsername(hostUsername string) ([]*HostMark, error)
+	GetByHost(hostUsername string) ([]*HostMark, error)
 }

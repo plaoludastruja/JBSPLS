@@ -45,6 +45,11 @@ service UserService {
                 body: "loginDTO"
             };
         }
+        rpc GetHosts(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/user/hosts"
+            };
+        }
         
 }
 

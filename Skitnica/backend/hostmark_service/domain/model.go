@@ -9,4 +9,5 @@ type HostMark struct {
 	Username     string             `json:"username" bson:"username,omitempty"`
 	Grade        int32              `json:"grade" bson:"grade" binding:"required"`
 	HostUsername string             `json:"hostUsername" bson:"hostUsername,omitempty"`
+	DateTime string             `json:"dateTime" bson:"dateTime,omitempty"`
 }

@@ -139,3 +139,7 @@ func checkPasswordHash(password, hash string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err
 }
+
+func (service *UserService) GetHosts() ([]*domain.User, error) {
+	return service.store.GetHosts()
+}

@@ -13,9 +13,14 @@ import SearchParams from "../../model/SearchParams";
 import Reservation from "../../model/Reservation";
 import decodeToken from "../../services/auth.service";
 import FilterParams from "../../model/FilterParams";
+import accomodationRatingService from "../../services/accomodationRating.service";
+import AccomodationRating from "../../model/AccomodationRating";
 
 function SearchAccomodations() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [ratings, setRatings] = useState<AccomodationRating[]>([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [showRating, setShowRating] = useState(false);
   const [searchParams, setAppointmentForChange] = useState<SearchParams>({
     Location: "",
     GuestNumber: 0,
@@ -191,6 +196,27 @@ function SearchAccomodations() {
         console.log(response.data);
       });
     }
+  }
+  const showRatings = (accomodation: SearchResult): void => {
+    setShowRating(true);
+    accomodationRatingService
+      .getAccomodationRatingsByAccomodationId(accomodation.AccomodationId)
+      .then((res) => {
+        setRatings(res.data.accomodationRatings);
+        var sum = 0;
+        res.data.accomodationRatings.forEach((rating) => {
+          sum += rating.rating;
+        });
+        setAverageRating(sum / res.data.accomodationRatings.length);
+      });
+  };
+
+  const deleteRating = (rating: AccomodationRating): void => {
+    accomodationRatingService
+      .deleteAccomodationRating(rating.id)
+      .then((res) => {
+        alert("Your rating for this accomodation is deleted.");
+      });
   };
 
   return (
@@ -362,6 +388,9 @@ function SearchAccomodations() {
                         Book now
                       </MDBBtn>
                     )}
+                    <MDBBtn onClick={() => showRatings(searchResult)}>
+                      Show ratings
+                    </MDBBtn>
                   </div>
                 </MDBCardText>
               </MDBCardBody>
@@ -369,7 +398,41 @@ function SearchAccomodations() {
           </div>
         ))}
       </div>
-      <div></div>
+      {showRating && (
+        <div>
+          <h1>Average Rating {averageRating}</h1>
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Guest</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                {ratings.map((rating) => (
+                  <tbody key={rating.id}>
+                    <tr>
+                      <td>{rating.email}</td>
+                      <td>{rating.rating}</td>
+                      <td>{rating.date}</td>
+                      <td>
+                        {rating.email === decodeToken()?.username && (
+                          <MDBBtn onClick={() => deleteRating(rating)}>
+                            DELETE
+                          </MDBBtn>
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                ))}
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

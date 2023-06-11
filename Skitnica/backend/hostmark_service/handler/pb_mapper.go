@@ -12,6 +12,7 @@ func mapHostMark(hostMark *domain.HostMark) *pb.HostMark {
 		Username:     hostMark.Username,
 		Grade:        hostMark.Grade,
 		HostUsername: hostMark.HostUsername,
+		DateTime: hostMark.DateTime,
 	}
 	return hostMarkPb
 }
@@ -22,6 +23,8 @@ func mapHostMarkPb(hostMarkPb *pb.HostMark) *domain.HostMark {
 		Id:           hostMarkPbId,
 		Username:     hostMarkPb.Username,
 		HostUsername: hostMarkPb.HostUsername,
+		Grade: hostMarkPb.Grade,
+		DateTime: hostMarkPb.DateTime,
 	}
 	return hostMark
 }
