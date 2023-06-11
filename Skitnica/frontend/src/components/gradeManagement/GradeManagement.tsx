@@ -102,6 +102,12 @@ const editGradeForHost = () => {
   console.log(hostMarks[0].id)
 }
 
+const deleteGradeForHost = () => {
+  hostMarkService.deleteHostGrade(grade.id).then(() => {
+    alert("Successfully deleted grade!");
+  })
+}
+
   return (
     <>
       Add grade
@@ -190,6 +196,7 @@ onMouseLeave={() => setHover(rating)}
 );
 })}
 <button onClick={() => editGradeForHost()}>Set grade</button>
+<button onClick={() => deleteGradeForHost()}>Delete grade</button>
 </div>
       </div>
         </div>
