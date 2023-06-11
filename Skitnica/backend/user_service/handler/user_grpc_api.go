@@ -132,3 +132,18 @@ func (handler *UserHandler) LoginUser(ctx context.Context, request *pb.LoginDTO)
 	}
 	return response, nil
 }
+
+func (handler *UserHandler) GetHosts(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
+	users, err := handler.service.GetHosts()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		Users: []*pb.User{},
+	}
+	for _, user := range users {
+		current := mapUser(user)
+		response.Users = append(response.Users, current)
+	}
+	return response, nil
+}

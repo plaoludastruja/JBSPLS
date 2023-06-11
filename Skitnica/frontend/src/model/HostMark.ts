@@ -1,6 +1,7 @@
 export default interface HostMark{
     id: string,
-    username: string,
+    username: string|undefined,
     grade: number,
-    hostUsername: string
+    hostUsername: string|undefined,
+    dateTime: string
 }

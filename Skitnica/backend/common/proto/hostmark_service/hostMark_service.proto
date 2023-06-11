@@ -34,14 +34,19 @@ service HostMarkService {
                 delete: "/hostmark/{id}"
             };
         }
-        rpc GetByUsername(GetByUsernameAndHostRequest) returns(GetResponse) {
+        rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
+            option (google.api.http) = {
+                get: "/isBestHost/{hostUsername}"
+            };
+        }
+        rpc GetByHostAndUser(GetByUsernameAndHostRequest) returns(GetAllResponse) {
             option (google.api.http) = {
                 get: "/hostmark/{username}/{hostUsername}"
             };
         }
-        rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
+        rpc GetByHost(GetByHostRequest) returns(GetAllResponse) {
             option (google.api.http) = {
-                get: "/isBestHost/{hostUsername}"
+                get: "/hostmark/host/{hostUsername}"
             };
         }
 }
@@ -53,6 +58,10 @@ message GetRequest {
 message GetByUsernameAndHostRequest {
         string username = 1;
         string hostUsername = 2;
+}
+
+message GetByHostRequest {
+        string hostUsername = 1;
 }
 
 message GetResponse {
@@ -105,6 +114,7 @@ message HostMark {
         string username = 2;
         int32 grade = 3;
         string hostUsername = 4;
+        string dateTime = 5;
 }
 
 message IsHostBestHostRequest {

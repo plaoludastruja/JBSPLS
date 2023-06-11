@@ -6,6 +6,7 @@ import decodeToken from "../../services/auth.service";
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardText, MDBCardTitle } from "mdb-react-ui-kit";
 import { isArray } from "util";
 import hostMarkService from "../../services/hostMark.service";
+import "./GradeManagement.css";
 
 function GradeManagement() {
   const [hostMarks, setHostMarks] = useState<HostMark[]>([]);
@@ -15,11 +16,18 @@ function GradeManagement() {
       id: "",
       username: "",
       grade: 0,
-      hostUsername: ""
+      hostUsername: "",
+      dateTime: ""
     }
   );
   const [gradeExists, setGradeExists] = useState<Boolean>(false);
-  
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [username, setUsername] = useState<string|undefined>("");
+  const [hostUsername, setHostUsername] = useState<string|undefined>("");
+  const [addGrade, setAddGrade] = useState(false);
+  const [editGrade, setEditGrade] = useState(false);
+
   useEffect(() => {
     reservationService
       .getByGuest(decodeToken()?.username)
@@ -27,16 +35,85 @@ function GradeManagement() {
         setHosts(response.data.usernames);
       });
       console.log(Array.isArray(hosts))
-      
+      setUsername(decodeToken()?.username)
   }, []);
 
-  const something = (hostUsername: string) => {
-    hostMarkService.getByHostAndUsername(decodeToken()?.username, hostUsername).then(
-      (response) => {
-        setGradeExists(true);
-      }
-    )
+  const checkExisting = (hostUsername: string) => {
+    setHostUsername(hostUsername)
+    var ret = false
+      hostMarkService.getByHostAndUsername(decodeToken()?.username, hostUsername).then(
+        (response) => {
+          console.log(response.data.hostMark)
+          setHostMarks(response.data.hostMark)
+          var now = new Date(),
+            date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()
+            + ' ' + now.getHours() + ':' + now.getMinutes();
+          if(response.data.hostMark.length != 0){
+            setAddGrade(false)
+            setEditGrade(true)
+            setGrade((prevState) => ({
+              ...prevState,
+              id: response.data.hostMark[0].id,
+              grade: response.data.hostMark[0].grade,
+              dateTime: date
+            }))
+            console.log("ima ocenu")
+          }else{
+            setAddGrade(true)
+            setEditGrade(false)
+            console.log("nema ocenu")
+          }
+          
+        }
+      )
+      
+      console.log(addGrade)
+      console.log(editGrade)
+      return ret
+    
   }
+
+  const sleep = (milliseconds: number) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+  const setGradeForHost = () => {
+    console.log(rating)
+    
+    /*setGrade((prevState) => ({
+      ...prevState,
+      username: username,
+      hostUsername: host,
+      grade: rating
+    }))*/
+    
+    console.log(grade)
+    hostMarkService.createHostGrade(grade).then(() => {
+      alert("Successfully added grade!");
+    });
+}
+
+const editGradeForHost = () => {
+  console.log(rating)
+  
+  /*setGrade((prevState) => ({
+      ...prevState,
+      grade: rating
+    }))*/
+  console.log(grade)
+  console.log(rating)
+  hostMarkService.editHostGrade(grade).then(() => {
+    alert("Successfully changed grade!");
+  });
+  console.log(hostMarks[0].id)
+}
+
+const deleteGradeForHost = () => {
+  hostMarkService.deleteHostGrade(grade.id).then(() => {
+    alert("Successfully deleted grade!");
+  })
+}
+
   return (
     <>
       Add grade
@@ -47,11 +124,9 @@ function GradeManagement() {
               <MDBCardBody>
                 <MDBCardTitle>{host}</MDBCardTitle>
                 <MDBCardText>
-                  <div>
-                    unesi, izmeni
-                  </div>
+                  
                 </MDBCardText>
-                <MDBBtn onClick={() => something(host)}>
+                <MDBBtn onClick={() => checkExisting(host)}>
                   My grade
                 </MDBBtn>
               </MDBCardBody>
@@ -59,7 +134,87 @@ function GradeManagement() {
           </div>
         ))}
     </div>
+    {addGrade && (
+      <div>
+      <div className="star-rating">
+{[...Array(5)].map((star, index) => {
+index += 1;
+return (
+<button
+type="button"
+key={index}
+className={index <= (hover || rating) ? "on" : "off"}
+onClick={function(event){
+  setGrade((prevState) => ({
+    ...prevState,
+    username: username,
+    hostUsername: hostUsername,
+    grade: index
+  }))
+  setRating(index)
+}
+}
+  
+  
+onMouseEnter={() => setHover(index)}
+onMouseLeave={() => setHover(rating)}
+>
+<span className="star">&#9733;</span>
+</button>
+
+);
+})}
+<MDBBtn onClick={() => setGradeForHost()}>Set grade</MDBBtn>
+</div>
+      </div>
+      )}
+      {editGrade && (
+        <div>
+          <p>Old grade: {grade.grade}</p>
+
+<div>
+      <div className="star-rating">
+{[...Array(5)].map((star, index) => {
+index += 1;
+return (
+<button
+type="button"
+key={index}
+className={index <= (hover || rating) ? "on" : "off"}
+onClick={function(event){
+  setGrade((prevState) => ({
+    ...prevState,
+    username: username,
+    hostUsername: hostUsername,
+    grade: index
+  }))
+  setRating(index)
+}
+}
+  
+  
+onMouseEnter={() => setHover(index)}
+onMouseLeave={() => setHover(rating)}
+>
+<span className="star">&#9733;</span>
+</button>
+
+);
+})}
+<MDBBtn onClick={() => editGradeForHost()}>Set grade</MDBBtn>
+<MDBBtn onClick={() => deleteGradeForHost()}>Delete grade</MDBBtn>
+</div>
+      </div>
+        </div>
+        
+
+        
+    )}
+
+
+    
     </>
   );
+  
 }
 export default GradeManagement;

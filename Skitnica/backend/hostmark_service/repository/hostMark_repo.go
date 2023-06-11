@@ -51,6 +51,7 @@ func (store *HostMarkRepo) Edit(hostMark *domain.HostMark) error {
 		"username":     hostMark.Username,
 		"grade":        hostMark.Grade,
 		"hostUsername": hostMark.HostUsername,
+		"dateTime"	: hostMark.DateTime,
 	}}
 	_, err := store.hostMarks.UpdateOne(context.TODO(), filter, update)
 
@@ -96,12 +97,17 @@ func decode(cursor *mongo.Cursor) (hostMarks []*domain.HostMark, err error) {
 	return
 }
 
-func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) (*domain.HostMark, error) {
+func (store *HostMarkRepo) GetByUsername(username string, hostUsername string) ([]*domain.HostMark, error) {
 	filter := bson.M{"username": username, "hostUsername": hostUsername}
-	return store.filterOne(filter)
+	return store.filter(filter)
 }
 
 func (store *HostMarkRepo) GetAllByHostUsername(hostUsername string) ([]*domain.HostMark, error) {
+	filter := bson.M{"hostUsername": hostUsername}
+	return store.filter(filter)
+}
+
+func (store *HostMarkRepo) GetByHost(hostUsername string) ([]*domain.HostMark, error) {
 	filter := bson.M{"hostUsername": hostUsername}
 	return store.filter(filter)
 }
