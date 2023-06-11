@@ -98,6 +98,9 @@ func (server *Server) initCustomHandlers() {
 
 	bestHostHandler := handler.NewBestHosthHandler(reservationEndpoint, hostmarkEndpoint)
 	bestHostHandler.Init(server.mux)
+
+	filterHandler := handler.NewFilterHandler(accomodationEndpoint, appointmentEndpoint, reservationEndpoint, hostmarkEndpoint)
+	filterHandler.Init(server.mux)
 }
 
 func (server *Server) Start() {
