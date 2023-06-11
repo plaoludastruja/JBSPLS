@@ -16,7 +16,8 @@ function GradeManagement() {
       id: "",
       username: "",
       grade: 0,
-      hostUsername: ""
+      hostUsername: "",
+      dateTime: ""
     }
   );
   const [gradeExists, setGradeExists] = useState<Boolean>(false);
@@ -44,13 +45,17 @@ function GradeManagement() {
         (response) => {
           console.log(response.data.hostMark)
           setHostMarks(response.data.hostMark)
+          var now = new Date(),
+            date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()
+            + ' ' + now.getHours() + ':' + now.getMinutes();
           if(response.data.hostMark.length != 0){
             setAddGrade(false)
             setEditGrade(true)
             setGrade((prevState) => ({
               ...prevState,
               id: response.data.hostMark[0].id,
-              grade: response.data.hostMark[0].grade
+              grade: response.data.hostMark[0].grade,
+              dateTime: date
             }))
             console.log("ima ocenu")
           }else{
@@ -81,6 +86,7 @@ function GradeManagement() {
       hostUsername: host,
       grade: rating
     }))*/
+    
     console.log(grade)
     hostMarkService.createHostGrade(grade).then(() => {
       alert("Successfully added grade!");
@@ -158,7 +164,7 @@ onMouseLeave={() => setHover(rating)}
 
 );
 })}
-<button onClick={() => setGradeForHost()}>Set grade</button>
+<MDBBtn onClick={() => setGradeForHost()}>Set grade</MDBBtn>
 </div>
       </div>
       )}
@@ -195,8 +201,8 @@ onMouseLeave={() => setHover(rating)}
 
 );
 })}
-<button onClick={() => editGradeForHost()}>Set grade</button>
-<button onClick={() => deleteGradeForHost()}>Delete grade</button>
+<MDBBtn onClick={() => editGradeForHost()}>Set grade</MDBBtn>
+<MDBBtn onClick={() => deleteGradeForHost()}>Delete grade</MDBBtn>
 </div>
       </div>
         </div>

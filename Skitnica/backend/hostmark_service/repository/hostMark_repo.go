@@ -51,6 +51,7 @@ func (store *HostMarkRepo) Edit(hostMark *domain.HostMark) error {
 		"username":     hostMark.Username,
 		"grade":        hostMark.Grade,
 		"hostUsername": hostMark.HostUsername,
+		"dateTime"	: hostMark.DateTime,
 	}}
 	_, err := store.hostMarks.UpdateOne(context.TODO(), filter, update)
 

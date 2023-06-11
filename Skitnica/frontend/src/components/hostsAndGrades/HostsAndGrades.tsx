@@ -100,7 +100,7 @@ function HostsAndGrades() {
                       <tr>
                         <td>{grade.username}</td>
                         <td>{grade.grade}</td>
-                        <td>vreme</td>
+                        <td>{grade.dateTime}</td>
                         
                       </tr>
                     </tbody>

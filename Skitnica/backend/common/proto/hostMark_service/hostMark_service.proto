@@ -114,6 +114,7 @@ message HostMark {
         string username = 2;
         int32 grade = 3;
         string hostUsername = 4;
+        string dateTime = 5;
 }
 
 message IsHostBestHostRequest {
