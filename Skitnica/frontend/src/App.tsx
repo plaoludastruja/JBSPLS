@@ -12,6 +12,7 @@ import UserProfile from "./components/userProfile/UserProfile";
 import SearchAccomodations from "./components/search/SearchAccomodations";
 import HostsReservations from "./components/hosts-reservations/HostsReservations";
 import GradeManagement from "./components/gradeManagement/GradeManagement";
+import HostsAndGrades from "./components/hostsAndGrades/HostsAndGrades";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/search" element={<SearchAccomodations />} />
             <Route path="/hostsReservations" element={<HostsReservations />} />
             <Route path="/addHostGrade" element={<GradeManagement />} />
+            <Route path="/hosts" element={<HostsAndGrades />} />
           </Routes>
         </div>
       </div>
