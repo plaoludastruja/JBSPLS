@@ -1,6 +1,5 @@
 version: "3.3"
 services:
-
   user_service:
     image: user_service
     container_name: user_service
@@ -80,7 +79,7 @@ services:
       - db_host
     networks:
       - network
-  
+
   hostmark_service:
     image: hostmark_service
     container_name: hostmark_service
@@ -96,7 +95,7 @@ services:
       - db_host
     networks:
       - network
-      
+
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -118,7 +117,8 @@ services:
       RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
       HOSTMARK_SERVICE_HOST: ${HOSTMARK_SERVICE_HOST}
       HOSTMARK_SERVICE_PORT: ${HOSTMARK_SERVICE_PORT}
-
+      ACCOMODATION_RATING_SERVICE_HOST: ${ACCOMODATION_RATING_SERVICE_HOST}
+      ACCOMODATION_RATING_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
     networks:
       - network
 
