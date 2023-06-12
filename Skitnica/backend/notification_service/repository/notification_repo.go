@@ -31,14 +31,14 @@ func (store *NotificationRepo) Get(id primitive.ObjectID) (*domain.Notification,
 	return store.filterOne(filter)
 }
 
-func (store *NotificationRepo) GetBySender(username string) (*domain.Notification, error) {
+func (store *NotificationRepo) GetBySender(username string) ([]*domain.Notification, error) {
 	filter := bson.M{"sender": username}
-	return store.filterOne(filter)
+	return store.filter(filter)
 }
 
-func (store *NotificationRepo) GetByReceiver(username string) (*domain.Notification, error) {
+func (store *NotificationRepo) GetByReceiver(username string) ([]*domain.Notification, error) {
 	filter := bson.M{"receiver": username}
-	return store.filterOne(filter)
+	return store.filter(filter)
 }
 
 func (store *NotificationRepo) GetAll() ([]*domain.Notification, error) {
