@@ -11,6 +11,7 @@ import AccomodationRating from "../../model/AccomodationRating";
 function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [oldRating, setOldRating] = useState<AccomodationRating | null>();
   const [rating, setRating] = useState(0);
   const [ratedAccomodation, setRatedAccomodation] = useState("");
   const [showRating, setShowRating] = useState(false);
@@ -29,9 +30,23 @@ function Reservations() {
       reservation.endDate = reservation.endDate.split(" ", 1)[0];
       const reservationEndDate = new Date(reservation.endDate.split(" ", 1)[0]);
       const currentDate = new Date();
-      if (reservationEndDate.getTime() > currentDate.getTime()) {
+      if (reservationEndDate.getTime() < currentDate.getTime()) {
         setShowRating(true);
         setRatedAccomodation(reservation.accomodationId);
+        accomodationRatingService
+          .getAccomodationRatingsByAccomodationAndUser(
+            reservation.accomodationId,
+            decodeToken()?.username
+          )
+          .then((res) => {
+            if (res.data.accomodationRatings.length > 0) {
+              setOldRating(res.data.accomodationRatings[0]);
+              setRating(res.data.accomodationRatings[0].rating);
+            } else {
+              setOldRating(null);
+              setRating(0);
+            }
+          });
         return;
       }
       reservationService.changeReservationStatus(reservation).then((res) => {
@@ -48,7 +63,7 @@ function Reservations() {
   const isInPast = (reservation: Reservation) => {
     const reservationEndDate = new Date(reservation.endDate.split(" ", 1)[0]);
     const currentDate = new Date();
-    if (reservationEndDate.getTime() > currentDate.getTime()) {
+    if (reservationEndDate.getTime() < currentDate.getTime()) {
       return true;
     }
     return false;
@@ -60,19 +75,35 @@ function Reservations() {
 
   const submitRating = () => {
     var date = formatDate(new Date());
-    var accomodationRating = new AccomodationRating({
-      id: "",
-      email: decodeToken()?.username,
-      accomodationId: ratedAccomodation,
-      rating: rating,
-      date: date,
-    });
-    accomodationRatingService
-      .createAccomodationRating(accomodationRating)
-      .then((res) => {
-        alert("Successfully rated!");
-        setShowRating(false);
+    if (!oldRating) {
+      var accomodationRating = new AccomodationRating({
+        id: "",
+        email: decodeToken()?.username,
+        accomodationId: ratedAccomodation,
+        rating: rating,
+        date: date,
       });
+      accomodationRatingService
+        .createAccomodationRating(accomodationRating)
+        .then((res) => {
+          alert("Successfully rated!");
+          setShowRating(false);
+        });
+    } else {
+      var accomodationRating = new AccomodationRating({
+        id: oldRating.id,
+        email: decodeToken()?.username,
+        accomodationId: ratedAccomodation,
+        rating: rating,
+        date: date,
+      });
+      accomodationRatingService
+        .updateAccomodationRating(accomodationRating)
+        .then((res) => {
+          alert("Your rating for this accomodation is successfully changed!!");
+          setShowRating(false);
+        });
+    }
   };
 
   function formatDate(date: Date) {
@@ -128,6 +159,7 @@ function Reservations() {
                 {showRating && (
                   <div>
                     <h1>Rate the accomodation</h1>
+                    {oldRating && <p>Old rating : {oldRating?.rating} </p>}
                     <StarRatings
                       rating={rating}
                       starRatedColor="#ffc107"
