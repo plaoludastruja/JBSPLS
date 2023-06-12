@@ -21,9 +21,11 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	AccomodationRatingService_Get_FullMethodName                      = "/accomodation_rating.AccomodationRatingService/Get"
 	AccomodationRatingService_GetAll_FullMethodName                   = "/accomodation_rating.AccomodationRatingService/GetAll"
+	AccomodationRatingService_GetAllByAccomodationId_FullMethodName   = "/accomodation_rating.AccomodationRatingService/GetAllByAccomodationId"
 	AccomodationRatingService_CreateAccomodationRating_FullMethodName = "/accomodation_rating.AccomodationRatingService/CreateAccomodationRating"
 	AccomodationRatingService_EditAccomodationRating_FullMethodName   = "/accomodation_rating.AccomodationRatingService/EditAccomodationRating"
 	AccomodationRatingService_DeleteAccomodationRating_FullMethodName = "/accomodation_rating.AccomodationRatingService/DeleteAccomodationRating"
+	AccomodationRatingService_GetByAccomodationAndUser_FullMethodName = "/accomodation_rating.AccomodationRatingService/GetByAccomodationAndUser"
 )
 
 // AccomodationRatingServiceClient is the client API for AccomodationRatingService service.
@@ -32,9 +34,11 @@ const (
 type AccomodationRatingServiceClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
+	GetAllByAccomodationId(ctx context.Context, in *GetAllByAccomodationIdRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
 	CreateAccomodationRating(ctx context.Context, in *CreateAccomodationRatingRequest, opts ...grpc.CallOption) (*CreateAccomodationRatingResponse, error)
 	EditAccomodationRating(ctx context.Context, in *EditAccomodationRatingRequest, opts ...grpc.CallOption) (*EditAccomodationRatingResponse, error)
 	DeleteAccomodationRating(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	GetByAccomodationAndUser(ctx context.Context, in *GetByAccomodationAndUserRequest, opts ...grpc.CallOption) (*GetAllResponse, error)
 }
 
 type accomodationRatingServiceClient struct {
@@ -57,6 +61,15 @@ func (c *accomodationRatingServiceClient) Get(ctx context.Context, in *GetReques
 func (c *accomodationRatingServiceClient) GetAll(ctx context.Context, in *GetAllRequest, opts ...grpc.CallOption) (*GetAllResponse, error) {
 	out := new(GetAllResponse)
 	err := c.cc.Invoke(ctx, AccomodationRatingService_GetAll_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accomodationRatingServiceClient) GetAllByAccomodationId(ctx context.Context, in *GetAllByAccomodationIdRequest, opts ...grpc.CallOption) (*GetAllResponse, error) {
+	out := new(GetAllResponse)
+	err := c.cc.Invoke(ctx, AccomodationRatingService_GetAllByAccomodationId_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,15 +103,26 @@ func (c *accomodationRatingServiceClient) DeleteAccomodationRating(ctx context.C
 	return out, nil
 }
 
+func (c *accomodationRatingServiceClient) GetByAccomodationAndUser(ctx context.Context, in *GetByAccomodationAndUserRequest, opts ...grpc.CallOption) (*GetAllResponse, error) {
+	out := new(GetAllResponse)
+	err := c.cc.Invoke(ctx, AccomodationRatingService_GetByAccomodationAndUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccomodationRatingServiceServer is the server API for AccomodationRatingService service.
 // All implementations must embed UnimplementedAccomodationRatingServiceServer
 // for forward compatibility
 type AccomodationRatingServiceServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	GetAll(context.Context, *GetAllRequest) (*GetAllResponse, error)
+	GetAllByAccomodationId(context.Context, *GetAllByAccomodationIdRequest) (*GetAllResponse, error)
 	CreateAccomodationRating(context.Context, *CreateAccomodationRatingRequest) (*CreateAccomodationRatingResponse, error)
 	EditAccomodationRating(context.Context, *EditAccomodationRatingRequest) (*EditAccomodationRatingResponse, error)
 	DeleteAccomodationRating(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	GetByAccomodationAndUser(context.Context, *GetByAccomodationAndUserRequest) (*GetAllResponse, error)
 	mustEmbedUnimplementedAccomodationRatingServiceServer()
 }
 
@@ -112,6 +136,9 @@ func (UnimplementedAccomodationRatingServiceServer) Get(context.Context, *GetReq
 func (UnimplementedAccomodationRatingServiceServer) GetAll(context.Context, *GetAllRequest) (*GetAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
 }
+func (UnimplementedAccomodationRatingServiceServer) GetAllByAccomodationId(context.Context, *GetAllByAccomodationIdRequest) (*GetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllByAccomodationId not implemented")
+}
 func (UnimplementedAccomodationRatingServiceServer) CreateAccomodationRating(context.Context, *CreateAccomodationRatingRequest) (*CreateAccomodationRatingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAccomodationRating not implemented")
 }
@@ -120,6 +147,9 @@ func (UnimplementedAccomodationRatingServiceServer) EditAccomodationRating(conte
 }
 func (UnimplementedAccomodationRatingServiceServer) DeleteAccomodationRating(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccomodationRating not implemented")
+}
+func (UnimplementedAccomodationRatingServiceServer) GetByAccomodationAndUser(context.Context, *GetByAccomodationAndUserRequest) (*GetAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByAccomodationAndUser not implemented")
 }
 func (UnimplementedAccomodationRatingServiceServer) mustEmbedUnimplementedAccomodationRatingServiceServer() {
 }
@@ -167,6 +197,24 @@ func _AccomodationRatingService_GetAll_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AccomodationRatingServiceServer).GetAll(ctx, req.(*GetAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AccomodationRatingService_GetAllByAccomodationId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllByAccomodationIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccomodationRatingServiceServer).GetAllByAccomodationId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccomodationRatingService_GetAllByAccomodationId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccomodationRatingServiceServer).GetAllByAccomodationId(ctx, req.(*GetAllByAccomodationIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -225,6 +273,24 @@ func _AccomodationRatingService_DeleteAccomodationRating_Handler(srv interface{}
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AccomodationRatingService_GetByAccomodationAndUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetByAccomodationAndUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccomodationRatingServiceServer).GetByAccomodationAndUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccomodationRatingService_GetByAccomodationAndUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccomodationRatingServiceServer).GetByAccomodationAndUser(ctx, req.(*GetByAccomodationAndUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AccomodationRatingService_ServiceDesc is the grpc.ServiceDesc for AccomodationRatingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -241,6 +307,10 @@ var AccomodationRatingService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AccomodationRatingService_GetAll_Handler,
 		},
 		{
+			MethodName: "GetAllByAccomodationId",
+			Handler:    _AccomodationRatingService_GetAllByAccomodationId_Handler,
+		},
+		{
 			MethodName: "CreateAccomodationRating",
 			Handler:    _AccomodationRatingService_CreateAccomodationRating_Handler,
 		},
@@ -251,6 +321,10 @@ var AccomodationRatingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteAccomodationRating",
 			Handler:    _AccomodationRatingService_DeleteAccomodationRating_Handler,
+		},
+		{
+			MethodName: "GetByAccomodationAndUser",
+			Handler:    _AccomodationRatingService_GetByAccomodationAndUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

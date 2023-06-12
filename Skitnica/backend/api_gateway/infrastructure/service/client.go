@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 
+	accomodationRatingGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_rating_service/generated"
 	accomodationGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
 	hostmarkGW "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
@@ -41,6 +42,14 @@ func NewHostMarkClient(address string) hostmarkGW.HostMarkServiceClient {
 		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
 	}
 	return hostmarkGW.NewHostMarkServiceClient(conn)
+}
+
+func NewAccomodationRatingClient(address string) accomodationRatingGW.AccomodationRatingServiceClient {
+	conn, err := getConnection(address)
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	return accomodationRatingGW.NewAccomodationRatingServiceClient(conn)
 }
 
 func getConnection(address string) (*grpc.ClientConn, error) {

@@ -51,6 +51,7 @@ func (store *AccomodationRatingRepo) Edit(accomodationRating *domain.Accomodatio
 		"email":          accomodationRating.Email,
 		"accomodationId": accomodationRating.AccomodationId,
 		"rating":         accomodationRating.Rating,
+		"date":           accomodationRating.Date,
 	}}
 	_, err := store.accomodationRatings.UpdateOne(context.TODO(), filter, update)
 

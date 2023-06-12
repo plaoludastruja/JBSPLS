@@ -17,6 +17,11 @@ service AccomodationRatingService {
                 get: "/accomodation-rating"
             };
         }
+        rpc GetAllByAccomodationId(GetAllByAccomodationIdRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating/{accomodationId}"
+            };
+        }
         rpc CreateAccomodationRating(CreateAccomodationRatingRequest) returns(CreateAccomodationRatingResponse) {
             option (google.api.http) = {
                 post: "/accomodation-rating"
@@ -34,14 +39,28 @@ service AccomodationRatingService {
                 delete: "/accomodation-rating/{id}"
             };
         }
+        rpc GetByAccomodationAndUser(GetByAccomodationAndUserRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating/{accomodationId}/{email}"
+            };
+        }
 }
 
 message GetRequest {
         string id = 1;
 }
 
+message GetByAccomodationAndUserRequest {
+        string accomodationId = 1;
+        string email = 2;
+}
+
 message GetResponse {
         AccomodationRating accomodationRating = 1;
+}
+
+message GetAllByAccomodationIdRequest {
+    string accomodationId = 1;
 }
 
 message GetAllRequest {
@@ -79,4 +98,5 @@ message AccomodationRating {
         string email = 2;
         string accomodationId = 3;
         int32 rating = 4;
+        string date = 5;
 }

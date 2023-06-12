@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/service"
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_rating_service/generated"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -42,6 +43,30 @@ func (handler *AccomodationRatingHandler) Get(ctx context.Context, request *pb.G
 
 func (handler *AccomodationRatingHandler) GetAll(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
 	accomodationRatings, err := handler.service.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		AccomodationRatings: []*pb.AccomodationRating{},
+	}
+	for _, accomodationRating := range accomodationRatings {
+		current := mapAccomodationRating(accomodationRating)
+		response.AccomodationRatings = append(response.AccomodationRatings, current)
+	}
+	return response, nil
+}
+
+func (handler *AccomodationRatingHandler) GetAllByAccomodationId(ctx context.Context, request *pb.GetAllByAccomodationIdRequest) (*pb.GetAllResponse, error) {
+	fmt.Println(request.AccomodationId)
+	accomodationId := request.AccomodationId
+	allAccomodationRatings, err := handler.service.GetAll()
+	accomodationRatings := make([]*domain.AccomodationRating, 0)
+	for _, res := range allAccomodationRatings {
+		if res.AccomodationId == accomodationId {
+			accomodationRatings = append(accomodationRatings, res)
+		}
+
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -102,4 +127,29 @@ func (handler *AccomodationRatingHandler) DeleteAccomodationRating(ctx context.C
 		return nil, err
 	}
 	return &pb.DeleteResponse{}, nil
+}
+
+func (handler *AccomodationRatingHandler) GetByAccomodationAndUser(ctx context.Context, request *pb.GetByAccomodationAndUserRequest) (*pb.GetAllResponse, error) {
+	accomodationId := request.AccomodationId
+	email := request.Email
+	allAccomodationRatings, err := handler.service.GetAll()
+	accomodationRatings := make([]*domain.AccomodationRating, 0)
+	for _, res := range allAccomodationRatings {
+		if res.AccomodationId == accomodationId && res.Email == email {
+			accomodationRatings = append(accomodationRatings, res)
+		}
+
+	}
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		AccomodationRatings: []*pb.AccomodationRating{},
+	}
+	for _, accomodationRating := range accomodationRatings {
+		current := mapAccomodationRating(accomodationRating)
+		response.AccomodationRatings = append(response.AccomodationRatings, current)
+	}
+
+	return response, nil
 }

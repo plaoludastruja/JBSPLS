@@ -12,6 +12,7 @@ func mapAccomodationRating(accomodationRating *domain.AccomodationRating) *pb.Ac
 		Email:          accomodationRating.Email,
 		AccomodationId: accomodationRating.AccomodationId,
 		Rating:         accomodationRating.Rating,
+		Date:           accomodationRating.Date,
 	}
 	return accomodationRatingPb
 }
@@ -23,6 +24,7 @@ func mapAccomodationRatingPb(accomodationRatingPb *pb.AccomodationRating) *domai
 		Email:          accomodationRatingPb.Email,
 		AccomodationId: accomodationRatingPb.AccomodationId,
 		Rating:         accomodationRatingPb.Rating,
+		Date:           accomodationRatingPb.Date,
 	}
 	return accomodationRating
 }

@@ -76,9 +76,9 @@ func (server *Server) initHandlers() {
 	errHostMark := hostmarkGw.RegisterHostMarkServiceHandlerFromEndpoint(context.TODO(), server.mux, hostmarkEndpoint, opts)
 	if errAppointment != nil {
 		panic(errHostMark)
-  }
-  
-	accomodationRatingEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationRatingHost, server.config.AppointmentPort)
+	}
+
+	accomodationRatingEndpoint := fmt.Sprintf("%s:%s", server.config.AccomodationRatingHost, server.config.AccomodationRatingPort)
 	errAccomodationRating := accomodationRatingGw.RegisterAccomodationRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, accomodationRatingEndpoint, opts)
 	if errAccomodationRating != nil {
 		panic(errAccomodationRating)
@@ -98,6 +98,9 @@ func (server *Server) initCustomHandlers() {
 
 	bestHostHandler := handler.NewBestHosthHandler(reservationEndpoint, hostmarkEndpoint)
 	bestHostHandler.Init(server.mux)
+
+	filterHandler := handler.NewFilterHandler(accomodationEndpoint, appointmentEndpoint, reservationEndpoint, hostmarkEndpoint)
+	filterHandler.Init(server.mux)
 }
 
 func (server *Server) Start() {
