@@ -39,10 +39,20 @@ service AccomodationRatingService {
                 delete: "/accomodation-rating/{id}"
             };
         }
+        rpc GetByAccomodationAndUser(GetByAccomodationAndUserRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating/{accomodationId}/{email}"
+            };
+        }
 }
 
 message GetRequest {
         string id = 1;
+}
+
+message GetByAccomodationAndUserRequest {
+        string accomodationId = 1;
+        string email = 2;
 }
 
 message GetResponse {

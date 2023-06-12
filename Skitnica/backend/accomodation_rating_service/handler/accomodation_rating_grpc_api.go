@@ -128,3 +128,28 @@ func (handler *AccomodationRatingHandler) DeleteAccomodationRating(ctx context.C
 	}
 	return &pb.DeleteResponse{}, nil
 }
+
+func (handler *AccomodationRatingHandler) GetByAccomodationAndUser(ctx context.Context, request *pb.GetByAccomodationAndUserRequest) (*pb.GetAllResponse, error) {
+	accomodationId := request.AccomodationId
+	email := request.Email
+	allAccomodationRatings, err := handler.service.GetAll()
+	accomodationRatings := make([]*domain.AccomodationRating, 0)
+	for _, res := range allAccomodationRatings {
+		if res.AccomodationId == accomodationId && res.Email == email {
+			accomodationRatings = append(accomodationRatings, res)
+		}
+
+	}
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		AccomodationRatings: []*pb.AccomodationRating{},
+	}
+	for _, accomodationRating := range accomodationRatings {
+		current := mapAccomodationRating(accomodationRating)
+		response.AccomodationRatings = append(response.AccomodationRatings, current)
+	}
+
+	return response, nil
+}
