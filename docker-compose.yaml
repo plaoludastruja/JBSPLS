@@ -96,6 +96,26 @@ services:
     networks:
       - network
 
+  notification_service:
+    image: notification_service
+    container_name: notification_service
+    build:
+      context: .
+      dockerfile: ./Skitnica/backend/notification_service/Dockerfile
+    restart: on-failure
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      NOTIFICATION_SERVICE_PORT: ${NOTIFICATION_SERVICE_PORT}
+      NATS_HOST: ${NATS_HOST}
+      NATS_PORT: ${NATS_PORT}
+      NATS_USER: ${NATS_USER}
+      NATS_PASS: ${NATS_PASS}
+    depends_on:
+      - db_host
+    networks:
+      - network
+      
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -117,8 +137,11 @@ services:
       RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
       HOSTMARK_SERVICE_HOST: ${HOSTMARK_SERVICE_HOST}
       HOSTMARK_SERVICE_PORT: ${HOSTMARK_SERVICE_PORT}
+      NOTIFICATION_SERVICE_HOST: ${NOTIFICATION_SERVICE_HOST}
+      NOTIFICATION_SERVICE_PORT: ${NOTIFICATION_SERVICE_PORT}
       ACCOMODATION_RATING_SERVICE_HOST: ${ACCOMODATION_RATING_SERVICE_HOST}
       ACCOMODATION_RATING_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
+
     networks:
       - network
 
@@ -131,6 +154,16 @@ services:
     ports:
       - ${DB_PORT}:${DB_PORT}
 
+  nats:
+    image: nats
+    container_name: nats
+    expose:
+      - ${NATS_PORT}
+    ports:
+      - ${NATS_PORT}:${NATS_PORT}
+    restart: on-failure
+    networks:
+      - network
   # accomodation_db:
   #   image: mongo
   #   container_name: accomodation_db
