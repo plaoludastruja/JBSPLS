@@ -102,4 +102,5 @@ message Notification {
         string sender = 3;
         string subject = 4;
         string message = 5;
+        string isRead = 6;
 }
