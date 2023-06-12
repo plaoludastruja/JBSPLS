@@ -6,27 +6,27 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func mapNotification(user *domain.Notification) *pb.Notification {
-	userPb := &pb.Notification{
-		Id:       user.Id.Hex(),
-		Receiver: user.Receiver,
-		Sender:   user.Sender,
-		Subject:  user.Subject,
-		Message:  user.Message,
-		IsRead:   user.IsRead,
+func mapNotification(notification *domain.Notification) *pb.Notification {
+	notificationPb := &pb.Notification{
+		Id:       notification.Id.Hex(),
+		Receiver: notification.Receiver,
+		Sender:   notification.Sender,
+		Subject:  notification.Subject,
+		Message:  notification.Message,
+		IsRead:   notification.IsRead,
 	}
-	return userPb
+	return notificationPb
 }
 
-func mapNotificationPb(userPb *pb.Notification) *domain.Notification {
-	userPbId, _ := primitive.ObjectIDFromHex(userPb.Id)
-	user := &domain.Notification{
-		Id:       userPbId,
-		Receiver: userPb.Receiver,
-		Sender:   userPb.Sender,
-		Subject:  userPb.Subject,
-		Message:  userPb.Message,
-		IsRead:   userPb.IsRead,
+func mapNotificationPb(notificationPb *pb.Notification) *domain.Notification {
+	notificationPbId, _ := primitive.ObjectIDFromHex(notificationPb.Id)
+	notification := &domain.Notification{
+		Id:       notificationPbId,
+		Receiver: notificationPb.Receiver,
+		Sender:   notificationPb.Sender,
+		Subject:  notificationPb.Subject,
+		Message:  notificationPb.Message,
+		IsRead:   notificationPb.IsRead,
 	}
-	return user
+	return notification
 }

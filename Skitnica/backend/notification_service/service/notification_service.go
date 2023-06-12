@@ -31,6 +31,6 @@ func (service *NotificationService) GetAll() ([]*domain.Notification, error) {
 	return service.store.GetAll()
 }
 
-func (service *NotificationService) Insert(user domain.Notification) error {
-	return service.store.Insert(&user)
+func (service *NotificationService) Insert(notification domain.Notification) error {
+	return service.store.Insert(&notification)
 }
