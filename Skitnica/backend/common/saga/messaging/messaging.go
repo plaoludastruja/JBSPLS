@@ -1,0 +1,10 @@
+package saga
+
+type Publisher interface {
+	Publish(message interface{}) error
+}
+
+type Subscriber interface {
+	Subscribe(function interface{}) error
+	//SubscribeNotification() (string, error)
+}
