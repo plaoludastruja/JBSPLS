@@ -15,6 +15,7 @@ import (
 	accomodationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
 	appointmentGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/appointment_service/generated"
 	hostmarkGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/hostmark_service/generated"
+	notificationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	reservationGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 	userGw "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 
@@ -82,6 +83,12 @@ func (server *Server) initHandlers() {
 	errAccomodationRating := accomodationRatingGw.RegisterAccomodationRatingServiceHandlerFromEndpoint(context.TODO(), server.mux, accomodationRatingEndpoint, opts)
 	if errAccomodationRating != nil {
 		panic(errAccomodationRating)
+	}
+
+	notificationEndpoint := fmt.Sprintf("%s:%s", server.config.NotificationkHost, server.config.NotificationPort)
+	errNotificationnRating := notificationGw.RegisterNotificationServiceHandlerFromEndpoint(context.TODO(), server.mux, notificationEndpoint, opts)
+	if errNotificationnRating != nil {
+		panic(errNotificationnRating)
 	}
 
 }
