@@ -1,5 +1,7 @@
 package create_order
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Color struct {
 	Code string
 }
@@ -52,4 +54,44 @@ const (
 type CreateOrderReply struct {
 	Order OrderDetails
 	Type  CreateOrderReplyType
+}
+
+type User struct {
+	Id        primitive.ObjectID
+	Username  string
+	Password  string
+	FirstName string
+	LastName  string
+	Role      string
+	Address   string
+}
+
+type DeleteUserCommandType int8
+
+const (
+	CheckReservations DeleteUserCommandType = iota
+	DeleteUser
+	DeleteAccomodations
+	Unknown
+)
+
+type DeleteUserCommand struct {
+	User User
+	Type DeleteUserCommandType
+}
+
+type DeleteUserReplyType int8
+
+const (
+	CanDelete DeleteUserReplyType = iota
+	CanNotDelete
+	DeletedGuest
+	DeletedHost
+	AccomodationsDeleted
+	UnknownRep
+)
+
+type DeleteUserReply struct {
+	User User
+	Type DeleteUserReplyType
 }
