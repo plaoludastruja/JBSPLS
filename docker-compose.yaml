@@ -1,5 +1,21 @@
 version: "3.3"
 services:
+  lsbackend:
+    image: lsbackend
+    container_name: "lsbackend"
+    build:
+      context: .
+      dockerfile: ./LetiSleti/LSbackend/Dockerfile
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./LetiSleti/LSbackend:/app"
+    depends_on:
+      - "db_host"
+    networks:
+      - network
+      
   user_service:
     image: user_service
     container_name: user_service
@@ -141,7 +157,6 @@ services:
       NOTIFICATION_SERVICE_PORT: ${NOTIFICATION_SERVICE_PORT}
       ACCOMODATION_RATING_SERVICE_HOST: ${ACCOMODATION_RATING_SERVICE_HOST}
       ACCOMODATION_RATING_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
-
     networks:
       - network
 
@@ -164,6 +179,13 @@ services:
     restart: on-failure
     networks:
       - network
+
+networks:
+  network:
+    driver: bridge
+
+
+
   # accomodation_db:
   #   image: mongo
   #   container_name: accomodation_db
@@ -188,9 +210,6 @@ services:
   #     - network
   #   ports:
   #     - ${RESERVATION_DB_PORT}:${RESERVATION_DB_PORT}
-networks:
-  network:
-    driver: bridge
 
   # #baza
   # mongo:
@@ -202,6 +221,24 @@ networks:
   #     - type: bind
   #       source: ./data
   #       target: /data/db
+
+  #back
+  # lsbackend:
+  #   image: lsbackend
+  #   container_name: "lsbackend"
+  #   build:
+  #     context: .
+  #     dockerfile: ./Skitnica/LSbackend/Dockerfile
+  #   restart: on-failure
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - "./LetiSleti/LSbackend:/app"
+  #   depends_on:
+  #     - "db_host"
+  #   networks:
+  #     - network
+
   # #back
   # lsbackend:
   #   container_name: "lsbackend"
@@ -212,6 +249,7 @@ networks:
   #     - "./LetiSleti/LSbackend:/app"
   #   depends_on:
   #     - "mongo"
+
   # #front
   # lsfrontend:
   #   container_name: "lsfrontend"
