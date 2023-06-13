@@ -15,6 +15,7 @@ func mapUser(user *domain.User) *pb.User {
 		LastName:  user.LastName,
 		Role:      user.Role,
 		Address:   user.Address,
+		ApiKey:    user.ApiKey,
 	}
 	return userPb
 }
@@ -29,6 +30,7 @@ func mapUserPb(userPb *pb.User) *domain.User {
 		LastName:  userPb.LastName,
 		Role:      userPb.Role,
 		Address:   userPb.Address,
+		ApiKey:    userPb.ApiKey,
 	}
 	return user
 }

@@ -110,6 +110,7 @@ message User {
         string lastName = 5;
         string role = 6;
         string address = 7;
+        string apiKey = 8;
 }
 
 message UserDTO {

@@ -58,6 +58,7 @@ func (store *UserRepo) Edit(user *domain.User) error {
 		"first_name": user.FirstName,
 		"last_name":  user.LastName,
 		"address":    user.Address,
+		"apiKey":     user.ApiKey,
 	}}
 	_, err := store.users.UpdateOne(context.TODO(), filter, update)
 
