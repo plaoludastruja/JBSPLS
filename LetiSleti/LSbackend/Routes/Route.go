@@ -28,6 +28,7 @@ func InitRoutes() *gin.Engine {
 	public.GET("/user/getAll", Controllers.GetAllUsers)
 	public.GET("/user/by-email/:email", Controllers.GetUserByEmail)
 	public.DELETE("/user/:userId", Controllers.DeleteUser)
+	public.GET("/user/api-key/:email/:isDurable", Controllers.GenerateApiKey)
 
 	public.POST("/ticket", Controllers.CreateTicket)
 	user.GET("/ticket/getAll", Controllers.GetAllTickets)
