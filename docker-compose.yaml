@@ -40,11 +40,16 @@ services:
       dockerfile: ./Skitnica/backend/accomodation_rating_service/Dockerfile
     restart: on-failure
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      ACCOMODATION_RATING_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
+      # DB_HOST: ${DB_HOST}
+      # DB_PORT: ${DB_PORT}
+      # ACCOMODATION_RATING_SERVICE_PORT: ${ACCOMODATION_RATING_SERVICE_PORT}
+      - NEO4J_DB=bolt://neo4j:7687
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_PASS=nekaSifra
     depends_on:
-      - db_host
+      # - db_host
+      neo4j:
+        condition: service_healthy
     networks:
       - network
 
@@ -115,7 +120,7 @@ services:
       - db_host
     networks:
       - network
-      
+
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -154,6 +159,32 @@ services:
     ports:
       - ${DB_PORT}:${DB_PORT}
 
+  neo4j:
+    image: neo4j
+    restart: always
+    ports:
+      # bolt
+      - "7687:7687"
+      # http
+      - "7474:7474"
+      # https
+      - "7473:7473"
+    # Docker healtcheck - checks if database is "alive"
+    healthcheck:
+      # test: [ "CMD-SHELL", "echo RETURN 1 | cypher-shell -a <NEO4J_dbms_connector_bolt_listen__address> -u <user defined username> -p <user defined password> || exit 1" ]
+      test:
+        [
+          "CMD-SHELL",
+          "echo RETURN 1 | cypher-shell -a bolt://neo4j:7687 -u neo4j -p nekaSifra || exit 1",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    environment:
+      - NEO4J_AUTH=neo4j/nekaSifra
+    volumes:
+      - neo4j_data:/data
+
   nats:
     image: nats
     container_name: nats
@@ -191,7 +222,8 @@ services:
 networks:
   network:
     driver: bridge
-
+volumes:
+  neo4j_data:
   # #baza
   # mongo:
   #   image: "mongo:latest"

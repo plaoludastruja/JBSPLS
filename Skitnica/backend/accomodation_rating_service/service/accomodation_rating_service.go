@@ -23,8 +23,9 @@ func (service *AccomodationRatingService) GetAll() ([]*domain.AccomodationRating
 	return service.store.GetAll()
 }
 
-func (service *AccomodationRatingService) Insert(accomodation domain.AccomodationRating) error {
-	return service.store.Insert(&accomodation)
+func (service *AccomodationRatingService) Insert(accomodationRating domain.AccomodationRating) error {
+	service.store.WriteAccomodationRating(&accomodationRating)
+	return service.store.Insert(&accomodationRating)
 }
 
 func (service *AccomodationRatingService) Delete(id primitive.ObjectID) error {

@@ -30,7 +30,7 @@ function Reservations() {
       reservation.endDate = reservation.endDate.split(" ", 1)[0];
       const reservationEndDate = new Date(reservation.endDate.split(" ", 1)[0]);
       const currentDate = new Date();
-      if (reservationEndDate.getTime() < currentDate.getTime()) {
+      if (reservationEndDate.getTime() > currentDate.getTime()) {
         setShowRating(true);
         setRatedAccomodation(reservation.accomodationId);
         accomodationRatingService
@@ -63,7 +63,7 @@ function Reservations() {
   const isInPast = (reservation: Reservation) => {
     const reservationEndDate = new Date(reservation.endDate.split(" ", 1)[0]);
     const currentDate = new Date();
-    if (reservationEndDate.getTime() < currentDate.getTime()) {
+    if (reservationEndDate.getTime() > currentDate.getTime()) {
       return true;
     }
     return false;
