@@ -44,6 +44,11 @@ service NotificationService {
                 delete: "/notification/{id}"
             };
         }
+        rpc readAllByUsername(ReadAllByUsernameRequest) returns(ReadAllByUsernameResponse) {
+            option (google.api.http) = {
+                put: "/notification/readAllByUsername/{username}"
+            };
+        }
         
 }
 
@@ -92,6 +97,13 @@ message DeleteRequest {
 }
 
 message DeleteResponse {
+}
+
+message ReadAllByUsernameRequest {
+        string username = 1;
+}
+
+message ReadAllByUsernameResponse {
 }
 
 

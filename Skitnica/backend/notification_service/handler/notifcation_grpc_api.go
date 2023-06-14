@@ -91,3 +91,12 @@ func (handler *NotificationHandler) CreateNotification(ctx context.Context, requ
 		Notification: mapNotification(notification),
 	}, nil
 }
+
+func (handler *NotificationHandler) ReadAllByUsername(ctx context.Context, request *pb.ReadAllByUsernameRequest) (*pb.ReadAllByUsernameResponse, error) {
+
+	err := handler.service.ReadAllByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ReadAllByUsernameResponse{}, nil
+}

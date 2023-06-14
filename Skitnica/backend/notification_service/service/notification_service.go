@@ -40,3 +40,14 @@ func (service *NotificationService) Insert(notification domain.Notification) err
 	sub.Publish(notification.Message)
 	return service.store.Insert(&notification)
 }
+
+func (service *NotificationService) ReadAllByUsername(username string) error {
+	notifications, _ := service.GetByReceiver(username)
+	for _, notification := range notifications {
+		err := service.store.Edit(notification)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

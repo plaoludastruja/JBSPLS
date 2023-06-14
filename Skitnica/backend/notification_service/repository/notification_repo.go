@@ -58,7 +58,7 @@ func (store *NotificationRepo) Insert(notification *domain.Notification) error {
 func (store *NotificationRepo) Edit(notification *domain.Notification) error {
 	filter := bson.M{"_id": notification.Id}
 	update := bson.M{"$set": bson.M{
-		"isRead": notification.IsRead,
+		"isRead": "true",
 	}}
 	_, err := store.notifications.UpdateOne(context.TODO(), filter, update)
 
