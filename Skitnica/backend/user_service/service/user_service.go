@@ -6,6 +6,7 @@ import (
 	"log"
 
 	reservationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
+	events "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/create_order"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/token"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,12 +16,14 @@ import (
 )
 
 type UserService struct {
-	store domain.IUserRepo
+	store        domain.IUserRepo
+	orchestrator *DeleteUserOrchestrator
 }
 
-func NewUserService(store domain.IUserRepo) *UserService {
+func NewUserService(store domain.IUserRepo, orchestrator *DeleteUserOrchestrator) *UserService {
 	return &UserService{
-		store: store,
+		store:        store,
+		orchestrator: orchestrator,
 	}
 }
 
@@ -46,7 +49,20 @@ func (service *UserService) Insert(user domain.User) error {
 }
 
 func (service *UserService) Delete(id primitive.ObjectID) error {
+
 	user, err := service.Get(id)
+
+	if err != nil {
+		return err
+	}
+	err = service.orchestrator.Start(user)
+
+	if err != nil {
+		return err
+	}
+	return nil
+
+	/*user, err := service.Get(id)
 	fmt.Println("13213")
 	if err != nil {
 		return err
@@ -58,7 +74,7 @@ func (service *UserService) Delete(id primitive.ObjectID) error {
 		fmt.Println("2")
 		return service.deleteHost(user)
 	}
-	//return service.store.Delete(id)
+	//return service.store.Delete(id)*/
 }
 
 func (service *UserService) deleteUser(user *domain.User) error {
@@ -142,4 +158,8 @@ func checkPasswordHash(password, hash string) error {
 
 func (service *UserService) GetHosts() ([]*domain.User, error) {
 	return service.store.GetHosts()
+}
+
+func (service *UserService) DelUser(user events.User) error {
+	return service.store.Delete(user.Id)
 }
