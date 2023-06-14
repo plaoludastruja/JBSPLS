@@ -30,7 +30,7 @@ func (handler *DeleteUserCommandHandler) handle(command *events.DeleteUserComman
 	reply := events.DeleteUserReply{User: command.User}
 
 	switch command.Type {
-	case events.CheckReservations:
+	case events.DeleteAccomodations:
 		res, err := handler.accomodationService.GetAll()
 
 		if err != nil {

@@ -33,7 +33,7 @@ func (handler *DeleteUserCommandHandler) handle(command *events.DeleteUserComman
 	case events.DeleteUser:
 		err := handler.userService.DelUser(command.User)
 		if err != nil {
-			reply.Type = events.UnknownRep
+			reply.Type = events.UnknownRep //ovo promeniti mozda
 		}
 		if command.User.Role == "USER" {
 			reply.Type = events.DeletedGuest
