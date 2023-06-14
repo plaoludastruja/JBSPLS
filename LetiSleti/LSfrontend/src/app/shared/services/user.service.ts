@@ -30,6 +30,12 @@ export class UserService {
         return this.http.get<any>(this.apiHost + 'user/by-email/' + email);
     }
 
+    generateApiKey(email: string, isDurable: boolean): Observable<any> {
+        let durable = ""
+        isDurable ? durable = "true" : durable = "false"
+        return this.http.get<any>(this.apiHost + 'user/api-key/' + email + '/' + durable);
+    }
+
     public login = (login: any): void => {
         this.http.post<any>(this.apiHost + 'user/login', login).subscribe({
             next: (res) => {
@@ -37,7 +43,6 @@ export class UserService {
                 this.toastr.success('Login successfull', '', { closeButton: true, timeOut : 1500  });
                 this.router.navigate(['home']);
             },
-            //TODO: handle errors
             error: err => {
                 this.toastr.error('Wrong username or password', '', { closeButton: true, timeOut : 1500  });
             }

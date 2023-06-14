@@ -24,7 +24,7 @@ func GetUserByEmail(ctx *gin.Context) {
 	fmt.Println(email)
 	user, _ = Services.GetUserByEmail(email)
 	httpGin.OK(user)
- }
+}
 
 func DeleteUser(ctx *gin.Context) {
 	fmt.Println("DeleteUser")
@@ -32,4 +32,14 @@ func DeleteUser(ctx *gin.Context) {
 	httpGin := HTTP.Gin{Context: ctx}
 	users := Services.DeleteUser(userId)
 	httpGin.OK(users)
+}
+
+func GenerateApiKey(ctx *gin.Context) {
+	fmt.Println("GenerateApiKey")
+	email := ctx.Param("email")
+	isDurable := ctx.Param("isDurable")
+	fmt.Println(email)
+	httpGin := HTTP.Gin{Context: ctx}
+	Services.GenerateApiKey(email, isDurable)
+	httpGin.OK("Ok")
 }
