@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class FlightService {
 
-  apiHost: string = 'http://localhost:8080/';
+  apiHost: string = 'http://localhost:8082/';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }
