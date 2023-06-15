@@ -2,6 +2,7 @@ package Services
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -39,7 +40,9 @@ func GenerateToken(email string, isDurable string) (string, error) {
 	}
 	claims := jwt.MapClaims{}
 	claims["email"] = email
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(tokenLifespan)).Unix()
+	fullTime := time.Now().Add(time.Hour * time.Duration(tokenLifespan)).String()
+	justDate := strings.Split(fullTime, " ")[0]
+	claims["exp"] = justDate
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	fmt.Println(token.SignedString([]byte(SECRET_KEY)))
 	return token.SignedString([]byte(SECRET_KEY))

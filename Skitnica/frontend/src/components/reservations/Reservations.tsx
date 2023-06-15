@@ -12,6 +12,8 @@ import flightService from "../../services/flights.service";
 import { Flight } from "../../model/Flight";
 import accomodationService from "../../services/accomodation.service";
 import Accomodation from "../../model/Accomodation";
+import userService from "../../services/user.service";
+import ticketService from "../../services/ticket.service";
 
 function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -177,8 +179,8 @@ function Reservations() {
     console.log("3")
     accomodationService.getAccomodation(selectedReservation.accomodationId).then((res) => {
       setAccomodationFromReservation(res.data.accomodation)
-      searchCriteria1.endPlace = accomodationFromReservation.location;
-      searchCriteria2.startPlace = accomodationFromReservation.location;
+      searchCriteria1.endPlace = res.data.accomodation.location;
+      searchCriteria2.startPlace = res.data.accomodation.location;
       flightService.getRecommendedFlights(searchCriteria1).then((res) => {
         setFlights1(res.data)
         console.log("flights1")
@@ -194,9 +196,63 @@ function Reservations() {
   };
 
   const showRecomendFormFunc = (reservation: Reservation) => {
-    console.log(selectedReservation)
+    
     setSelectedReservation(reservation);
+    console.log(selectedReservation)
     setshowRecommendForm(true);
+  };
+
+  const buyTicket = (flight: Flight) => {
+    /*var niz = flight.start.split("T")
+    var datum = niz[0]
+    var niz2 = datum.split("-")
+    var year = parseInt(niz2[0])
+    var month = parseInt(niz2[1])-1
+    var day = parseInt(niz2[2])
+
+    var satiNiz1 = niz[1].split(":")
+    var hour = parseInt(satiNiz1[0])
+    var min = parseInt(satiNiz1[1])
+    
+    var d = new Date(year, month, day,hour,min,0)
+
+    var nizEnd = flight.end.split("T")
+    var datumEnd = nizEnd[0]
+    var nizEnd2 = datumEnd.split("-")
+    var yearEnd = parseInt(nizEnd2[0])
+    var monthEnd = parseInt(nizEnd2[1])-1
+    var dayEnd = parseInt(nizEnd2[2])
+
+    var satiNiz2 = nizEnd[1].split(":")
+    var hourEnd = parseInt(satiNiz2[0])
+    var minMin = parseInt(satiNiz2[1])
+    
+    var dEnd = new Date(yearEnd, monthEnd, dayEnd,hourEnd,minMin,0)*/
+    console.log(flight)
+    var dto = {apiKey: "",
+                startTime: flight.start,
+                startPlace: flight.startPlace,
+                endTime: flight.end,
+                endPlace: flight.endPlace,
+                price: flight.pricePerPlace,
+                count: selectedReservation.guestNumber,
+                flightId: ""}
+    userService.getUserByUsername().then((res) => {
+      console.log(res.data)
+      var user = res.data.user;
+      console.log("user")
+      console.log(user)
+      dto.apiKey = res.data.user.apiKey;
+      //dto.apiKey = "aaa"
+      
+      //console.log("api key")
+      //console.log(dto.ApiKey)
+      console.log("dto date 1")
+      console.log(dto)
+      ticketService.createTicket(dto).then((res) => {
+        alert("Ticket bought!");
+      });
+    });
   };
 
   return (
@@ -332,6 +388,7 @@ function Reservations() {
                         <td>{flight.remaining}</td>
                         <td>{flight.pricePerPlace}</td>
                         <td>{flight.pricePerPlace*selectedReservation.guestNumber}</td>
+                        <td><MDBBtn onClick={() => buyTicket(flight)}>BUY</MDBBtn></td>
                       </tr>
                     </tbody>
                   ))}
@@ -359,6 +416,7 @@ function Reservations() {
                         <td>{flight.remaining}</td>
                         <td>{flight.pricePerPlace}</td>
                         <td>{flight.pricePerPlace*selectedReservation.guestNumber}</td>
+                        <td><MDBBtn onClick={() => buyTicket(flight)}>BUY</MDBBtn></td>
                       </tr>
                     </tbody>
                   ))}
