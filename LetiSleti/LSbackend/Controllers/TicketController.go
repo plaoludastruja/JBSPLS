@@ -7,6 +7,7 @@ import (
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/HTTP"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Helper/Token"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models"
+	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Models/DTO"
 	"github.com/plaoludastruja/JBSPLS/LetiSleti/LSbackend/Services"
 )
 
@@ -33,4 +34,20 @@ func GetAllTickets(ctx *gin.Context) {
 	fmt.Println(email)
 	tickets := Services.GetAllTickets(email)
 	httpGin.OK(tickets)
+}
+
+func CreateTicketFromSkitnica(ctx *gin.Context) {
+	fmt.Println("Creating ticket from skitnica")
+	httpGin := HTTP.Gin{Context: ctx}
+	ticketSkitnicaDto := DTO.TicketSkitnicaDTO{}
+	if err := ctx.ShouldBindJSON(&ticketSkitnicaDto); err != nil {
+		fmt.Println(&ticketSkitnicaDto)
+		httpGin.BadRequest(err.Error())
+		return
+	}
+	if !Services.CreateTicketFromSkitnica(ticketSkitnicaDto) {
+		httpGin.BadRequest(ticketSkitnicaDto)
+		return
+	}
+	httpGin.Created(ticketSkitnicaDto)
 }

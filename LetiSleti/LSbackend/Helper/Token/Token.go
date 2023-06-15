@@ -97,3 +97,55 @@ func AdminAuthMiddleware() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+func ExtractApiKeyEmail(apiKey string) (string, error) {
+
+	token, err := parseToken(apiKey)
+	if err != nil {
+		return "", err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		return fmt.Sprintf("%s", claims["email"]), nil
+	}
+	return "", nil
+}
+
+/*func ExtractApiKeyExp(apiKey string) (time.Time, error) {
+	fmt.Println(apiKey)
+	token, err := parseToken(apiKey)
+	if err != nil {
+		fmt.Println("1111")
+		return time.Now(), err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		fmt.Println("3333")
+		expString, ok := claims["exp"]
+		fmt.Println(expString)
+		if ok {
+			fmt.Println("4444")
+			expTime, err := time.Parse(time.RFC3339, expString.(string))
+			if err == nil {
+				fmt.Println("5555")
+				return expTime, nil
+			}
+		}
+
+	}
+	fmt.Println("2222")
+	return time.Now(), nil
+}*/
+
+func ExtractApiKeyExp(apiKey string) (string, error) {
+
+	token, err := parseToken(apiKey)
+	if err != nil {
+		return "", err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		return fmt.Sprintf("%s", claims["exp"]), nil
+	}
+	return "", nil
+}

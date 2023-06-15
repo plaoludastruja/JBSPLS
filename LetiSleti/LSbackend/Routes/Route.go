@@ -32,6 +32,7 @@ func InitRoutes() *gin.Engine {
 
 	public.POST("/ticket", Controllers.CreateTicket)
 	user.GET("/ticket/getAll", Controllers.GetAllTickets)
+	public.POST("/ticket/skitnica", Controllers.CreateTicketFromSkitnica)
 
 	admin.POST("/flight/register", Controllers.RegisterFlight)
 	public.GET("/flight/change-places-left/:flightId/:count", Controllers.ChangePlacesLeft)
