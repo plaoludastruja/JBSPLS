@@ -3,10 +3,15 @@ import "./Reservations.css";
 import reservationService from "../../services/reservation.service";
 import Reservation from "../../model/Reservation";
 import decodeToken from "../../services/auth.service";
-import { MDBBtn } from "mdb-react-ui-kit";
+import { MDBBtn, MDBCol, MDBContainer, MDBInput, MDBRow } from "mdb-react-ui-kit";
 import StarRatings from "react-star-ratings";
 import accomodationRatingService from "../../services/accomodationRating.service";
 import AccomodationRating from "../../model/AccomodationRating";
+import RecomendFlightsParam from "../../model/RecomendFlightsParam";
+import flightService from "../../services/flights.service";
+import { Flight } from "../../model/Flight";
+import accomodationService from "../../services/accomodation.service";
+import Accomodation from "../../model/Accomodation";
 
 function Reservations() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -15,6 +20,28 @@ function Reservations() {
   const [rating, setRating] = useState(0);
   const [ratedAccomodation, setRatedAccomodation] = useState("");
   const [showRating, setShowRating] = useState(false);
+  const [showRecommendForm, setshowRecommendForm] = useState(false);
+  const [recommendParams, setRecommendParams] = useState<RecomendFlightsParam>({Departure:"", Arrival: ""});
+  const [selectedReservation, setSelectedReservation] = useState<Reservation>({id:"",
+                                                                              accomodationId:"",
+                                                                              username: "",
+                                                                              startDate:"",
+                                                                              endDate: "",
+                                                                              guestNumber: 0,
+                                                                              status:"",
+                                                                              hostUsername:""});
+  const [flights1, setFlights1] = useState<Flight[]>([]);
+  const [flights2, setFlights2] = useState<Flight[]>([]);
+  const [accomodationFromReservation, setAccomodationFromReservation] = useState<Accomodation>({id: "",
+  name: "",
+  location: "",
+  facilities: "",
+  minNumberOfGuests: 0,
+  maxNumberOfGuests: 0,
+  isAutomaticApproved: "",
+  hostUsername: "",
+  image: ""});
+  const [showRecommendTables, setShowRecommendTables] = useState(false);
 
   useEffect(() => {
     reservationService
@@ -113,6 +140,65 @@ function Reservations() {
 
     return `${year}-${month}-${day}`;
   }
+
+  const submitFlightsRecommendation = () => {
+    var niz = selectedReservation.startDate.split(" ")
+    var datum = niz[0]
+    var niz2 = datum.split("-")
+    var year = parseInt(niz2[0])
+    var month = parseInt(niz2[1])-1
+    var day = parseInt(niz2[2])
+
+    var d = new Date(year, month, day,3,0,0)
+
+    var searchCriteria1 = {
+      startPlace: recommendParams.Departure,
+      endPlace: "",
+      numberOfPlaces: selectedReservation.guestNumber,
+      date: d.toISOString() 
+    }
+
+    var nizz = selectedReservation.endDate.split(" ")
+    var datumm = nizz[0]
+    var nizz2 = datumm.split("-")
+    var year2 = parseInt(nizz2[0])
+    var month2 = parseInt(nizz2[1])-1
+    var day2 = parseInt(nizz2[2])
+
+    var d2 = new Date(year2, month2, day2,3,0,0)
+    console.log("Arrival")
+    console.log(recommendParams.Arrival)
+    var searchCriteria2 = {
+      startPlace: "", // gde je accomodation
+      endPlace: recommendParams.Arrival,
+      numberOfPlaces: selectedReservation.guestNumber,
+      date: d2.toISOString() 
+    }
+    console.log("3")
+    accomodationService.getAccomodation(selectedReservation.accomodationId).then((res) => {
+      setAccomodationFromReservation(res.data.accomodation)
+      searchCriteria1.endPlace = accomodationFromReservation.location;
+      searchCriteria2.startPlace = accomodationFromReservation.location;
+      flightService.getRecommendedFlights(searchCriteria1).then((res) => {
+        setFlights1(res.data)
+        console.log("flights1")
+        console.log(flights1)
+        flightService.getRecommendedFlights(searchCriteria2).then((res) => {
+          setShowRecommendTables(true);
+          setFlights2(res.data)
+          console.log("flights2")
+          console.log(flights2)
+        });
+      });
+    });
+  };
+
+  const showRecomendFormFunc = (reservation: Reservation) => {
+    console.log(selectedReservation)
+    setSelectedReservation(reservation);
+    setshowRecommendForm(true);
+  };
+
   return (
     <>
       <div className="row">
@@ -152,6 +238,9 @@ function Reservations() {
                             </MDBBtn>
                           )}
                         </td>
+                        <td>
+                          <MDBBtn onClick={() => showRecomendFormFunc(reservation)}>RECOMEND FLIGHTS</MDBBtn>
+                        </td>
                       </tr>
                     </tbody>
                   ))}
@@ -173,6 +262,110 @@ function Reservations() {
                     <MDBBtn onClick={() => submitRating()}>SUBMIT</MDBBtn>
                   </div>
                 )}
+
+                {showRecommendForm && (
+                  <div>
+                    <MDBContainer fluid className="p-3 my-5 h-custom">
+                      <MDBRow>
+                      <MDBCol col="4" md="6">
+
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Place before holiday"
+                        onChange={(e) =>
+                          setRecommendParams((prevState) => ({
+                        ...prevState,
+                        Departure: e.target.value,
+                        }))
+                        }
+                        type="text"
+                        size="lg"
+                      />
+                      </MDBCol>
+                      <MDBCol>
+                      <MDBInput
+                        wrapperClass="mb-4"
+                        label="Place after holiday"
+                        onChange={(e) =>
+                          setRecommendParams((prevState) => ({
+                        ...prevState,
+                        Arrival: e.target.value,
+                        }))
+                        }
+                        type="text"
+                        size="lg"
+                      />
+
+                      <div className="text-center text-md-start mt-4 pt-2">
+                        <MDBBtn className="mb-0 px-5" size="lg" onClick={() => submitFlightsRecommendation()}>
+                          Submit
+                        </MDBBtn>
+                      </div>
+                    </MDBCol>
+                  </MDBRow>
+                  </MDBContainer>
+                    
+                  </div>
+                )}
+                {showRecommendTables && (
+                  <div>
+                    <table className="tableFlights">
+                  <thead>
+                    <tr>
+                      <th>Start date</th>
+                      <th>Start place</th>
+                      <th>End date</th>
+                      <th>End place</th>
+                      <th>Remaining places</th>
+                      <th>Price per place</th>
+                      <th>Total price</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  {flights1.map((flight) => (
+                    <tbody key={flight.id}>
+                      <tr>
+                        <td>{flight.start}</td>
+                        <td>{flight.startPlace}</td>
+                        <td>{flight.end.split(" ", 1)}</td>
+                        <td>{flight.endPlace}</td>
+                        <td>{flight.remaining}</td>
+                        <td>{flight.pricePerPlace}</td>
+                        <td>{flight.pricePerPlace*selectedReservation.guestNumber}</td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+                <table className="tableFlights2">
+                  <thead>
+                    <tr>
+                      <th>Start date</th>
+                      <th>Start place</th>
+                      <th>End date</th>
+                      <th>End place</th>
+                      <th>Remaining places</th>
+                      <th>Price per place</th>
+                      <th>Total price</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  {flights2.map((flight) => (
+                    <tbody key={flight.id}>
+                      <tr>
+                        <td>{flight.start}</td>
+                        <td>{flight.startPlace}</td>
+                        <td>{flight.end.split(" ", 1)}</td>
+                        <td>{flight.endPlace}</td>
+                        <td>{flight.remaining}</td>
+                        <td>{flight.pricePerPlace}</td>
+                        <td>{flight.pricePerPlace*selectedReservation.guestNumber}</td>
+                      </tr>
+                    </tbody>
+                  ))}
+                </table>
+                  </div>
+                )}
+                
               </div>
             </div>
           </div>
