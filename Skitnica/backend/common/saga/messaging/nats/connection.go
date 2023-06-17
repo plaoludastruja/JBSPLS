@@ -14,6 +14,6 @@ func getConnection(host, port, user, password string) (*nats.Conn, error) {
 	if err != nil {
 		fmt.Println("NATS connection error")
 		return nil, err
-	}s
+	}
 	return connection, nil
 }
