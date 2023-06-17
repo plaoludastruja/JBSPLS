@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	events "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/create_order"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -108,4 +109,37 @@ func (service *ReservationService) GetAllByHostUsername(hostUsername string) ([]
 
 func (service *ReservationService) GetAllCanceledByHostUsername(hostUsername string) ([]*domain.Reservation, error) {
 	return service.store.GetAllCanceledByHostUsername(hostUsername)
+}
+
+func (service *ReservationService) CheckReservations(user events.User) (bool, error) {
+	if user.Role == "USER" {
+		return service.CheckReservationsForGuest(user)
+	} else {
+		return service.CheckReservationsForHost(user)
+	}
+}
+
+func (service *ReservationService) CheckReservationsForGuest(user events.User) (bool, error) {
+
+	reservations, _ := service.GetAll()
+
+	for _, reservation := range reservations {
+		if reservation.Username == user.Username {
+			return false, nil
+		}
+	}
+
+	return true, nil
+}
+
+func (service *ReservationService) CheckReservationsForHost(user events.User) (bool, error) {
+	reservations, _ := service.GetAll()
+
+	for _, reservation := range reservations {
+		if reservation.HostUsername == user.Username {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }

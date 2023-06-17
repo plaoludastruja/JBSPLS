@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketDTO } from 'src/app/shared/model/DTO/ticketDTO';
 import { TicketService } from 'src/app/shared/services/ticket.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-tickets-info',
@@ -11,12 +12,25 @@ export class TicketsInfoComponent implements OnInit {
 
   tickets: TicketDTO[] = []
   displayedColumns: string[] = ['from', 'to', 'depart', 'return', 'price', 'count', 'total'];
+  email: string=""
+  isDurable: boolean = false;
 
-  constructor(public ticketService: TicketService) { }
+
+  constructor(public ticketService: TicketService, public userService: UserService) { }
 
   ngOnInit(): void {
     this.ticketService.getAll().subscribe( data => {
       this.tickets = data
+    })
+  }
+
+  onCheckBoxChange(event: any){
+    this.isDurable = event.checked
+  }
+
+  generateApiKey(){
+    this.userService.generateApiKey(this.email, this.isDurable).subscribe(res => {
+      alert("You have generated API KEY successfully")
     })
   }
 

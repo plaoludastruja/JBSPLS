@@ -15,6 +15,8 @@ import (
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service/service"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_service/startup/config"
 	accomodationPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
+	saga "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/messaging"
+	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/messaging/nats"
 )
 
 type Server struct {
@@ -27,10 +29,19 @@ func NewServer(config *config.Config) *Server {
 	}
 }
 
+const (
+	QueueGroup = "accomodation_service"
+)
+
 func (server *Server) Start() {
 	mongoClient := server.initMongoClient()
 	accomodationStore := repository.NewAccomodationRepo(mongoClient)
 	accomodationService := service.NewAccomodationService(accomodationStore)
+
+	commandSubscriber := server.initSubscriber(server.config.DeleteUserCommandSubject, QueueGroup)
+	replyPublisher := server.initPublisher(server.config.DeleteUserReplySubject)
+	server.initDeleteUserHandler(accomodationService, replyPublisher, commandSubscriber)
+
 	accomodationHandler := handler.NewAccomodationHandler(accomodationService)
 	server.startGrpcServer(accomodationHandler)
 }
@@ -66,5 +77,32 @@ func (server *Server) startGrpcServer(accomodationHandler *handler.AccomodationH
 	// fmt.Println("server running ")
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %s", err)
+	}
+}
+
+func (server *Server) initSubscriber(subject, queueGroup string) saga.Subscriber {
+	subscriber, err := nats.NewNATSSubscriber(
+		server.config.NatsHost, server.config.NatsPort,
+		server.config.NatsUser, server.config.NatsPass, subject, queueGroup)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return subscriber
+}
+
+func (server *Server) initPublisher(subject string) saga.Publisher {
+	publisher, err := nats.NewNATSPublisher(
+		server.config.NatsHost, server.config.NatsPort,
+		server.config.NatsUser, server.config.NatsPass, subject)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return publisher
+}
+
+func (server *Server) initDeleteUserHandler(service *service.AccomodationService, publisher saga.Publisher, subscriber saga.Subscriber) {
+	_, err := handler.NewDeleteUserCommandHandler(service, publisher, subscriber)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
