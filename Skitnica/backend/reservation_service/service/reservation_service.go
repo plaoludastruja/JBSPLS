@@ -1,12 +1,17 @@
 package service
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"time"
 
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	events "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/create_order"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type ReservationService struct {
@@ -63,10 +68,13 @@ func (service *ReservationService) GetCanceledForUser(username string) (int32, e
 func (service *ReservationService) ApproveReservation(reservationDto domain.ReservationDto) {
 	service.store.ApproveReservation(&reservationDto)
 	service.store.RejectOverlapsed(&reservationDto)
+	service.sendNotification(reservationDto, "prihvaćena. ")
 }
 
 func (service *ReservationService) RejectReservation(reservationDto domain.ReservationDto) {
 	service.store.RejectReservation(&reservationDto)
+
+	service.sendNotification(reservationDto, "odbijena. ")
 }
 
 func (service *ReservationService) GetForGuest(username string) []string {
@@ -142,4 +150,26 @@ func (service *ReservationService) CheckReservationsForHost(user events.User) (b
 	}
 
 	return true, nil
+}
+
+func (service *ReservationService) sendNotification(reservationDto domain.ReservationDto, reservationStatus string) {
+	// ako se ocjeni host, salje se notifikacija na notifiaction_service
+	notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+	conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+	notificationPb := notificationProto.Notification{
+		Id:       primitive.NewObjectID().Hex(),
+		Receiver: reservationDto.Username,
+		Sender:   reservationDto.AccomodationId,
+		Subject:  "RESERVATION_RESPONSE",
+		Message:  " Vaša rezervacija za datum " + reservationDto.StartDate.Format("01.02.2006.") + " - " + reservationDto.EndDate.Format("01.02.2006.") + " je " + reservationStatus,
+		IsRead:   "false",
+	}
+
+	notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+	fmt.Println(notification.Notification)
 }

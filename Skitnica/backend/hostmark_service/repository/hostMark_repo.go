@@ -3,11 +3,16 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
+	"strconv"
 
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/hostmark_service/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -41,6 +46,27 @@ func (store *HostMarkRepo) Insert(user *domain.HostMark) error {
 	if err != nil {
 		return err
 	}
+	// ako se ocjeni host, salje se notifikacija na notifiaction_service
+	if err == nil {
+		notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+		conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+		notificationPb := notificationProto.Notification{
+			Id:       primitive.NewObjectID().Hex(),
+			Receiver: user.HostUsername,
+			Sender:   user.Username,
+			Subject:  "GRADE_HOST",
+			Message:  user.Username + " je ocjenio " + user.HostUsername + " sa ocjenom " + strconv.Itoa(int(user.Grade)),
+			IsRead:   "false",
+		}
+
+		notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+		fmt.Println(notification.Notification)
+	}
 	user.Id = result.InsertedID.(primitive.ObjectID)
 	return nil
 }
@@ -51,7 +77,7 @@ func (store *HostMarkRepo) Edit(hostMark *domain.HostMark) error {
 		"username":     hostMark.Username,
 		"grade":        hostMark.Grade,
 		"hostUsername": hostMark.HostUsername,
-		"dateTime"	: hostMark.DateTime,
+		"dateTime":     hostMark.DateTime,
 	}}
 	_, err := store.hostMarks.UpdateOne(context.TODO(), filter, update)
 
