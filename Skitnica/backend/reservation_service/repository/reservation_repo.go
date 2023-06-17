@@ -47,6 +47,27 @@ func (store *ReservationRepo) Insert(reservation *domain.Reservation) error {
 	if err != nil {
 		return err
 	}
+	// ako se zakaze rezevacija, salje se notifikacija na notifiaction_service
+	if err == nil {
+		notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+		conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+		notificationPb := notificationProto.Notification{
+			Id:       primitive.NewObjectID().Hex(),
+			Receiver: reservation.HostUsername,
+			Sender:   reservation.Username,
+			Subject:  "CREATE_RESERVATION",
+			Message:  reservation.Username + " je zakazao rezevaciju kod " + reservation.HostUsername,
+			IsRead:   "false",
+		}
+
+		notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+		fmt.Println(notification.Notification)
+	}
 	reservation.Id = result.InsertedID.(primitive.ObjectID)
 	return nil
 }

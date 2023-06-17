@@ -3,11 +3,17 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/domain"
+	accomodationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -40,6 +46,36 @@ func (store *AccomodationRatingRepo) Insert(accomodationRating *domain.Accomodat
 	result, err := store.accomodationRatings.InsertOne(context.TODO(), accomodationRating)
 	if err != nil {
 		return err
+	}
+	// ako se ocjeni hostov smjestaj, salje se notifikacija na notifiaction_service
+	if err == nil {
+		notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+		conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+		accomodationEndpoint := fmt.Sprintf("%s:%s", "accomodation_service", "8000")
+		conn2, err2 := grpc.Dial(accomodationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err2 != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		accomodationClient := accomodationProto.NewAccomodationServiceClient(conn2)
+
+		accomodation, err2 := accomodationClient.Get(context.TODO(), &accomodationProto.GetRequest{Id: accomodationRating.AccomodationId})
+
+		notificationPb := notificationProto.Notification{
+			Id:       primitive.NewObjectID().Hex(),
+			Receiver: accomodation.Accomodation.HostUsername,
+			Sender:   "SYSTEM",
+			Subject:  "GRADE_ACCOMODATION",
+			Message:  "Vaš smještaj je ocjenjen  " + " sa ocjenom " + strconv.Itoa(int(accomodationRating.Rating)),
+			IsRead:   "false",
+		}
+
+		notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+		fmt.Println(notification.Notification)
 	}
 	accomodationRating.Id = result.InsertedID.(primitive.ObjectID)
 	return nil
