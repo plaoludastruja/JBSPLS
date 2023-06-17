@@ -13,16 +13,18 @@ services:
       dockerfile: ./LetiSleti/LSbackend/Dockerfile
     restart: on-failure
     ports:
-      - "8082:8082"
+      - "8082:8080"
     volumes:
       - "./LetiSleti/LSbackend:/app"
+    environment:
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
     depends_on:
       - "db_host"
     networks:
       - network
       - monitoring
     logging: *fluent-bit
-      
+
   user_service:
     image: user_service
     container_name: user_service
@@ -34,6 +36,7 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
     depends_on:
       - db_host
     networks:
@@ -152,7 +155,7 @@ services:
       - network
       - monitoring
     logging: *fluent-bit
-      
+
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -201,16 +204,16 @@ services:
     networks:
       - network
       - monitoring
-  
-  
 
 networks:
+  lsbackend:
+    name: lsbackend
+  user_service:
+    name: user_service
   network:
     driver: bridge
   monitoring:
     external: true
-
-
 
   # accomodation_db:
   #   image: mongo

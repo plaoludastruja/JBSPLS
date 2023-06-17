@@ -75,7 +75,6 @@ services:
     networks:
       - monitoring
 
-
 volumes:
   grafana:
     name: grafana

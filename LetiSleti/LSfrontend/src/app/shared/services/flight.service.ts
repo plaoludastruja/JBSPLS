@@ -1,6 +1,3 @@
-import { IFlight } from 'src/app/shared/model/Flight';
-import { DeleteDto } from './../model/DTO/deleteDTO';
-import { SearchDto } from './../model/DTO/searchDTO';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
