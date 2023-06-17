@@ -188,6 +188,8 @@ services:
       - ${DB_PORT}:${DB_PORT}
 
   nats:
+    volumes:
+      - ./nats-server.conf:/nats-server.conf
     image: nats
     container_name: nats
     expose:
@@ -197,6 +199,15 @@ services:
     restart: on-failure
     networks:
       - network
+
+  # skitnica_frontend:
+  # skitnica_frontend:
+  #   image: skitnica_frontend
+  #   container_name: skitnica_frontend
+  #   build: ./Skitnica/frontend/
+  #   restart: on-failure
+  #   ports:
+  #     - 3000:3000
 
 networks:
   network:

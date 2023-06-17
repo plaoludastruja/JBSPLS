@@ -3,13 +3,17 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/reservation_service/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -63,6 +67,27 @@ func (store *ReservationRepo) Edit(reservation *domain.Reservation) error {
 		}}
 		_, err := store.reservations.UpdateOne(context.TODO(), filter, update)
 
+		// ako se otkaze rezevacija, salje se notifikacija na notifiaction_service
+		if err == nil {
+			notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+			conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+			if err != nil {
+				log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+			}
+			notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+			notificationPb := notificationProto.Notification{
+				Id:       primitive.NewObjectID().Hex(),
+				Receiver: reservation.HostUsername,
+				Sender:   reservation.Username,
+				Subject:  "CANCEL_RESERVATION",
+				Message:  reservation.Username + " je otkazao rezevaciju kod " + reservation.HostUsername,
+				IsRead:   "false",
+			}
+
+			notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+			fmt.Println(notification.Notification)
+		}
 		return err
 	}
 	return nil

@@ -11,6 +11,10 @@ const registerUser = (user: User) => baseAxios.post('/user', user)
 const loginUser = (loginDTO: LoginDTO) => baseAxios.post('user/login', loginDTO)
 const deleteUser = (userId: string) => baseAxios.delete('/user/' + userId)
 
+const getAllUnread = (username: string) => baseAxios.get('/notificatin/getAllUnread/' + username)
+const getAllByReceiver = (username: string) => baseAxios.get('/notification/getByReceiver/' + username)
+const readAllByUsername = (username: string) => baseAxios.put('/notification/readAllByUsername/' + username)
+
 const isBestHost = (hostUsername: string) => baseAxios.get('/isBestHost/' + hostUsername)
 const getHosts = () => baseAxios.get<UsersResponse>('/user/hosts')
 
@@ -21,5 +25,8 @@ export default {
     editUser,
     deleteUser,
     isBestHost,
-    getHosts
+    getHosts,
+    getAllUnread,
+    getAllByReceiver,
+    readAllByUsername
 }
