@@ -44,6 +44,11 @@ service AccomodationRatingService {
                 get: "/accomodation-rating/{accomodationId}/{email}"
             };
         }
+        rpc GetAllRecommended(GetAllRecommendedRequest) returns(GetAllRecommendedResponse) {
+            option (google.api.http) = {
+                get: "/accomodation-rating/recommended/{email}"
+            };
+        }
 }
 
 message GetRequest {
@@ -91,6 +96,14 @@ message EditAccomodationRatingRequest {
 
 message EditAccomodationRatingResponse {
         AccomodationRating accomodationRating = 1;
+}
+
+message GetAllRecommendedRequest {
+    string email = 1;
+}
+
+message GetAllRecommendedResponse {
+    repeated string accommodations = 1;
 }
 
 message AccomodationRating {

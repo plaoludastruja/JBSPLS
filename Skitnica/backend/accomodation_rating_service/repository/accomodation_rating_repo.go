@@ -159,3 +159,71 @@ func decode(cursor *mongo.Cursor) (accomodationRatings []*domain.AccomodationRat
 	err = cursor.Err()
 	return
 }
+
+func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, error) {
+	query := `MATCH (r:AccomodationRating) 
+	WHERE r.email = $email
+	RETURN r.id as id, r.email as email, r.accomodationId as accomodationId, r.rating as rating, r.date as date`
+	fmt.Println("2")
+	fmt.Println("3")
+	result1, err1 := store.neo4jSession.Run(query, map[string]any{"email": email})
+	if err1 != nil {
+		fmt.Println("4b")
+		panic(err1)
+	}
+
+	var ratings []*domain.AccomodationRating
+	for result1.Next() {
+		record := result1.Record()
+		id, _ := record.Get("id")
+		email, _ := record.Get("email")
+		accomodationId, _ := record.Get("accomodationId")
+		rating, _ := record.Get("rating")
+		date, _ := record.Get("date")
+		ratings = append(ratings, &domain.AccomodationRating{
+			Id:             id.(primitive.ObjectID),
+			Email:          email.(string),
+			AccomodationId: accomodationId.(string),
+			Rating:         rating.(int32),
+			Date:           date.(string),
+		})
+	}
+	var ratings3 []*domain.AccomodationRating
+	for _, rat := range ratings {
+		query1 := `MATCH (r:AccomodationRating) 
+		WHERE r.accomodationId = $accomodationId AND r.rating BETWEEN $n AND $m
+		RETURN r.id as id, r.email as email, r.accomodationId as accomodationId, r.rating as rating, r.date as date`
+		result2, err2 := store.neo4jSession.Run(query1, map[string]any{"accomodationId": rat.AccomodationId, "n": rat.Rating - 1, "m": rat.Rating + 1})
+		if err2 != nil {
+			panic(err2)
+		}
+
+		var ratings2 []*domain.AccomodationRating
+		for result2.Next() {
+			record := result2.Record()
+			id, _ := record.Get("id")
+			email, _ := record.Get("email")
+			accomodationId, _ := record.Get("accomodationId")
+			rating, _ := record.Get("rating")
+			date, _ := record.Get("date")
+			ratings2 = append(ratings2, &domain.AccomodationRating{
+				Id:             id.(primitive.ObjectID),
+				Email:          email.(string),
+				AccomodationId: accomodationId.(string),
+				Rating:         rating.(int32),
+				Date:           date.(string),
+			})
+		}
+		ratings3 = append(ratings3, ratings2...)
+
+	}
+	var accomodations []string
+	for _, rat := range ratings3 {
+		if rat.Rating == 4 || rat.Rating == 5 {
+			accomodations = append(accomodations, rat.AccomodationId)
+		}
+
+	}
+
+	return accomodations, nil
+}

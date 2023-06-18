@@ -63,8 +63,8 @@ func (server *Server) startGrpcServer(accomodationRatingHandler *handler.Accomod
 }
 
 func (server *Server) initNeo() neo4j.Session {
-	uri := "neo4j+s://59ab3a7b.databases.neo4j.io"
-	auth := neo4j.BasicAuth("neo4j", "SyxR9cQpsGOfa2u5-Ol-Ygrw04UC3pQ-X9Js93EKqeI", "")
+	uri := "neo4j+s://8fe831a7.databases.neo4j.io"
+	auth := neo4j.BasicAuth("neo4j", "S_wvIcfiFAiCWu1Zqa9Bp8ShNW8OAqMQ7jvMF4m4HjE", "")
 	driver, err := neo4j.NewDriver(uri, auth)
 	if err != nil {
 		panic(err)

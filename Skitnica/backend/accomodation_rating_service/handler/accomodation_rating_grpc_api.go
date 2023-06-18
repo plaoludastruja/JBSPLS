@@ -153,3 +153,12 @@ func (handler *AccomodationRatingHandler) GetByAccomodationAndUser(ctx context.C
 
 	return response, nil
 }
+
+func (handler *AccomodationRatingHandler) GetAllRecommended(ctx context.Context, request *pb.GetAllRecommendedRequest) (*pb.GetAllRecommendedResponse, error) {
+	fmt.Println(request.Email)
+	result, _ := handler.service.GetRecommended(request.Email)
+	response := &pb.GetAllRecommendedResponse{
+		Accommodations: result,
+	}
+	return response, nil
+}
