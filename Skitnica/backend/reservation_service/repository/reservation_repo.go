@@ -60,7 +60,7 @@ func (store *ReservationRepo) Insert(reservation *domain.Reservation) error {
 			Id:       primitive.NewObjectID().Hex(),
 			Receiver: reservation.HostUsername,
 			Sender:   reservation.Username,
-			Subject:  "CREATE_RESERVATION",
+			Subject:  "reservation",
 			Message:  reservation.Username + " je zakazao rezevaciju kod " + reservation.HostUsername,
 			IsRead:   "false",
 		}
@@ -101,7 +101,7 @@ func (store *ReservationRepo) Edit(reservation *domain.Reservation) error {
 				Id:       primitive.NewObjectID().Hex(),
 				Receiver: reservation.HostUsername,
 				Sender:   reservation.Username,
-				Subject:  "CANCEL_RESERVATION",
+				Subject:  "reservation",
 				Message:  reservation.Username + " je otkazao rezevaciju kod " + reservation.HostUsername,
 				IsRead:   "false",
 			}

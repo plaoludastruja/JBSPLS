@@ -19,14 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	NotificationService_Get_FullMethodName                = "/notification.NotificationService/Get"
-	NotificationService_GetAll_FullMethodName             = "/notification.NotificationService/GetAll"
-	NotificationService_GetByReceiver_FullMethodName      = "/notification.NotificationService/GetByReceiver"
-	NotificationService_GetBySender_FullMethodName        = "/notification.NotificationService/GetBySender"
-	NotificationService_CreateNotification_FullMethodName = "/notification.NotificationService/CreateNotification"
-	NotificationService_EditNotification_FullMethodName   = "/notification.NotificationService/EditNotification"
-	NotificationService_DeleteNotification_FullMethodName = "/notification.NotificationService/DeleteNotification"
-	NotificationService_ReadAllByUsername_FullMethodName  = "/notification.NotificationService/readAllByUsername"
+	NotificationService_Get_FullMethodName                             = "/notification.NotificationService/Get"
+	NotificationService_GetAll_FullMethodName                          = "/notification.NotificationService/GetAll"
+	NotificationService_GetByReceiver_FullMethodName                   = "/notification.NotificationService/GetByReceiver"
+	NotificationService_GetBySender_FullMethodName                     = "/notification.NotificationService/GetBySender"
+	NotificationService_CreateNotification_FullMethodName              = "/notification.NotificationService/CreateNotification"
+	NotificationService_EditNotification_FullMethodName                = "/notification.NotificationService/EditNotification"
+	NotificationService_DeleteNotification_FullMethodName              = "/notification.NotificationService/DeleteNotification"
+	NotificationService_ReadAllByUsername_FullMethodName               = "/notification.NotificationService/readAllByUsername"
+	NotificationService_GetNotificationFilterByUsername_FullMethodName = "/notification.NotificationService/GetNotificationFilterByUsername"
+	NotificationService_EditNotificationFilter_FullMethodName          = "/notification.NotificationService/EditNotificationFilter"
+	NotificationService_CreateNotificationFilter_FullMethodName        = "/notification.NotificationService/CreateNotificationFilter"
 )
 
 // NotificationServiceClient is the client API for NotificationService service.
@@ -41,6 +44,9 @@ type NotificationServiceClient interface {
 	EditNotification(ctx context.Context, in *EditNotificationRequest, opts ...grpc.CallOption) (*EditNotificationResponse, error)
 	DeleteNotification(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 	ReadAllByUsername(ctx context.Context, in *ReadAllByUsernameRequest, opts ...grpc.CallOption) (*ReadAllByUsernameResponse, error)
+	GetNotificationFilterByUsername(ctx context.Context, in *ReadAllByUsernameRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error)
+	EditNotificationFilter(ctx context.Context, in *NotificationFilterRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error)
+	CreateNotificationFilter(ctx context.Context, in *NotificationFilterRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error)
 }
 
 type notificationServiceClient struct {
@@ -123,6 +129,33 @@ func (c *notificationServiceClient) ReadAllByUsername(ctx context.Context, in *R
 	return out, nil
 }
 
+func (c *notificationServiceClient) GetNotificationFilterByUsername(ctx context.Context, in *ReadAllByUsernameRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error) {
+	out := new(NotificationFilterResponse)
+	err := c.cc.Invoke(ctx, NotificationService_GetNotificationFilterByUsername_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationServiceClient) EditNotificationFilter(ctx context.Context, in *NotificationFilterRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error) {
+	out := new(NotificationFilterResponse)
+	err := c.cc.Invoke(ctx, NotificationService_EditNotificationFilter_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *notificationServiceClient) CreateNotificationFilter(ctx context.Context, in *NotificationFilterRequest, opts ...grpc.CallOption) (*NotificationFilterResponse, error) {
+	out := new(NotificationFilterResponse)
+	err := c.cc.Invoke(ctx, NotificationService_CreateNotificationFilter_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NotificationServiceServer is the server API for NotificationService service.
 // All implementations must embed UnimplementedNotificationServiceServer
 // for forward compatibility
@@ -135,6 +168,9 @@ type NotificationServiceServer interface {
 	EditNotification(context.Context, *EditNotificationRequest) (*EditNotificationResponse, error)
 	DeleteNotification(context.Context, *DeleteRequest) (*DeleteResponse, error)
 	ReadAllByUsername(context.Context, *ReadAllByUsernameRequest) (*ReadAllByUsernameResponse, error)
+	GetNotificationFilterByUsername(context.Context, *ReadAllByUsernameRequest) (*NotificationFilterResponse, error)
+	EditNotificationFilter(context.Context, *NotificationFilterRequest) (*NotificationFilterResponse, error)
+	CreateNotificationFilter(context.Context, *NotificationFilterRequest) (*NotificationFilterResponse, error)
 	mustEmbedUnimplementedNotificationServiceServer()
 }
 
@@ -165,6 +201,15 @@ func (UnimplementedNotificationServiceServer) DeleteNotification(context.Context
 }
 func (UnimplementedNotificationServiceServer) ReadAllByUsername(context.Context, *ReadAllByUsernameRequest) (*ReadAllByUsernameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReadAllByUsername not implemented")
+}
+func (UnimplementedNotificationServiceServer) GetNotificationFilterByUsername(context.Context, *ReadAllByUsernameRequest) (*NotificationFilterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNotificationFilterByUsername not implemented")
+}
+func (UnimplementedNotificationServiceServer) EditNotificationFilter(context.Context, *NotificationFilterRequest) (*NotificationFilterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditNotificationFilter not implemented")
+}
+func (UnimplementedNotificationServiceServer) CreateNotificationFilter(context.Context, *NotificationFilterRequest) (*NotificationFilterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateNotificationFilter not implemented")
 }
 func (UnimplementedNotificationServiceServer) mustEmbedUnimplementedNotificationServiceServer() {}
 
@@ -323,6 +368,60 @@ func _NotificationService_ReadAllByUsername_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NotificationService_GetNotificationFilterByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadAllByUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).GetNotificationFilterByUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_GetNotificationFilterByUsername_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).GetNotificationFilterByUsername(ctx, req.(*ReadAllByUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NotificationService_EditNotificationFilter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NotificationFilterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).EditNotificationFilter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_EditNotificationFilter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).EditNotificationFilter(ctx, req.(*NotificationFilterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NotificationService_CreateNotificationFilter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NotificationFilterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationServiceServer).CreateNotificationFilter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationService_CreateNotificationFilter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationServiceServer).CreateNotificationFilter(ctx, req.(*NotificationFilterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NotificationService_ServiceDesc is the grpc.ServiceDesc for NotificationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -361,6 +460,18 @@ var NotificationService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "readAllByUsername",
 			Handler:    _NotificationService_ReadAllByUsername_Handler,
+		},
+		{
+			MethodName: "GetNotificationFilterByUsername",
+			Handler:    _NotificationService_GetNotificationFilterByUsername_Handler,
+		},
+		{
+			MethodName: "EditNotificationFilter",
+			Handler:    _NotificationService_EditNotificationFilter_Handler,
+		},
+		{
+			MethodName: "CreateNotificationFilter",
+			Handler:    _NotificationService_CreateNotificationFilter_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

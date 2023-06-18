@@ -13,4 +13,7 @@ type INotificationRepo interface {
 	Edit(usenotificationr *Notification) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	InsertNotificationFilters(notificationFilter *NotificationFilter) error
+	EditNotificationFilter(notificationFilter *NotificationFilter) error
+	GetNotificationFilterByUsername(username string) (*NotificationFilter, error)
 }

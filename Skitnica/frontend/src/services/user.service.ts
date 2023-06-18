@@ -1,4 +1,5 @@
 import LoginDTO from "../model/LoginDTO";
+import NotificationFilter from "../model/NotificationFilter";
 import User from "../model/User";
 import UsersResponse from "../model/UsersResponse";
 import USersResponse from "../model/UsersResponse";
@@ -17,6 +18,8 @@ const readAllByUsername = (username: string) => baseAxios.put('/notification/rea
 
 const isBestHost = (hostUsername: string) => baseAxios.get('/isBestHost/' + hostUsername)
 const getHosts = () => baseAxios.get<UsersResponse>('/user/hosts')
+const editNotificationFilter = (notificatinFilter: NotificationFilter) => baseAxios.put('/notificationFilter', notificatinFilter)
+const getNotificationFilter = (username: string) => baseAxios.get('/notificationFilter/getNotificationFilterByUsername/' + username)
 
 export default {
     registerUser,
@@ -28,5 +31,7 @@ export default {
     getHosts,
     getAllUnread,
     getAllByReceiver,
-    readAllByUsername
+    readAllByUsername,
+    editNotificationFilter,
+    getNotificationFilter
 }

@@ -96,7 +96,7 @@ func (store *AccomodationRatingRepo) Insert(accomodationRating *domain.Accomodat
 			Id:       primitive.NewObjectID().Hex(),
 			Receiver: accomodation.Accomodation.HostUsername,
 			Sender:   "SYSTEM",
-			Subject:  "GRADE_ACCOMODATION",
+			Subject:  "rating",
 			Message:  "Vaš smještaj je ocjenjen  " + " sa ocjenom " + strconv.Itoa(int(accomodationRating.Rating)),
 			IsRead:   "false",
 		}
