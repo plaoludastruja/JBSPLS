@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	reservationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
 	events "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/create_order"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/domain"
@@ -45,6 +46,7 @@ func (service *UserService) Insert(user domain.User) error {
 	if err == nil {
 		return err
 	}
+	service.makeNotificationFilter(user.Username)
 	return service.store.Insert(&user)
 }
 
@@ -162,4 +164,25 @@ func (service *UserService) GetHosts() ([]*domain.User, error) {
 
 func (service *UserService) DelUser(user events.User) error {
 	return service.store.Delete(user.Id)
+}
+
+func (service *UserService) makeNotificationFilter(username string) {
+	// ako se ocjeni host, salje se notifikacija na notifiaction_service
+	notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+	conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+	notificationPb := notificationProto.NotificationFilter{
+		Id:          primitive.NewObjectID().Hex(),
+		Username:    username,
+		Reservation: true,
+		Rating:      true,
+		Super:       true,
+	}
+
+	notification, err := notificationClient.CreateNotificationFilter(context.TODO(), &notificationProto.NotificationFilterRequest{NotificationFilter: &notificationPb})
+	fmt.Println(notification.NotificationFilter)
 }

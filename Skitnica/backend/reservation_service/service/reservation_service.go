@@ -165,7 +165,7 @@ func (service *ReservationService) sendNotification(reservationDto domain.Reserv
 		Id:       primitive.NewObjectID().Hex(),
 		Receiver: reservationDto.Username,
 		Sender:   reservationDto.AccomodationId,
-		Subject:  "RESERVATION_RESPONSE",
+		Subject:  "reservation",
 		Message:  " Vaša rezervacija za datum " + reservationDto.StartDate.Format("01.02.2006.") + " - " + reservationDto.EndDate.Format("01.02.2006.") + " je " + reservationStatus,
 		IsRead:   "false",
 	}

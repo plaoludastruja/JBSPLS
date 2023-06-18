@@ -30,3 +30,26 @@ func mapNotificationPb(notificationPb *pb.Notification) *domain.Notification {
 	}
 	return notification
 }
+
+func mapNotificationFilter(notification *domain.NotificationFilter) *pb.NotificationFilter {
+	notificationPb := &pb.NotificationFilter{
+		Id:          notification.Id.Hex(),
+		Username:    notification.Username,
+		Reservation: notification.Reservation,
+		Rating:      notification.Rating,
+		Super:       notification.Super,
+	}
+	return notificationPb
+}
+
+func mapNotificationFilterPb(notificationPb *pb.NotificationFilter) *domain.NotificationFilter {
+	notificationPbId, _ := primitive.ObjectIDFromHex(notificationPb.Id)
+	notification := &domain.NotificationFilter{
+		Id:          notificationPbId,
+		Username:    notificationPb.Username,
+		Reservation: notificationPb.Reservation,
+		Rating:      notificationPb.Rating,
+		Super:       notificationPb.Super,
+	}
+	return notification
+}

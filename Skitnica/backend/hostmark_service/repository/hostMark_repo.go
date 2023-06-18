@@ -59,7 +59,7 @@ func (store *HostMarkRepo) Insert(user *domain.HostMark) error {
 			Id:       primitive.NewObjectID().Hex(),
 			Receiver: user.HostUsername,
 			Sender:   user.Username,
-			Subject:  "GRADE_HOST",
+			Subject:  "rating",
 			Message:  user.Username + " je ocjenio " + user.HostUsername + " sa ocjenom " + strconv.Itoa(int(user.Grade)),
 			IsRead:   "false",
 		}
