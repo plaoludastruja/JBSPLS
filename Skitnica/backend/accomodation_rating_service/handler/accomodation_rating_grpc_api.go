@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"fmt"
+	"log"
 
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/service"
@@ -25,13 +25,16 @@ func NewAccomodationRatingHandler(service *service.AccomodationRatingService) *A
 }
 
 func (handler *AccomodationRatingHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
+	log.Println("Get accomodation..")
 	id := request.Id
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	accomodationRating, err := handler.service.Get(objectId)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	accomodationRatingPb := mapAccomodationRating(accomodationRating)
@@ -42,8 +45,10 @@ func (handler *AccomodationRatingHandler) Get(ctx context.Context, request *pb.G
 }
 
 func (handler *AccomodationRatingHandler) GetAll(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
+	log.Println("Get all accomodation..")
 	accomodationRatings, err := handler.service.GetAll()
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.GetAllResponse{
@@ -57,7 +62,7 @@ func (handler *AccomodationRatingHandler) GetAll(ctx context.Context, request *p
 }
 
 func (handler *AccomodationRatingHandler) GetAllByAccomodationId(ctx context.Context, request *pb.GetAllByAccomodationIdRequest) (*pb.GetAllResponse, error) {
-	fmt.Println(request.AccomodationId)
+	log.Println(request.AccomodationId)
 	accomodationId := request.AccomodationId
 	allAccomodationRatings, err := handler.service.GetAll()
 	accomodationRatings := make([]*domain.AccomodationRating, 0)
@@ -68,6 +73,7 @@ func (handler *AccomodationRatingHandler) GetAllByAccomodationId(ctx context.Con
 
 	}
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.GetAllResponse{
@@ -88,17 +94,18 @@ func (handler *AccomodationRatingHandler) CreateAccomodationRating(ctx context.C
 
 	// Get the value of a specific header
 	myHeaderValues := md.Get("Authorization")
-	fmt.Println(len(myHeaderValues), "-------------------------------------")
+	log.Println(len(myHeaderValues), "-------------------------------------")
 	if len(myHeaderValues) == 0 {
 		return nil, status.Error(codes.InvalidArgument, "my-header is required")
 	}
-	fmt.Println(myHeaderValues, "-------------------------------------")
+	log.Println(myHeaderValues, "-------------------------------------")
 	myHeaderValue := myHeaderValues[0]
 
-	fmt.Println(myHeaderValue, "-------------------------------------")
+	log.Println(myHeaderValue, "-------------------------------------")
 	accomodationRating := mapAccomodationRatingPb(request.AccomodationRating)
 	err := handler.service.Insert(*accomodationRating)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &pb.CreateAccomodationRatingResponse{
@@ -110,6 +117,7 @@ func (handler *AccomodationRatingHandler) EditAccomodationRating(ctx context.Con
 	accomodationRating := mapAccomodationRatingPb(request.AccomodationRating)
 	err := handler.service.Edit(*accomodationRating)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &pb.EditAccomodationRatingResponse{
@@ -120,10 +128,12 @@ func (handler *AccomodationRatingHandler) EditAccomodationRating(ctx context.Con
 func (handler *AccomodationRatingHandler) DeleteAccomodationRating(ctx context.Context, request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
 	objectId, err := primitive.ObjectIDFromHex(request.Id)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	errr := handler.service.Delete(objectId)
 	if errr != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &pb.DeleteResponse{}, nil
@@ -141,6 +151,7 @@ func (handler *AccomodationRatingHandler) GetByAccomodationAndUser(ctx context.C
 
 	}
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.GetAllResponse{
@@ -155,7 +166,7 @@ func (handler *AccomodationRatingHandler) GetByAccomodationAndUser(ctx context.C
 }
 
 func (handler *AccomodationRatingHandler) GetAllRecommended(ctx context.Context, request *pb.GetAllRecommendedRequest) (*pb.GetAllRecommendedResponse, error) {
-	fmt.Println(request.Email)
+	log.Println(request.Email)
 	result, _ := handler.service.GetRecommended(request.Email)
 	response := &pb.GetAllRecommendedResponse{
 		Accommodations: result,
