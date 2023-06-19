@@ -25,6 +25,13 @@ function RecommendedAccomodations() {
       .then((response) => {
         console.log("idovi")
         console.log(response.data.accommodations)
+        response.data.accommodations.forEach((i) => {
+          accomodationService.getAccomodation(i).then((response) => {
+            var array = accomodations;
+            array.push(response.data.accomodation);    
+            setAccomodations(array)
+          });
+        })
         setAccomodationsIds(response.data.accommodations);
       });
   }, []);

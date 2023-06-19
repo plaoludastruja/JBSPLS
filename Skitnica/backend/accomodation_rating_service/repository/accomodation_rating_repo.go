@@ -188,6 +188,10 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 			Date:           date.(string),
 		})
 	}
+	fmt.Println("ratings")
+	fmt.Println(ratings)
+	fmt.Println("result1")
+	//fmt.Println(result1.Record().Values...)
 	var ratings3 []*domain.AccomodationRating
 	for _, rat := range ratings {
 		query1 := `MATCH (r:AccomodationRating) 
@@ -214,9 +218,13 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 				Date:           date.(string),
 			})
 		}
+		fmt.Println("ratings2")
+		fmt.Println(ratings2)
 		ratings3 = append(ratings3, ratings2...)
 
 	}
+	fmt.Println("ratings3")
+	fmt.Println(ratings3)
 	var accomodations []string
 	for _, rat := range ratings3 {
 		if rat.Rating == 4 || rat.Rating == 5 {
@@ -224,6 +232,7 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 		}
 
 	}
-
+	fmt.Println("accomodations")
+	fmt.Println(accomodations)
 	return accomodations, nil
 }
