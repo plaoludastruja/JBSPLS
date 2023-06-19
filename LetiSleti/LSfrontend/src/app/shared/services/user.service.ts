@@ -12,7 +12,7 @@ import { User } from '../model/user';
 })
 export class UserService {
 
-    apiHost: string = 'http://localhost:8080/';
+    apiHost: string = 'http://localhost:8082/';
     headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     jwtHelper: any;
 

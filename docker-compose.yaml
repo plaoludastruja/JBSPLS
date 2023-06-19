@@ -1,4 +1,9 @@
 version: "3.3"
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
   lsbackend:
     image: lsbackend
@@ -8,14 +13,18 @@ services:
       dockerfile: ./LetiSleti/LSbackend/Dockerfile
     restart: on-failure
     ports:
-      - "8080:8080"
+      - "8082:8080"
     volumes:
       - "./LetiSleti/LSbackend:/app"
+    environment:
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
     depends_on:
       - "db_host"
     networks:
       - network
-      
+      - monitoring
+    logging: *fluent-bit
+
   user_service:
     image: user_service
     container_name: user_service
@@ -27,6 +36,7 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
+      JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
       NATS_HOST: ${NATS_HOST}
       NATS_PORT: ${NATS_PORT}
       NATS_USER: ${NATS_USER}
@@ -37,6 +47,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   accomodation_service:
     image: accomodation_service
@@ -59,6 +71,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   accomodation_rating_service:
     image: accomodation_rating_service
@@ -75,6 +89,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   appointment_service:
     image: appointment_service
@@ -91,6 +107,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   reservation_service:
     image: reservation_service
@@ -113,6 +131,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   hostmark_service:
     image: hostmark_service
@@ -129,6 +149,8 @@ services:
       - db_host
     networks:
       - network
+      - monitoring
+    logging: *fluent-bit
 
   notification_service:
     image: notification_service
@@ -149,7 +171,9 @@ services:
       - db_host
     networks:
       - network
-      
+      - monitoring
+    logging: *fluent-bit
+
   api_gateway:
     image: api_gateway
     container_name: api_gateway
@@ -199,6 +223,7 @@ services:
     restart: on-failure
     networks:
       - network
+      - monitoring
 
   # skitnica_frontend:
   # skitnica_frontend:
@@ -210,10 +235,14 @@ services:
   #     - 3000:3000
 
 networks:
+  lsbackend:
+    name: lsbackend
+  user_service:
+    name: user_service
   network:
     driver: bridge
-
-
+  monitoring:
+    external: true
 
   # accomodation_db:
   #   image: mongo

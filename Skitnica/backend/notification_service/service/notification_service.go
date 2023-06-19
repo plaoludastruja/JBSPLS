@@ -23,7 +23,21 @@ func (service *NotificationService) Get(id primitive.ObjectID) (*domain.Notifica
 }
 
 func (service *NotificationService) GetByReceiver(username string) ([]*domain.Notification, error) {
-	return service.store.GetByReceiver(username)
+	notificationFilter, _ := service.GetNotificationFilterByUsername(username)
+	notifications, err := service.store.GetByReceiver(username)
+	if err != nil {
+		return notifications, err
+	}
+	var mySlice []*domain.Notification
+	for _, notification := range notifications {
+
+		if (notification.Subject == "reservation" && notificationFilter.Reservation) || (notification.Subject == "rating" && notificationFilter.Rating) || (notification.Subject == "super" && notificationFilter.Super) {
+			mySlice = append(mySlice, notification)
+		}
+
+	}
+
+	return mySlice, err
 }
 
 func (service *NotificationService) GetBySender(username string) ([]*domain.Notification, error) {
@@ -50,4 +64,16 @@ func (service *NotificationService) ReadAllByUsername(username string) error {
 		}
 	}
 	return nil
+}
+
+func (service *NotificationService) InsertNotificationFilters(notificationFilter domain.NotificationFilter) error {
+	return service.store.InsertNotificationFilters(&notificationFilter)
+}
+
+func (service *NotificationService) EditNotificationFilter(notificationFilter domain.NotificationFilter) error {
+	return service.store.EditNotificationFilter(&notificationFilter)
+}
+
+func (service *NotificationService) GetNotificationFilterByUsername(username string) (*domain.NotificationFilter, error) {
+	return service.store.GetNotificationFilterByUsername(username)
 }

@@ -18,13 +18,36 @@ import {
   MDBModalTitle,
   MDBInput,
   MDBBadge,
+  MDBSwitch,
 } from "mdb-react-ui-kit";
 import User from "../../model/User";
 import userService from "../../services/user.service";
 import { removeToken } from "../../services/token.service";
 import { useNavigate } from "react-router-dom";
+import NotificationFilter from "../../model/NotificationFilter";
 
 export default function UserProfile() {
+  const navigate = useNavigate();
+  const [basicModal, setBasicModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [notificationModal, setNotificationModal] = useState(false);
+
+  const toggleShow = () => {
+    setBasicModal(!basicModal);
+    setUserEdit(user);
+  };
+
+  const toggleShowDelete = () => {
+    setDeleteModal(!deleteModal);
+  };
+
+  const toggleShowNotification = () => {
+    setNotificationModal(!notificationModal);
+    setNotificationFilter(notificationFilter)
+  };
+
+  const [isBestHost, setIsBestHost] = useState(false);
+
   const [user, setUser] = useState<User>({
     id: "",
     username: "",
@@ -47,31 +70,29 @@ export default function UserProfile() {
     apiKey: "",
   });
 
+
+
   useEffect(() => {
     userService.getUserByUsername().then((response) => {
       setUser(response.data.user);
       console.log(response.data.user);
-      userService.isBestHost(response.data.user.username).then((res) => {
-        if (res.data == "true") {
+      userService.isBestHost(response.data.user.username).then((res1) => {
+        if (res1.data == "true") {
           setIsBestHost(true);
         } else {
           setIsBestHost(false);
         }
       });
+      userService.getNotificationFilter(response.data.user.username).then((res2) => {
+        setNotificationFilter(res2.data.notificationFilter)
+        setIsChecked1(res2.data.notificationFilter.reservation)
+        setIsChecked2(res2.data.notificationFilter.rating)
+        setIsChecked3(res2.data.notificationFilter.super)
+      });
+
     });
   }, []);
 
-  const [basicModal, setBasicModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-
-  const toggleShow = () => {
-    setBasicModal(!basicModal);
-    setUserEdit(user);
-  };
-
-  const toggleShowDelete = () => {
-    setDeleteModal(!deleteModal);
-  };
 
   const editUser = () => {
     userService.editUser(userEdit).then(() => {
@@ -81,7 +102,7 @@ export default function UserProfile() {
       navigate("/login");
     });
   };
-  const navigate = useNavigate();
+
   const deleteUser = () => {
     userService.deleteUser(user.id).then(() => {
       removeToken();
@@ -89,7 +110,51 @@ export default function UserProfile() {
     });
   };
 
-  const [isBestHost, setIsBestHost] = useState(false);
+
+
+
+  const [notificationFilter, setNotificationFilter] = useState<NotificationFilter>(
+    {
+      id: "",
+      username: "",
+      reservation: true,
+      rating: true,
+      super: true
+
+    }
+  );
+
+  const [isChecked1, setIsChecked1] = useState(notificationFilter.reservation);
+  const handleSwitchChange1 = () => {
+    setIsChecked1(!isChecked1);
+  };
+  const [isChecked2, setIsChecked2] = useState(notificationFilter.rating);
+  const handleSwitchChange2 = () => {
+    setIsChecked2(!isChecked2);
+  };
+  const [isChecked3, setIsChecked3] = useState(notificationFilter.super);
+  const handleSwitchChange3 = () => {
+    setIsChecked3(!isChecked3);
+  };
+
+
+  const editNotification = () => {
+    const notificationFilterEdit : NotificationFilter = {
+      id: notificationFilter.id ,
+      username: notificationFilter.username,
+      reservation: isChecked1,
+      rating: isChecked2,
+      super: isChecked3
+    };
+    userService.editNotificationFilter(notificationFilterEdit).then((res) => {
+      toggleShowNotification()
+      console.log(res.data.notificationFilter)
+      setNotificationFilter(res.data.notificationFilter)
+      setIsChecked1(res.data.notificationFilter.reservation)
+        setIsChecked2(res.data.notificationFilter.rating)
+        setIsChecked3(res.data.notificationFilter.super)
+    });
+  };
 
   return (
     <section style={{ backgroundColor: "#eee" }}>
@@ -118,8 +183,8 @@ export default function UserProfile() {
                 <p className="text-muted mb-4">Bay Area, San Francisco, CA</p>*/}
                 <div className="d-flex justify-content-center mb-2">
                   <MDBBtn onClick={toggleShow}>Edit profile</MDBBtn>
-                  <MDBBtn outline className="ms-1">
-                    Change avatar
+                  <MDBBtn onClick={toggleShowNotification} outline className="ms-1">
+                    Notification
                   </MDBBtn>
                   <MDBBtn className="ms-1" onClick={toggleShowDelete}>
                     <MDBIcon fas icon="trash" />
@@ -295,6 +360,38 @@ export default function UserProfile() {
                 Close
               </MDBBtn>
               <MDBBtn onClick={deleteUser}>Delete</MDBBtn>
+            </MDBModalFooter>
+          </MDBModalContent>
+        </MDBModalDialog>
+      </MDBModal>
+
+
+      <MDBModal show={notificationModal} tabIndex="-1">
+        <MDBModalDialog>
+          <MDBModalContent>
+            <MDBModalHeader>
+              <MDBModalTitle>Edit notification</MDBModalTitle>
+              <MDBBtn
+                className="btn-close"
+                color="none"
+                onClick={toggleShowNotification}
+              ></MDBBtn>
+            </MDBModalHeader>
+            <MDBModalBody>
+              <MDBRow>
+
+                <MDBSwitch className="ms-1" label='Notifikacije za rezervacije' checked={isChecked1} onChange={handleSwitchChange1} />
+                <MDBSwitch className="ms-1" label='Notifikacije za ocjenjivanje' checked={isChecked2} onChange={handleSwitchChange2} />
+                <MDBSwitch className="ms-1" label='Notifikacije za super korisnika' checked={isChecked3} onChange={handleSwitchChange3} />
+      
+              </MDBRow>
+            </MDBModalBody>
+
+            <MDBModalFooter>
+              <MDBBtn color="secondary" onClick={toggleShowNotification}>
+                Close
+              </MDBBtn>
+              <MDBBtn onClick={editNotification}>Save changes</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>
