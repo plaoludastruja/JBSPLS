@@ -13,7 +13,7 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.16.0
 	go.opentelemetry.io/otel/sdk v1.16.0
 	golang.org/x/crypto v0.8.0
-	google.golang.org/grpc v1.54.0
+	google.golang.org/grpc v1.56.0
 )
 
 require (
