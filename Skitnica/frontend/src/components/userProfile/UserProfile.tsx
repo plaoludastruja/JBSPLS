@@ -77,7 +77,8 @@ export default function UserProfile() {
       setUser(response.data.user);
       console.log(response.data.user);
       userService.isBestHost(response.data.user.username).then((res1) => {
-        if (res1.data == "true") {
+        console.log(res1.data)
+        if (res1.data == true) {
           setIsBestHost(true);
         } else {
           setIsBestHost(false);

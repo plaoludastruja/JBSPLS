@@ -79,7 +79,7 @@ func (handler *BestHosthHandler) IsHostBestHost(w http.ResponseWriter, r *http.R
 			Id:       primitive.NewObjectID().Hex(),
 			Receiver: hostUsername,
 			Sender:   "SYSTEM",
-			Subject:  "SUPERHOST",
+			Subject:  "super",
 			Message:  " Nemate status superhosta. ",
 			IsRead:   "false",
 		}
@@ -93,7 +93,7 @@ func (handler *BestHosthHandler) IsHostBestHost(w http.ResponseWriter, r *http.R
 		Id:       primitive.NewObjectID().Hex(),
 		Receiver: hostUsername,
 		Sender:   "SYSTEM",
-		Subject:  "SUPERHOST",
+		Subject:  "super",
 		Message:  " Imate status superhosta. ",
 		IsRead:   "false",
 	}
