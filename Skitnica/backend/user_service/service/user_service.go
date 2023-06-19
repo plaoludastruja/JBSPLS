@@ -1,19 +1,30 @@
 package service
 
 import (
+	"context"
+	"fmt"
+	"log"
+
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
+	reservationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/reservation_service/generated"
+	events "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/saga/create_order"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/domain"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/token"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type UserService struct {
-	store domain.IUserRepo
+	store        domain.IUserRepo
+	orchestrator *DeleteUserOrchestrator
 }
 
-func NewUserService(store domain.IUserRepo) *UserService {
+func NewUserService(store domain.IUserRepo, orchestrator *DeleteUserOrchestrator) *UserService {
 	return &UserService{
-		store: store,
+		store:        store,
+		orchestrator: orchestrator,
 	}
 }
 
@@ -35,11 +46,80 @@ func (service *UserService) Insert(user domain.User) error {
 	if err == nil {
 		return err
 	}
+	service.makeNotificationFilter(user.Username)
 	return service.store.Insert(&user)
 }
 
 func (service *UserService) Delete(id primitive.ObjectID) error {
-	return service.store.Delete(id)
+
+	user, err := service.Get(id)
+
+	if err != nil {
+		return err
+	}
+	err = service.orchestrator.Start(user)
+
+	if err != nil {
+		return err
+	}
+	return nil
+
+	/*user, err := service.Get(id)
+	fmt.Println("13213")
+	if err != nil {
+		return err
+	}
+	if user.Role == "USER" {
+		fmt.Println("1")
+		return service.deleteUser(user)
+	} else {
+		fmt.Println("2")
+		return service.deleteHost(user)
+	}
+	//return service.store.Delete(id)*/
+}
+
+func (service *UserService) deleteUser(user *domain.User) error {
+	reservationEndpoint := fmt.Sprintf("%s:%s", "reservation_service", "8000")
+	fmt.Println("3")
+	conn, err := grpc.Dial(reservationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	fmt.Println("4")
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	fmt.Println("5")
+	reservationClient := reservationProto.NewReservationServiceClient(conn)
+	fmt.Println("6")
+	reservations, err := reservationClient.GetAllRes(context.TODO(), &reservationProto.GetAllReq{})
+	fmt.Println("7")
+	fmt.Println(len(reservations.Reservations))
+	for _, reservation := range reservations.Reservations {
+		fmt.Println("8")
+		if reservation.Username == user.Username {
+			fmt.Println("9")
+			return fmt.Errorf("guest has a reservation in a future")
+		}
+	}
+	fmt.Println("10")
+	return service.store.Delete(user.Id)
+}
+
+func (service *UserService) deleteHost(user *domain.User) error {
+	reservationEndpoint := fmt.Sprintf("%s:%s", "reservation_service", "8000")
+	conn, err := grpc.Dial(reservationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	reservationClient := reservationProto.NewReservationServiceClient(conn)
+	reservations, err := reservationClient.GetAllRes(context.TODO(), &reservationProto.GetAllReq{})
+
+	for _, reservation := range reservations.Reservations {
+		if reservation.HostUsername == user.Username {
+			return fmt.Errorf("guest has a reservation in a future")
+		}
+	}
+
+	return service.store.Delete(user.Id)
 }
 
 func (service *UserService) Edit(user domain.User) error {
@@ -76,4 +156,33 @@ func hashPassword(u *domain.User) {
 func checkPasswordHash(password, hash string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err
+}
+
+func (service *UserService) GetHosts() ([]*domain.User, error) {
+	return service.store.GetHosts()
+}
+
+func (service *UserService) DelUser(user events.User) error {
+	return service.store.Delete(user.Id)
+}
+
+func (service *UserService) makeNotificationFilter(username string) {
+	// ako se ocjeni host, salje se notifikacija na notifiaction_service
+	notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+	conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+	}
+	notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+	notificationPb := notificationProto.NotificationFilter{
+		Id:          primitive.NewObjectID().Hex(),
+		Username:    username,
+		Reservation: true,
+		Rating:      true,
+		Super:       true,
+	}
+
+	notification, err := notificationClient.CreateNotificationFilter(context.TODO(), &notificationProto.NotificationFilterRequest{NotificationFilter: &notificationPb})
+	fmt.Println(notification.NotificationFilter)
 }

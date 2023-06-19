@@ -15,4 +15,5 @@ type SearchResult struct {
 	Prices              []int32
 	PriceType           []string
 	HostUsername        string
+	Image               []byte
 }

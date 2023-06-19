@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+option go_package = "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/notification";
+
+package notification;
+
+import "google/api/annotations.proto";
+
+service NotificationService {
+        rpc Get(GetRequest) returns(GetResponse) {
+            option (google.api.http) = {
+                get: "/notification/{id}"
+            };
+        }
+        rpc GetAll(GetAllRequest) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/notification"
+            };
+        }
+        rpc GetByReceiver(GetRequestReceiver) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/notification/getByReceiver/{receiver}"
+            };
+        }
+        rpc GetBySender(GetRequestSender) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/notification/getBySender/{sender}"
+            };
+        }
+        rpc CreateNotification(CreateNotificationRequest) returns(CreateNotificationResponse) {
+            option (google.api.http) = {
+                post: "/notification"
+                body: "notification"
+            };
+        }
+        rpc EditNotification(EditNotificationRequest) returns(EditNotificationResponse) {
+            option (google.api.http) = {
+                put: "/notification"
+                body: "notification"
+            };
+        }
+        rpc DeleteNotification(DeleteRequest) returns(DeleteResponse) {
+            option (google.api.http) = {
+                delete: "/notification/{id}"
+            };
+        }
+        rpc readAllByUsername(ReadAllByUsernameRequest) returns(ReadAllByUsernameResponse) {
+            option (google.api.http) = {
+                put: "/notification/readAllByUsername/{username}"
+            };
+        }
+
+        rpc GetNotificationFilterByUsername(ReadAllByUsernameRequest) returns(NotificationFilterResponse) {
+            option (google.api.http) = {
+                get: "/notificationFilter/getNotificationFilterByUsername/{username}"
+            };
+        }
+        rpc EditNotificationFilter(NotificationFilterRequest) returns(NotificationFilterResponse) {
+            option (google.api.http) = {
+                put: "/notificationFilter"
+                body: "notificationFilter"
+            };
+        }
+        rpc CreateNotificationFilter(NotificationFilterRequest) returns(NotificationFilterResponse) {
+            option (google.api.http) = {
+                post: "/notificationFilter"
+                body: "notificationFilter"
+            };
+        }
+        
+}
+
+
+message GetRequest {
+        string id = 1;
+}
+
+message GetResponse {
+        Notification notification = 1;
+}
+
+message GetAllRequest {
+}
+
+message GetAllResponse {
+        repeated Notification notifications = 1;
+}
+
+message GetRequestReceiver {
+        string receiver = 1;
+}
+
+message GetRequestSender {
+        string sender = 1;
+}
+
+message CreateNotificationRequest {
+        Notification notification = 1;
+}
+
+message CreateNotificationResponse {
+        Notification notification = 1;
+}
+
+message EditNotificationRequest {
+        Notification notification = 1;
+}
+
+message EditNotificationResponse {
+        Notification notification = 1;
+}
+
+message DeleteRequest {
+        string id = 1;
+}
+
+message DeleteResponse {
+}
+
+message ReadAllByUsernameRequest {
+        string username = 1;
+}
+
+message ReadAllByUsernameResponse {
+}
+
+message NotificationFilterResponse {
+        NotificationFilter notificationFilter = 1;
+}
+
+message NotificationFilterRequest {
+        NotificationFilter notificationFilter = 1;
+}
+
+
+message Notification {
+        string id = 1;
+        string receiver = 2;
+        string sender = 3;
+        string subject = 4;
+        string message = 5;
+        string isRead = 6;
+}
+
+message NotificationFilter {
+        string id = 1;
+        string username = 2;
+        bool reservation = 3;
+        bool rating = 4;
+        bool super = 5;
+}

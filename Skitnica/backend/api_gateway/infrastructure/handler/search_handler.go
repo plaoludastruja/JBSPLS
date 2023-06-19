@@ -161,7 +161,8 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 						IsAutomaticApproved: accomodation.IsAutomaticApproved,
 						Prices:              prices,
 						PriceType:           priceTypes,
-						HostUsername:        accomodation.HostUsername}
+						HostUsername:        accomodation.HostUsername,
+						Image:               accomodation.Image}
 					found := false
 					for _, searchResult := range res {
 						if searchResult.AccomodationId == sr.AccomodationId {
@@ -212,7 +213,8 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 									IsAutomaticApproved: accomodation.IsAutomaticApproved,
 									Prices:              prices,
 									PriceType:           priceTypes,
-									HostUsername:        accomodation.HostUsername}
+									HostUsername:        accomodation.HostUsername,
+									Image:               accomodation.Image}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {
@@ -262,7 +264,8 @@ func (handler *SearchHandler) Search(w http.ResponseWriter, r *http.Request, pat
 									IsAutomaticApproved: accomodation.IsAutomaticApproved,
 									Prices:              prices,
 									PriceType:           priceTypes,
-									HostUsername:        accomodation.HostUsername}
+									HostUsername:        accomodation.HostUsername,
+									Image:               accomodation.Image}
 								found := false
 								for _, searchResult := range res {
 									if searchResult.AccomodationId == sr.AccomodationId {

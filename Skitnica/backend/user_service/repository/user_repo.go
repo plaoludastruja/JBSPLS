@@ -58,6 +58,7 @@ func (store *UserRepo) Edit(user *domain.User) error {
 		"first_name": user.FirstName,
 		"last_name":  user.LastName,
 		"address":    user.Address,
+		"apiKey":     user.ApiKey,
 	}}
 	_, err := store.users.UpdateOne(context.TODO(), filter, update)
 
@@ -101,4 +102,9 @@ func decode(cursor *mongo.Cursor) (users []*domain.User, err error) {
 	}
 	err = cursor.Err()
 	return
+}
+
+func (store *UserRepo) GetHosts() ([]*domain.User, error) {
+	filter := bson.M{"role": "HOST"}
+	return store.filter(filter)
 }

@@ -2,10 +2,13 @@ go 1.20
 
 use (
 	./LetiSleti/LSbackend
+	./Skitnica/backend/accomodation_rating_service
 	./Skitnica/backend/accomodation_service
 	./Skitnica/backend/api_gateway
 	./Skitnica/backend/appointment_service
 	./Skitnica/backend/common
+	./Skitnica/backend/hostmark_service
+	./Skitnica/backend/notification_service
 	./Skitnica/backend/reservation_service
 	./Skitnica/backend/user_service
 )

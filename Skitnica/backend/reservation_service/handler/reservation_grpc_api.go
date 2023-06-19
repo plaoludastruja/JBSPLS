@@ -61,6 +61,20 @@ func (handler *ReservationHandler) GetAll(ctx context.Context, request *pb.GetAl
 	}
 	return response, nil
 }
+func (handler *ReservationHandler) GetAllRes(ctx context.Context, request *pb.GetAllReq) (*pb.GetAllResponse, error) {
+	accomodations, err := handler.service.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.GetAllResponse{
+		Reservations: []*pb.Reservation{},
+	}
+	for _, reservation := range accomodations {
+		current := mapReservation(reservation)
+		response.Reservations = append(response.Reservations, current)
+	}
+	return response, nil
+}
 
 func (handler *ReservationHandler) CreateReservation(ctx context.Context, request *pb.CreateReservationRequest) (*pb.CreateReservationResponse, error) {
 	reservation := mapReservationPb(request.Reservation)
@@ -182,4 +196,22 @@ func (handler *ReservationHandler) RejectReservation(ctx context.Context, reques
 	return &pb.RejectReservationResponse{
 		ReservationDto: mapReservationDto(reservation),
 	}, nil
+}
+
+func (handler *ReservationHandler) GetForGuest(ctx context.Context, request *pb.GetGuestRequest) (*pb.GetGuestResponse, error) {
+	usernamesR := handler.service.GetForGuest(request.Username)
+
+	response := &pb.GetGuestResponse{
+		Usernames: usernamesR,
+	}
+	return response, nil
+
+}
+
+func (handler *ReservationHandler) IsHostBestHost(ctx context.Context, request *pb.IsHostBestHostRequest) (*pb.IsHostBestHostResposne, error) {
+	isBestHost := handler.service.IsBestHostCheck(request.HostUsername)
+	response := &pb.IsHostBestHostResposne{
+		IsBestHost: isBestHost,
+	}
+	return response, nil
 }

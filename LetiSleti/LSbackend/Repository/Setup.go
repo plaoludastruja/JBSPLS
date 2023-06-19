@@ -8,11 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const DATABASE_URI = "mongodb://mongo"
+const DATABASE_URI = "mongodb://db_host:27017"
 
 var usersCollection *mongo.Collection
 var flightsCollection *mongo.Collection
 var ticketsCollection *mongo.Collection
+var skitnicaUsersCollection *mongo.Collection
 
 var client *mongo.Client
 
@@ -26,6 +27,7 @@ func Setup() {
 	usersCollection = client.Database("LetiSleti").Collection("users")
 	flightsCollection = client.Database("LetiSleti").Collection("flights")
 	ticketsCollection = client.Database("LetiSleti").Collection("tickets")
+	skitnicaUsersCollection = client.Database("usersDB").Collection("users")
 }
 
 func Disconnect() {

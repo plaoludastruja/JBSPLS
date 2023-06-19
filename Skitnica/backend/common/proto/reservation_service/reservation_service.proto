@@ -17,6 +17,11 @@ service ReservationService {
                 get: "/reservation/all/{username}"
             };
         }
+        rpc GetAllRes(GetAllReq) returns(GetAllResponse) {
+            option (google.api.http) = {
+                get: "/reservation"
+            };
+        }
         rpc CreateReservation(CreateReservationRequest) returns(CreateReservationResponse) {
             option (google.api.http) = {
                 post: "/reservation"
@@ -66,6 +71,16 @@ service ReservationService {
                 body: "reservationDto"
             };
         }
+        rpc GetForGuest(GetGuestRequest) returns(GetGuestResponse) {
+            option (google.api.http) = {
+                get: "/reservation/by-guest/{username}"
+            };
+        }
+        rpc IsHostBestHost(IsHostBestHostRequest) returns(IsHostBestHostResposne) {
+            option (google.api.http) = {
+                get: "/isBestHost/{hostUsername}"
+            };
+        }
 }
 
 message GetRequest {
@@ -78,6 +93,17 @@ message GetResponse {
 
 message GetAllRequest {
     string username = 1;
+}
+
+message IsHostBestHostRequest {
+    string hostUsername = 1;
+}
+
+message IsHostBestHostResposne {
+    bool isBestHost = 1;
+}
+
+message GetAllReq {
 }
 
 message GetAllResponse {
@@ -152,6 +178,14 @@ message RejectReservationResponse {
         ReservationDto reservationDto = 1;
 }
 
+message GetGuestRequest {
+        string username = 1;
+}
+
+message GetGuestResponse {
+        repeated string usernames = 1;
+}
+
 message Reservation {
         string id = 1;
         string accomodationId = 2;
@@ -177,4 +211,11 @@ message ReservationDto {
         string endDate = 5;
         int32 guestNumber = 6;
         int32 cancellationNum = 7;
+}
+
+message Mark {
+        string id = 1;
+        string username = 2;
+        int32 grade = 3;
+        string hostUsername = 4;
 }

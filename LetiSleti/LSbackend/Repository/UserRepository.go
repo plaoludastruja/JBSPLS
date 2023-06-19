@@ -37,6 +37,17 @@ func GetUserByEmail(email string) (Models.User, error) {
 	return result, err
 }
 
+func GetSkitnicaUserByEmail(email string) (Models.SkitnicaUser, error) {
+	var result Models.SkitnicaUser
+	err := skitnicaUsersCollection.FindOne(context.TODO(), bson.D{{Key: "username", Value: email}}).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return result, err
+		}
+		log.Fatal(err)
+	}
+	return result, err
+}
 func DeleteUser(userId string) int64 {
 	objectId, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
@@ -49,4 +60,20 @@ func DeleteUser(userId string) int64 {
 	}
 	fmt.Printf("deleted %v documents\n", res.DeletedCount)
 	return res.DeletedCount
+}
+
+func UpdateSkitnicaUserApiKey(apiKey string, id string) error {
+
+	var skitnicaUser Models.SkitnicaUser
+	objID, _ := primitive.ObjectIDFromHex(id)
+	err := skitnicaUsersCollection.FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&skitnicaUser)
+	filter := bson.M{"_id": objID}
+	update := bson.M{"$set": bson.M{
+		"apiKey": apiKey,
+	}}
+	skitnicaUsersCollection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		return err
+	}
+	return nil
 }

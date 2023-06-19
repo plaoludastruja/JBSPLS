@@ -2,14 +2,13 @@ FROM golang:1.20
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY ./LetiSleti/LSbackend/go.mod ./LetiSleti/LSbackend/go.sum ./
 RUN go mod download
 
-COPY . ./
+COPY ./LetiSleti/LSbackend/ ./
 
 RUN go build -o /LetiSletiApp
 
-EXPOSE 8080
+EXPOSE 8082
 
 CMD [ "/LetiSletiApp" ]

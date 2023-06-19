@@ -6,4 +6,5 @@ export default interface User{
     lastName: string;
     role: string;
     address: string;
+    apiKey: string;
 }
