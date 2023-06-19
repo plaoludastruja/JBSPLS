@@ -172,45 +172,68 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 		panic(err1)
 	}
 
-	var ratings []*domain.AccomodationRating
+	var ratings []domain.AccomodationRating
 	for result1.Next() {
 		record := result1.Record()
 		email, _ := record.Get("email")
 		accomodationId, _ := record.Get("accomodationId")
 		rating, _ := record.Get("rating")
 		date, _ := record.Get("date")
-		ratings = append(ratings, &domain.AccomodationRating{
+
+		str := fmt.Sprintf("%v", rating)
+		str1, _ := strconv.ParseInt(str, 10, 32)
+		fmt.Println(record)
+		fmt.Println(email)
+		fmt.Println(accomodationId)
+		fmt.Println(rating)
+		fmt.Println(date)
+		ratings = append(ratings, domain.AccomodationRating{
 			Email:          email.(string),
 			AccomodationId: accomodationId.(string),
-			Rating:         rating.(int32),
+			Rating:         int32(str1),
 			Date:           date.(string),
 		})
 	}
 	fmt.Println("ratings")
 	fmt.Println(ratings)
+	fmt.Println(len(ratings))
 	fmt.Println("result1")
 	//fmt.Println(result1.Record().Values...)
-	var ratings3 []*domain.AccomodationRating
+	var ratings3 []domain.AccomodationRating
 	for _, rat := range ratings {
+		//ratingString := rat.Rating
+		ratingString1 := strconv.Itoa(int(rat.Rating - 1))
+		ratingString2 := strconv.Itoa(int(rat.Rating + 1))
 		query1 := `MATCH (r:AccomodationRating) 
-		WHERE r.AccomodationId = $accomodationId AND r.Rating BETWEEN $n AND $m
+		WHERE r.AccomodationId = $accomodationId AND r.Rating >= $n AND r.Rating <= $m
 		RETURN r.Id as id, r.Email as email, r.AccomodationId as accomodationId, r.Rating as rating, r.Date as date`
-		result2, err2 := store.neo4jSession.Run(query1, map[string]any{"accomodationId": rat.AccomodationId, "n": rat.Rating - 1, "m": rat.Rating + 1})
+		result2, err2 := store.neo4jSession.Run(query1, map[string]any{"accomodationId": rat.AccomodationId, "n": ratingString1, "m": ratingString2})
 		if err2 != nil {
 			panic(err2)
 		}
 
-		var ratings2 []*domain.AccomodationRating
+		fmt.Println(result2)
+
+		var ratings2 []domain.AccomodationRating
 		for result2.Next() {
+
 			record := result2.Record()
 			email, _ := record.Get("email")
 			accomodationId, _ := record.Get("accomodationId")
 			rating, _ := record.Get("rating")
 			date, _ := record.Get("date")
-			ratings2 = append(ratings2, &domain.AccomodationRating{
+			fmt.Println("recorddsadas")
+			fmt.Println(record)
+			fmt.Println(email)
+			fmt.Println(accomodationId)
+			fmt.Println(rating)
+
+			str := fmt.Sprintf("%v", rating)
+			str1, _ := strconv.ParseInt(str, 10, 32)
+			ratings2 = append(ratings2, domain.AccomodationRating{
 				Email:          email.(string),
 				AccomodationId: accomodationId.(string),
-				Rating:         rating.(int32),
+				Rating:         int32(str1),
 				Date:           date.(string),
 			})
 		}
@@ -221,14 +244,21 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 	}
 	fmt.Println("ratings3")
 	fmt.Println(ratings3)
-	var accomodations []string
+	var emails []string
 	for _, rat := range ratings3 {
 		if rat.Rating == 4 || rat.Rating == 5 {
-			accomodations = append(accomodations, rat.AccomodationId)
+			emails = append(emails, rat.Email)
 		}
 
 	}
+
+	// emails su slicni korisnici
+
 	fmt.Println("accomodations")
-	fmt.Println(accomodations)
-	return accomodations, nil
+	fmt.Println(emails)
+	return emails, nil
+}
+
+func str(i int32) {
+	panic("unimplemented")
 }
