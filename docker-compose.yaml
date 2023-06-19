@@ -37,6 +37,12 @@ services:
       DB_PORT: ${DB_PORT}
       USER_SERVICE_PORT: ${USER_SERVICE_PORT}
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT}
+      NATS_HOST: ${NATS_HOST}
+      NATS_PORT: ${NATS_PORT}
+      NATS_USER: ${NATS_USER}
+      NATS_PASS: ${NATS_PASS}
+      DELETE_USER_COMMAND_SUBJECT: $DELETE_USER_COMMAND_SUBJECT}
+      DELETE_USER_REPLY_SUBJECT: ${DELETE_USER_REPLY_SUBJECT}
     depends_on:
       - db_host
     networks:
@@ -55,6 +61,12 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       ACCOMODATION_SERVICE_PORT: ${ACCOMODATION_SERVICE_PORT}
+      NATS_HOST: ${NATS_HOST}
+      NATS_PORT: ${NATS_PORT}
+      NATS_USER: ${NATS_USER}
+      NATS_PASS: ${NATS_PASS}
+      DELETE_USER_COMMAND_SUBJECT: $DELETE_USER_COMMAND_SUBJECT}
+      DELETE_USER_REPLY_SUBJECT: ${DELETE_USER_REPLY_SUBJECT}
     depends_on:
       - db_host
     networks:
@@ -109,6 +121,12 @@ services:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
       RESERVATION_SERVICE_PORT: ${RESERVATION_SERVICE_PORT}
+      NATS_HOST: ${NATS_HOST}
+      NATS_PORT: ${NATS_PORT}
+      NATS_USER: ${NATS_USER}
+      NATS_PASS: ${NATS_PASS}
+      DELETE_USER_COMMAND_SUBJECT: $DELETE_USER_COMMAND_SUBJECT}
+      DELETE_USER_REPLY_SUBJECT: ${DELETE_USER_REPLY_SUBJECT}
     depends_on:
       - db_host
     networks:
@@ -194,6 +212,8 @@ services:
       - ${DB_PORT}:${DB_PORT}
 
   nats:
+    volumes:
+      - ./nats-server.conf:/nats-server.conf
     image: nats
     container_name: nats
     expose:
@@ -204,6 +224,15 @@ services:
     networks:
       - network
       - monitoring
+
+  # skitnica_frontend:
+  # skitnica_frontend:
+  #   image: skitnica_frontend
+  #   container_name: skitnica_frontend
+  #   build: ./Skitnica/frontend/
+  #   restart: on-failure
+  #   ports:
+  #     - 3000:3000
 
 networks:
   lsbackend:

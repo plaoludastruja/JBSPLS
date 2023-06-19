@@ -15,6 +15,8 @@ import (
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/service"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/startup/config"
 	accomodationRatingPb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_rating_service/generated"
+
+	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 )
 
 type Server struct {
@@ -29,7 +31,8 @@ func NewServer(config *config.Config) *Server {
 
 func (server *Server) Start() {
 	mongoClient := server.initMongoClient()
-	accomodationRatingStore := repository.NewAccomodationRatingRepo(mongoClient)
+	neo4jSession := server.initNeo()
+	accomodationRatingStore := repository.NewAccomodationRatingRepo(mongoClient, neo4jSession)
 	accomodationRatingService := service.NewAccomodationRatingService(accomodationRatingStore)
 	accomodationRatingHandler := handler.NewAccomodationRatingHandler(accomodationRatingService)
 	server.startGrpcServer(accomodationRatingHandler)
@@ -57,4 +60,15 @@ func (server *Server) startGrpcServer(accomodationRatingHandler *handler.Accomod
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
+}
+
+func (server *Server) initNeo() neo4j.Session {
+	uri := "neo4j+s://59ab3a7b.databases.neo4j.io"
+	auth := neo4j.BasicAuth("neo4j", "SyxR9cQpsGOfa2u5-Ol-Ygrw04UC3pQ-X9Js93EKqeI", "")
+	driver, err := neo4j.NewDriver(uri, auth)
+	if err != nil {
+		panic(err)
+	}
+	session := driver.NewSession(neo4j.SessionConfig{DatabaseName: "neo4j"})
+	return session
 }

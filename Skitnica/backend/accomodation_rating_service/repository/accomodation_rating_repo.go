@@ -3,11 +3,18 @@ package repository
 import (
 	"context"
 	"fmt"
+	"log"
+	"strconv"
 
+	"github.com/neo4j/neo4j-go-driver/v5/neo4j"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/accomodation_rating_service/domain"
+	accomodationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/accomodation_service/generated"
+	notificationProto "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/notification_service/generated"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -17,12 +24,14 @@ const (
 
 type AccomodationRatingRepo struct {
 	accomodationRatings *mongo.Collection
+	neo4jSession        neo4j.Session
 }
 
-func NewAccomodationRatingRepo(client *mongo.Client) domain.IAccomodationRatingRepo {
+func NewAccomodationRatingRepo(client *mongo.Client, neo4jSession neo4j.Session) domain.IAccomodationRatingRepo {
 	accomodationRatingsCollection := client.Database(DATABASE).Collection(COLLECTION)
 	return &AccomodationRatingRepo{
 		accomodationRatings: accomodationRatingsCollection,
+		neo4jSession:        neo4jSession,
 	}
 }
 
@@ -40,6 +49,60 @@ func (store *AccomodationRatingRepo) Insert(accomodationRating *domain.Accomodat
 	result, err := store.accomodationRatings.InsertOne(context.TODO(), accomodationRating)
 	if err != nil {
 		return err
+	}
+	fmt.Println("1")
+	query := "CREATE (p:AccomodationRating {Email: $email, AccomodationId: $accomodationId, Rating: $rating, Date: $date })"
+	fmt.Println("2")
+	parameters := map[string]interface{}{
+		"email":          accomodationRating.Email,
+		"accomodationId": accomodationRating.AccomodationId,
+		"rating":         strconv.Itoa(int(accomodationRating.Rating)),
+		"date":           accomodationRating.Date,
+	}
+	fmt.Println("3")
+	result1, err1 := store.neo4jSession.Run(query, parameters)
+	if err1 != nil {
+		fmt.Println("4b")
+		panic(err1)
+	}
+
+	fmt.Println("4")
+	// Check if the query executed successfully
+	if result1.Err() != nil {
+		fmt.Println("5b")
+		panic(result1.Err())
+	}
+
+	fmt.Println("5")
+	// ako se ocjeni hostov smjestaj, salje se notifikacija na notifiaction_service
+	if err == nil {
+		notificationEndpoint := fmt.Sprintf("%s:%s", "notification_service", "8000")
+		conn, err := grpc.Dial(notificationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		notificationClient := notificationProto.NewNotificationServiceClient(conn)
+
+		accomodationEndpoint := fmt.Sprintf("%s:%s", "accomodation_service", "8000")
+		conn2, err2 := grpc.Dial(accomodationEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err2 != nil {
+			log.Fatalf("Failed to start gRPC connection to Catalogue service: %v", err)
+		}
+		accomodationClient := accomodationProto.NewAccomodationServiceClient(conn2)
+
+		accomodation, err2 := accomodationClient.Get(context.TODO(), &accomodationProto.GetRequest{Id: accomodationRating.AccomodationId})
+
+		notificationPb := notificationProto.Notification{
+			Id:       primitive.NewObjectID().Hex(),
+			Receiver: accomodation.Accomodation.HostUsername,
+			Sender:   "SYSTEM",
+			Subject:  "rating",
+			Message:  "Vaš smještaj je ocjenjen  " + " sa ocjenom " + strconv.Itoa(int(accomodationRating.Rating)),
+			IsRead:   "false",
+		}
+
+		notification, err := notificationClient.CreateNotification(context.TODO(), &notificationProto.CreateNotificationRequest{Notification: &notificationPb})
+		fmt.Println(notification.Notification)
 	}
 	accomodationRating.Id = result.InsertedID.(primitive.ObjectID)
 	return nil

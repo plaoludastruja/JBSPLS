@@ -11,18 +11,22 @@ import (
 )
 
 const (
-	DATABASE   = "notificationDB"
-	COLLECTION = "notifications"
+	DATABASE    = "notificationDB"
+	COLLECTION  = "notifications"
+	COLLECTION2 = "notificationFilters"
 )
 
 type NotificationRepo struct {
-	notifications *mongo.Collection
+	notifications       *mongo.Collection
+	notificationFilters *mongo.Collection
 }
 
 func NewNotificationRepo(client *mongo.Client) domain.INotificationRepo {
 	notificationsCollection := client.Database(DATABASE).Collection(COLLECTION)
+	notificationFiltersCollection := client.Database(DATABASE).Collection(COLLECTION2)
 	return &NotificationRepo{
-		notifications: notificationsCollection,
+		notifications:       notificationsCollection,
+		notificationFilters: notificationFiltersCollection,
 	}
 }
 
@@ -58,7 +62,7 @@ func (store *NotificationRepo) Insert(notification *domain.Notification) error {
 func (store *NotificationRepo) Edit(notification *domain.Notification) error {
 	filter := bson.M{"_id": notification.Id}
 	update := bson.M{"$set": bson.M{
-		"isRead": notification.IsRead,
+		"isRead": "true",
 	}}
 	_, err := store.notifications.UpdateOne(context.TODO(), filter, update)
 
@@ -101,5 +105,37 @@ func decode(cursor *mongo.Cursor) (notifications []*domain.Notification, err err
 		notifications = append(notifications, &notification)
 	}
 	err = cursor.Err()
+	return
+}
+
+func (store *NotificationRepo) InsertNotificationFilters(notificationFilter *domain.NotificationFilter) error {
+	result, err := store.notificationFilters.InsertOne(context.TODO(), notificationFilter)
+	if err != nil {
+		return err
+	}
+	notificationFilter.Id = result.InsertedID.(primitive.ObjectID)
+	return nil
+}
+
+func (store *NotificationRepo) EditNotificationFilter(notificationFilter *domain.NotificationFilter) error {
+	filter := bson.M{"_id": notificationFilter.Id}
+	update := bson.M{"$set": bson.M{
+		"reservation": notificationFilter.Reservation,
+		"rating":      notificationFilter.Rating,
+		"super":       notificationFilter.Super,
+	}}
+	_, err := store.notificationFilters.UpdateOne(context.TODO(), filter, update)
+
+	return err
+}
+
+func (store *NotificationRepo) GetNotificationFilterByUsername(username string) (*domain.NotificationFilter, error) {
+	filter := bson.M{"username": username}
+	return store.filterOne1(filter)
+}
+
+func (store *NotificationRepo) filterOne1(filter interface{}) (notificationFilter *domain.NotificationFilter, err error) {
+	result := store.notificationFilters.FindOne(context.TODO(), filter)
+	err = result.Decode(&notificationFilter)
 	return
 }

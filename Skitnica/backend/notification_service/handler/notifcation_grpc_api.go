@@ -91,3 +91,46 @@ func (handler *NotificationHandler) CreateNotification(ctx context.Context, requ
 		Notification: mapNotification(notification),
 	}, nil
 }
+
+func (handler *NotificationHandler) ReadAllByUsername(ctx context.Context, request *pb.ReadAllByUsernameRequest) (*pb.ReadAllByUsernameResponse, error) {
+
+	err := handler.service.ReadAllByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ReadAllByUsernameResponse{}, nil
+}
+
+func (handler *NotificationHandler) GetNotificationFilterByUsername(ctx context.Context, request *pb.ReadAllByUsernameRequest) (*pb.NotificationFilterResponse, error) {
+	notificationFilter, err := handler.service.GetNotificationFilterByUsername(request.Username)
+	if err != nil {
+		return nil, err
+	}
+	notificationFilterPb := mapNotificationFilter(notificationFilter)
+	response := &pb.NotificationFilterResponse{
+		NotificationFilter: notificationFilterPb,
+	}
+	return response, nil
+}
+
+func (handler *NotificationHandler) CreateNotificationFilter(ctx context.Context, request *pb.NotificationFilterRequest) (*pb.NotificationFilterResponse, error) {
+	notification := mapNotificationFilterPb(request.NotificationFilter)
+	err := handler.service.InsertNotificationFilters(*notification)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.NotificationFilterResponse{
+		NotificationFilter: mapNotificationFilter(notification),
+	}, nil
+}
+
+func (handler *NotificationHandler) EditNotificationFilter(ctx context.Context, request *pb.NotificationFilterRequest) (*pb.NotificationFilterResponse, error) {
+	notification := mapNotificationFilterPb(request.NotificationFilter)
+	err := handler.service.EditNotificationFilter(*notification)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.NotificationFilterResponse{
+		NotificationFilter: mapNotificationFilter(notification),
+	}, nil
+}
