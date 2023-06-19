@@ -246,17 +246,64 @@ func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, err
 	fmt.Println(ratings3)
 	var emails []string
 	for _, rat := range ratings3 {
-		if rat.Rating == 4 || rat.Rating == 5 {
-			emails = append(emails, rat.Email)
-		}
-
+		emails = append(emails, rat.Email)
 	}
 
-	// emails su slicni korisnici
+	var result []string
+	for _, str := range emails {
+		if str != email {
+			result = append(result, str)
+		}
+	}
 
-	fmt.Println("accomodations")
-	fmt.Println(emails)
-	return emails, nil
+	var final2 []domain.AccomodationRating
+	for _, em := range result {
+		query2 := `MATCH (r:AccomodationRating) 
+		WHERE r.Email = $email
+		RETURN r.Id as id, r.Email as email, r.AccomodationId as accomodationId, r.Rating as rating, r.Date as date`
+		fmt.Println("2")
+		fmt.Println("3")
+		result10, err10 := store.neo4jSession.Run(query2, map[string]any{"email": em})
+		if err10 != nil {
+			fmt.Println("4b10")
+			panic(err10)
+		}
+
+		var final []domain.AccomodationRating
+		for result10.Next() {
+			record := result10.Record()
+			email, _ := record.Get("email")
+			accomodationId, _ := record.Get("accomodationId")
+			rating, _ := record.Get("rating")
+			date, _ := record.Get("date")
+
+			str := fmt.Sprintf("%v", rating)
+			str1, _ := strconv.ParseInt(str, 10, 32)
+			fmt.Println(record)
+			fmt.Println(email)
+			fmt.Println(accomodationId)
+			fmt.Println(rating)
+			fmt.Println(date)
+			final = append(final, domain.AccomodationRating{
+				Email:          email.(string),
+				AccomodationId: accomodationId.(string),
+				Rating:         int32(str1),
+				Date:           date.(string),
+			})
+		}
+		final2 = append(final2, final...)
+	}
+	var accomodations []string
+	// emails su slicni korisnici
+	for _, rat := range final2 {
+		if rat.Rating == 4 || rat.Rating == 5 {
+			accomodations = append(accomodations, rat.AccomodationId)
+		}
+	}
+
+	//fmt.Println("accomodations")
+	//fmt.Println(emails)
+	return accomodations, nil
 }
 
 func str(i int32) {
