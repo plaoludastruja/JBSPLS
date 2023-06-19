@@ -34,3 +34,7 @@ func (service *AccomodationRatingService) Delete(id primitive.ObjectID) error {
 func (service *AccomodationRatingService) Edit(accomodation domain.AccomodationRating) error {
 	return service.store.Edit(&accomodation)
 }
+
+func (service *AccomodationRatingService) GetRecommended(email string) ([]string, error) {
+	return service.store.GetRecommended(email)
+}

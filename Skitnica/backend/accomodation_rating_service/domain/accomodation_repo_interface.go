@@ -11,4 +11,5 @@ type IAccomodationRatingRepo interface {
 	Edit(accomodation *AccomodationRating) error
 	DeleteAll()
 	Delete(id primitive.ObjectID) error
+	GetRecommended(email string) ([]string, error)
 }

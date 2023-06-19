@@ -159,3 +159,153 @@ func decode(cursor *mongo.Cursor) (accomodationRatings []*domain.AccomodationRat
 	err = cursor.Err()
 	return
 }
+
+func (store *AccomodationRatingRepo) GetRecommended(email string) ([]string, error) {
+	query := `MATCH (r:AccomodationRating) 
+	WHERE r.Email = $email
+	RETURN r.Id as id, r.Email as email, r.AccomodationId as accomodationId, r.Rating as rating, r.Date as date`
+	fmt.Println("2")
+	fmt.Println("3")
+	result1, err1 := store.neo4jSession.Run(query, map[string]any{"email": email})
+	if err1 != nil {
+		fmt.Println("4b")
+		panic(err1)
+	}
+
+	var ratings []domain.AccomodationRating
+	for result1.Next() {
+		record := result1.Record()
+		email, _ := record.Get("email")
+		accomodationId, _ := record.Get("accomodationId")
+		rating, _ := record.Get("rating")
+		date, _ := record.Get("date")
+
+		str := fmt.Sprintf("%v", rating)
+		str1, _ := strconv.ParseInt(str, 10, 32)
+		fmt.Println(record)
+		fmt.Println(email)
+		fmt.Println(accomodationId)
+		fmt.Println(rating)
+		fmt.Println(date)
+		ratings = append(ratings, domain.AccomodationRating{
+			Email:          email.(string),
+			AccomodationId: accomodationId.(string),
+			Rating:         int32(str1),
+			Date:           date.(string),
+		})
+	}
+	fmt.Println("ratings")
+	fmt.Println(ratings)
+	fmt.Println(len(ratings))
+	fmt.Println("result1")
+	//fmt.Println(result1.Record().Values...)
+	var ratings3 []domain.AccomodationRating
+	for _, rat := range ratings {
+		//ratingString := rat.Rating
+		ratingString1 := strconv.Itoa(int(rat.Rating - 1))
+		ratingString2 := strconv.Itoa(int(rat.Rating + 1))
+		query1 := `MATCH (r:AccomodationRating) 
+		WHERE r.AccomodationId = $accomodationId AND r.Rating >= $n AND r.Rating <= $m
+		RETURN r.Id as id, r.Email as email, r.AccomodationId as accomodationId, r.Rating as rating, r.Date as date`
+		result2, err2 := store.neo4jSession.Run(query1, map[string]any{"accomodationId": rat.AccomodationId, "n": ratingString1, "m": ratingString2})
+		if err2 != nil {
+			panic(err2)
+		}
+
+		fmt.Println(result2)
+
+		var ratings2 []domain.AccomodationRating
+		for result2.Next() {
+
+			record := result2.Record()
+			email, _ := record.Get("email")
+			accomodationId, _ := record.Get("accomodationId")
+			rating, _ := record.Get("rating")
+			date, _ := record.Get("date")
+			fmt.Println("recorddsadas")
+			fmt.Println(record)
+			fmt.Println(email)
+			fmt.Println(accomodationId)
+			fmt.Println(rating)
+
+			str := fmt.Sprintf("%v", rating)
+			str1, _ := strconv.ParseInt(str, 10, 32)
+			ratings2 = append(ratings2, domain.AccomodationRating{
+				Email:          email.(string),
+				AccomodationId: accomodationId.(string),
+				Rating:         int32(str1),
+				Date:           date.(string),
+			})
+		}
+		fmt.Println("ratings2")
+		fmt.Println(ratings2)
+		ratings3 = append(ratings3, ratings2...)
+
+	}
+	fmt.Println("ratings3")
+	fmt.Println(ratings3)
+	var emails []string
+	for _, rat := range ratings3 {
+		emails = append(emails, rat.Email)
+	}
+
+	var result []string
+	for _, str := range emails {
+		if str != email {
+			result = append(result, str)
+		}
+	}
+
+	var final2 []domain.AccomodationRating
+	for _, em := range result {
+		query2 := `MATCH (r:AccomodationRating) 
+		WHERE r.Email = $email
+		RETURN r.Id as id, r.Email as email, r.AccomodationId as accomodationId, r.Rating as rating, r.Date as date`
+		fmt.Println("2")
+		fmt.Println("3")
+		result10, err10 := store.neo4jSession.Run(query2, map[string]any{"email": em})
+		if err10 != nil {
+			fmt.Println("4b10")
+			panic(err10)
+		}
+
+		var final []domain.AccomodationRating
+		for result10.Next() {
+			record := result10.Record()
+			email, _ := record.Get("email")
+			accomodationId, _ := record.Get("accomodationId")
+			rating, _ := record.Get("rating")
+			date, _ := record.Get("date")
+
+			str := fmt.Sprintf("%v", rating)
+			str1, _ := strconv.ParseInt(str, 10, 32)
+			fmt.Println(record)
+			fmt.Println(email)
+			fmt.Println(accomodationId)
+			fmt.Println(rating)
+			fmt.Println(date)
+			final = append(final, domain.AccomodationRating{
+				Email:          email.(string),
+				AccomodationId: accomodationId.(string),
+				Rating:         int32(str1),
+				Date:           date.(string),
+			})
+		}
+		final2 = append(final2, final...)
+	}
+	var accomodations []string
+	// emails su slicni korisnici
+	for _, rat := range final2 {
+		if rat.Rating == 4 || rat.Rating == 5 {
+			accomodations = append(accomodations, rat.AccomodationId)
+		}
+	}
+
+	//fmt.Println("accomodations")
+	//fmt.Println(emails)
+	return accomodations, nil
+}
+
+func str(i int32) {
+	panic("unimplemented")
+}
