@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"log"
 
 	pb "github.com/plaoludastruja/JBSPLS/Skitnica/backend/common/proto/user_service/generated"
 	"github.com/plaoludastruja/JBSPLS/Skitnica/backend/user_service/service"
@@ -24,9 +25,11 @@ func NewUserHandler(service *service.UserService) *UserHandler {
 }
 
 func (handler *UserHandler) Get(ctx context.Context, request *pb.GetRequest) (*pb.GetResponse, error) {
+	log.Println("Getting user by id..")
 	id := request.Id
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	user, err := handler.service.Get(objectId)
@@ -41,6 +44,7 @@ func (handler *UserHandler) Get(ctx context.Context, request *pb.GetRequest) (*p
 }
 
 func (handler *UserHandler) GetByUsername(ctx context.Context, request *pb.GetRequestUsername) (*pb.GetResponse, error) {
+	log.Println("Getting user by username..")
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, status.Error(codes.Internal, "failed to get metadata from context")
@@ -57,6 +61,7 @@ func (handler *UserHandler) GetByUsername(ctx context.Context, request *pb.GetRe
 
 	user, err := handler.service.GetByUsername(username)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
@@ -68,8 +73,10 @@ func (handler *UserHandler) GetByUsername(ctx context.Context, request *pb.GetRe
 }
 
 func (handler *UserHandler) GetAll(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
+	log.Println("Getting all users..")
 	users, err := handler.service.GetAll()
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.GetAllResponse{
@@ -83,6 +90,7 @@ func (handler *UserHandler) GetAll(ctx context.Context, request *pb.GetAllReques
 }
 
 func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	log.Println("Create new user")
 	user := mapUserPb(request.User)
 	err := handler.service.Insert(*user)
 	if err != nil {
@@ -94,9 +102,11 @@ func (handler *UserHandler) CreateUser(ctx context.Context, request *pb.CreateUs
 }
 
 func (handler *UserHandler) EditUser(ctx context.Context, request *pb.EditUserRequest) (*pb.EditUserResponse, error) {
+	log.Println("Edit user")
 	user := mapUserPb(request.User)
 	err := handler.service.Edit(*user)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &pb.EditUserResponse{
@@ -105,26 +115,25 @@ func (handler *UserHandler) EditUser(ctx context.Context, request *pb.EditUserRe
 }
 
 func (handler *UserHandler) DeleteUser(ctx context.Context, request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	log.Println("Delete user..")
 	objectId, err := primitive.ObjectIDFromHex(request.Id)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	errr := handler.service.Delete(objectId)
 	if errr != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return &pb.DeleteResponse{}, nil
 }
 
 func (handler *UserHandler) LoginUser(ctx context.Context, request *pb.LoginDTO) (*pb.UserToken, error) {
-
-	/*user, err := handler.service.GetByUsername(request.LoginDTO.Username)
-	if err != nil {
-		return nil, err
-	}
-	generatedToken, err := token.GenerateToken(user.Username, user.Role)*/
+	log.Println("Login")
 	generatedToken, err := handler.service.Login(request.LoginDTO.Username, request.LoginDTO.Password)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.UserToken{
@@ -134,8 +143,10 @@ func (handler *UserHandler) LoginUser(ctx context.Context, request *pb.LoginDTO)
 }
 
 func (handler *UserHandler) GetHosts(ctx context.Context, request *pb.GetAllRequest) (*pb.GetAllResponse, error) {
+	log.Println("Getting all hosts..")
 	users, err := handler.service.GetHosts()
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	response := &pb.GetAllResponse{
